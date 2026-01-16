@@ -5,16 +5,16 @@
 ENTER_ERROR = "Некорректный ввод! Попробуйте ещё раз."
 
 weekday = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-productivity = {}
-task = []
+# productivity = {}
+# task = []
 # Функция для нахождения среднего значения в словаре
 def average(array):
     total = 0
-    for score in array.values(): # Цикл для для добавления значения в переменную total
+    for score in array.values(): # Цикл для добавления значения в переменную total
         total += score
     return total / len(array)
 
-# Функция для нахождения дня с минимальным индексом продкутивности
+# Функция для нахождения дня с минимальным индексом продуктивности
 def find_min_day(array):
     # Преобразование словаря в список для получения 1 значения в словаре
     first_day = list(array.keys())[0]
@@ -56,32 +56,33 @@ def find_max_day(array):
         days = max_days[0]
     return days, max_score
 
-for index, day in enumerate(weekday, 1):
-    while True:  # Цикл повторения для конкретного дня
-        try:
-            a = float(input(f"{day}\n\tОценка продуктивности {index}-го дня недели(по шкале от 1 до 10): "))
-            if a >= 1 and a <= 10:
-                productivity[day] = a # Добавление ключ-значения в словарь
-                break
-            else:
-                print(f"{ENTER_ERROR}\n")
-        except ValueError:
-            print(ENTER_ERROR)
+def run_productivity_tracker():
+    for index, day in enumerate(weekday, 1):
+        while True:  # Цикл повторения для конкретного дня
+            try:
+                a = float(input(f"{day}\n\tОценка продуктивности {index}-го дня недели(по шкале от 1 до 10): "))
+                if a >= 1 and a <= 10:
+                    productivity[day] = a # Добавление ключ-значения в словарь
+                    break
+                else:
+                    print(f"{ENTER_ERROR}\n")
+            except ValueError:
+                print(ENTER_ERROR)
 
 #avg_value = average(productivity) # Сохраняем значения функции в переменные
-max_day, max_score = find_max_day(productivity)
-min_day, min_score = find_min_day(productivity)
-
-print(f"\nСреднее значение продуктивности этой недели составило: {average(productivity):.2f}\n")
-
-if max_score and min_score == 1:
-    point = "балл"
-elif max_score and min_score > 1 and max_score and min_score < 5:
-    point = "балла"
-else:
-    point = "баллов"
-print(f"Максимальная продуктивность: {max_day} - {max_score} {point}\n"
-      f"Минимальная продуктивность: {min_day} - {min_score} {point}\n")
+# max_day, max_score = find_max_day(productivity)
+# min_day, min_score = find_min_day(productivity)
+#
+# print(f"\nСреднее значение продуктивности этой недели составило: {average(productivity):.2f}\n")
+#
+# if max_score and min_score == 1:
+#     point = "балл"
+# elif max_score and min_score > 1 and max_score and min_score < 5:
+#     point = "балла"
+# else:
+#     point = "баллов"
+# print(f"Максимальная продуктивность: {max_day} - {max_score} {point}\n"
+#       f"Минимальная продуктивность: {min_day} - {min_score} {point}\n")
 
 def add_task(task):
     job = input("Введите название задачи: ")
@@ -176,26 +177,42 @@ def list_task(task):
                 print("Хорошего дня!")
                 break
 
-try:
-    list_task(task)
-except KeyboardInterrupt:
-    print("\n\nПрограмма завершила свою работу. "
-          "\nДо свидания!")
-
 def main_menu():
 
+    productivity = {}
+    tasks = []
+
     while True:
-        print("\n" + "="*50)
+        print("\n" + "=" * 50)
         print("ГЛАВНОЕ МЕНЮ")
-        print("")
+        print("=" * 50)
+        print("1. Трекер продуктивности")
+        print("2. Управление задачами")
+        print("3. Выйти")
 
-# print("\n\tОценка недели\n")
-# if avg_value >= 8:
-#     print("Превосходная неделя")
-# elif avg_value >= 6.5:
-#     print("Хорошая неделя")
-# elif avg_value >= 5:
-#     print("Средняя неделя")
-# else:
-#     print("Плохо, надо исправлять")
+        try:
+            choice = int(input("Выберите раздел: "))
+        except (ValueError, KeyboardInterrupt):
+            print("Некорректный ввод")
+            continue
 
+        if choice == 1:
+            # Запуск трекера продуктивности
+            run_productivity_tracker(productivity)
+        elif choice == 2:
+            # Запуск менеджера задач
+            list_task(tasks)
+        elif choice == 3:
+            print("До свидания!")
+            break
+        else:
+            print("Неверный выбор")
+
+
+# Start program
+if __name__ == "__main__":
+    try:
+        main_menu()
+    except KeyboardInterrupt:
+        print("\n\nПрограмма завершила свою работу. "
+              "\nДо свидания!")
