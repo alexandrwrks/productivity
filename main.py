@@ -1,12 +1,15 @@
 """
 Изменить структуру кода, внедрить систему оценивание,
 добавить БД,
+Изменение структуры кода - добавление классов, внедрение функций в эти классы
 """
 ENTER_ERROR = "Некорректный ввод! Попробуйте ещё раз."
 
 weekday = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-# productivity = {}
-# task = []
+
+productivity = {}
+task = []
+
 # Функция для нахождения среднего значения в словаре
 def average(array):
     total = 0
@@ -17,24 +20,24 @@ def average(array):
 # Функция для нахождения дней с минимальной/максимальной продуктивностью
 def extremal_days(array, find_min=True):
     first_day = list(array.keys())[0]
-    max_score = array[first_day]
-    max_day = first_day
+    extreme_score = array[first_day]
+    extreme_days = [first_day]
 
-    max_days = []
     for day, score in array.items():
-        if score > max_score:
-            max_score = score
-            max_days = [day]
-        elif score == max_score:
-            max_days.append(day)
+        if (find_min and score < extreme_score) or (not find_min and score > extreme_score):
+            extreme_score = score
+            extreme_days = [day]
+        elif score == extreme_score and day != first_day:
+            extreme_days.append(day)
 
-    if len(max_days) >= 1:
-        days = ", ".join(max_days)
+    if len(extreme_days) >= 1:
+        days = ", ".join(extreme_days)
     else:
-        days = max_days[0]
-    return days, max_score
+        days = extreme_days[0]
+    return days, extreme_score
 
 def run_productivity_tracker():
+
     for index, day in enumerate(weekday, 1):
         while True:  # Цикл повторения для конкретного дня
             try:
@@ -47,20 +50,21 @@ def run_productivity_tracker():
             except ValueError:
                 print(ENTER_ERROR)
 
-#avg_value = average(productivity) # Сохраняем значения функции в переменные
-# max_day, max_score = find_max_day(productivity)
-# min_day, min_score = find_min_day(productivity)
-#
-# print(f"\nСреднее значение продуктивности этой недели составило: {average(productivity):.2f}\n")
-#
-# if max_score and min_score == 1:
-#     point = "балл"
-# elif max_score and min_score > 1 and max_score and min_score < 5:
-#     point = "балла"
-# else:
-#     point = "баллов"
-# print(f"Максимальная продуктивность: {max_day} - {max_score} {point}\n"
-#       f"Минимальная продуктивность: {min_day} - {min_score} {point}\n")
+    avg = average(productivity)
+    print(f"\nСреднее значение продуктивности этой недели составило: {avg:.2f}\n")
+
+    max_day, max_score = extremal_days(productivity, find_min = False)
+    min_day, min_score = extremal_days(productivity, find_min = True)
+
+    if max_score and min_score == 1:
+        point = "балл"
+    elif 1 < max_score and min_score <= 5:
+        point = "балла"
+    else:
+        point = "баллов"
+    print(f"Максимальная продуктивность: {max_day} - {max_score} {point}\n"
+          f"Минимальная продуктивность: {min_day} - {min_score} {point}\n")
+
 
 def add_task(task):
     job = input("Введите название задачи: ")
@@ -124,7 +128,7 @@ def list_task(task):
                 "2. Завершить задачу\n"
                 "3. Показать задачи\n"
                 "4. Удалить задачу\n"
-                "0. Выйти из меню\n")
+                "0. Выйти в главное меню\n")
 
         try:
             choice = int(input("Выберите действие: "))
@@ -157,9 +161,6 @@ def list_task(task):
 
 def main_menu():
 
-    productivity = {}
-    tasks = []
-
     while True:
         print("\n" + "=" * 50)
         print("ГЛАВНОЕ МЕНЮ")
@@ -176,10 +177,10 @@ def main_menu():
 
         if choice == 1:
             # Запуск трекера продуктивности
-            run_productivity_tracker(productivity)
+            run_productivity_tracker()
         elif choice == 2:
             # Запуск менеджера задач
-            list_task(tasks)
+            list_task(task)
         elif choice == 3:
             print("До свидания!")
             break
