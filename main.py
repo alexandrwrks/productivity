@@ -14,30 +14,8 @@ def average(array):
         total += score
     return total / len(array)
 
-# Функция для нахождения дня с минимальным индексом продуктивности
-def find_min_day(array):
-    # Преобразование словаря в список для получения 1 значения в словаре
-    first_day = list(array.keys())[0]
-    min_score = array[first_day]
-    min_day = first_day
-
-    min_days = []
-    # Цикл для переборки всех дней, для нахождения маленького числа
-    for day, score in array.items():
-        if score < min_score:
-            min_score = score
-            min_days = [day]
-        elif score == min_score:
-            min_days.append(day)
-
-    if len(min_days) >= 1:
-        days = ", ".join(min_days)
-    else:
-        days = min_days[0]
-    return days, min_score
-
-# Функция для нахождения дня с максимальным индексом продуктивности
-def find_max_day(array):
+# Функция для нахождения дней с минимальной/максимальной продуктивностью
+def extremal_days(array, find_min=True):
     first_day = list(array.keys())[0]
     max_score = array[first_day]
     max_day = first_day
