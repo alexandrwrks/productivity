@@ -1,136 +1,104 @@
-# Функция для добавления задач в список
-def add_task(task):
-    job = input("Введите название задачи: ")
+list_task = []
 
-    task.append(job)
+class TaskBoard(object):
+    """
+    Класс для управления списком задач
+    Показывать задачи, добавлять задачи, удалять задачи, завершать задачи.
+    Главное меню для работы с задачами.
+    Добавить возможность добавлять здачи в файл(текстовый) или json.
+    """
+    def __init__(self, task):
+        self.task = task
 
-# Функция для удаления задач из списка
-def delete_task(task):
-    if not task:
-        print("Ошибка: задач в списке нет")
-        return
-    show_task(task)
-    try:
-        job = int(input("Выберите номер задачи для удаления: "))
-        if 1 <= job <= len(task):
-            removed = task.pop(job - 1)
-            print(f"Задача '{removed}' удалена\n")
+    def show_task(self):
+        if not self.task:
+            return f"Список пуст"
         else:
-            print("Неверный номер задачи")
-    except ValueError:
-        print("Введите число")
+            for number, exercise in enumerate(self.task, 1):
+                print(f"{number}. {exercise}")
 
-# Функция для выполнения задач
-def complete_task(task):
-    if not task:
-        print("Ошибка: задач в списке нет")
-        return
-    show_task(task)
-    try:
-        job = int(input("Выберите номер задачи, которую Вы завершили: "))
-        if 1 <= job <= len(task):
-            removed = task.pop(job - 1)
-            print(f"Задача '{removed}' завершена\n")
-        else:
-            print("Неверный номер задачи")
-    except ValueError:
-        print("Введите число")
+    def add_task(self):
 
-# Функция для показа задач
-def show_task(task):
-    if not task:
-        print("Список пуст")
-        return
-    else:
-        for index, item in enumerate(task, 1):
-            print(f"{index}. {item}")
+        exercise = input("ВВедите название задачи: ")
+        self.task.append(exercise)
 
-# Основная функция для работы с задачами
-def list_task(task):
-    while True:
-        # show_task
-        print("\n"+ "="*35)
-        print("\tЗадачи на сегодняшний день:")
-        #4print("="*35)
-        if len(task) == 0:
-            print("\n\tОтсутствуют")
-        else:
-            for index, job in enumerate(task, 1):
-                print(f"Задача №{index} - {job}")
-        print("="*35)
-        print("\n1. Добавить задача\n"
-                "2. Завершить задачу\n"
-                "3. Показать задачи\n"
-                "4. Удалить задачу\n"
-                "0. Выйти в главное меню\n")
-
+    def delete_task(self):
+        if not self.task:
+            print("Ошибка: задач нет в списке")
+            return
+        self.show_task()
         try:
-            choice = int(input("Выберите действие: "))
+            exercise = int(input("Выберите номер задачи для удаления:"))
+            if 1<= exercise <= len(self.task):
+                removed = self.task.pop(exercise - 1)
+                print(f"Задача '{removed}' удалена.")
+            else:
+                print("Неверный номер задачи.")
         except ValueError:
-            print("Пожалуйста, введите число")
-            continue  # вернуться к началу цикла
-
-        # Проверка диапазона
-        if choice not in [0, 1, 2, 3, 4]:
-            print("Неверный выбор. Выберите от 0 до 4")
-            continue
-        if choice == 1:
-            add_task(task)
-        elif choice == 2:
-            complete_task(task)
-        elif choice == 3:
-            show_task(task)
-        elif choice == 4:
-            delete_task(task)
-        elif choice == 0:
-            if len(task) == 0:
-                print(f"У Вас нет задач на сегодня!\n"
-                      f"Хорошего дня!")
-                break
-            if len(task) >= 1:
-                print("Список задач на сегодня:")
-                show_task(task)
-                print("Хорошего дня!")
-                break
-
-def main_menu():
-
-    productivity = {}
-    tasks = []
-
-    while True:
-        print("\n" + "=" * 50)
-        print("ГЛАВНОЕ МЕНЮ")
-        print("=" * 50)
-        print("1. Трекер продуктивности")
-        print("2. Управление задачами")
-        print("3. Выйти")
-
+            print("Введите число")
+            return
+    
+    def complete_task(self):
+        if not self.task:
+            print("Ошибка: задач в списке нет")
+            return
         try:
-            choice = int(input("Выберите раздел: "))
-        except (ValueError, KeyboardInterrupt):
-            print("Некорректный ввод")
-            continue
+            exercise = int(input("Выберите номер завершённой задачи: "))
+            if 1<= exercise <= len(self.task):
+                removed = self.task.pop(exercise - 1)
+                print(f"Задача '{removed}' выполнена.")
+            else:
+                print("Неверный номер задачи.")
+        except ValueError:
+            print("Введите число")
+            return
+        
+    def main_list_task(self):
+        while True:
+            print("\n"+ "="*35)
+            print("\tЗадачи на сегодняшний день:")
+            if len(self.task) == 0:
+                print("\n\tОтсутствуют")
+            else:
+                for index, exercise in enumerate(self.task, 1):
+                    print(f"Задача №{index} - {exercise}")
+            print("="*35)
+            print("\n1. Добавить задача\n"
+                    "2. Завершить задачу\n"
+                    "3. Показать задачи\n"
+                    "4. Удалить задачу\n"
+                    "0. Выйти в главное меню\n")
 
-        if choice == 1:
-            # Запуск трекера продуктивности
-            run_productivity_tracker(productivity)
-        elif choice == 2:
-            # Запуск менеджера задач
-            list_task(tasks)
-        elif choice == 3:
-            print("До свидания!")
-            break
-        else:
-            print("Неверный выбор")
+            try:
+                choice = int(input("Выберите действие: "))
+            except ValueError:
+                print("Пожалуйста, введите число")
+                continue
 
+            # Проверка диапазона
+            if choice not in [0, 1, 2, 3, 4]:
+                print("Неверный выбор. Выберите от 0 до 4")
+                continue
+            if choice == 1:
+                self.add_task()
+            elif choice == 2:
+                self.complete_task()
+            elif choice == 3:
+                self.show_task()
+            elif choice == 4:
+                self.delete_task()
+            elif choice == 0:
+                if len(self.task) == 0:
+                    print(f"У Вас нет задач на сегодня!\n"
+                        f"Хорошего дня!")
+                    break
+                if len(self.task) >= 1:
+                    print("Список задач на сегодня:")
+                    self.show_task()
+                    print("Хорошего дня!")
+                    break
 
-# Start program
-if __name__ == "__main__":
-    try:
-        main_menu()
-    except KeyboardInterrupt:
-        print("\n\nПрограмма завершила свою работу. "
-              "\nДо свидания!")
+task_board = TaskBoard(list_task)
+task_board.main_list_task()
 
 
