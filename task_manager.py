@@ -19,8 +19,13 @@ class TaskBoard(object):
 
     def add_task(self):
 
-        exercise = input("ВВедите название задачи: ")
-        self.task.append(exercise)
+        while True:
+            exercise = input("Введите название задачи: ")
+            if not exercise:
+                print("Ошибка: название задачи не может быть пустым.")
+            else:
+                self.task.append(exercise)
+                break
 
     def delete_task(self):
         if not self.task:
@@ -55,14 +60,14 @@ class TaskBoard(object):
         
     def main_list_task(self):
         while True:
-            print("\n"+ "="*35)
+            print("\n"+ "="*50)
             print("\tЗадачи на сегодняшний день:")
             if len(self.task) == 0:
                 print("\n\tОтсутствуют")
             else:
                 for index, exercise in enumerate(self.task, 1):
                     print(f"Задача №{index} - {exercise}")
-            print("="*35)
+            print("="*50)
             print("\n1. Добавить задача\n"
                     "2. Завершить задачу\n"
                     "3. Показать задачи\n"
@@ -99,6 +104,3 @@ class TaskBoard(object):
                     break
 
 task_board = TaskBoard(list_task)
-task_board.main_list_task()
-
-
