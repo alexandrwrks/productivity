@@ -4,8 +4,11 @@
 Понять синтаксис онсовынх программ и буду готов к учёбе и/или работе.
 */ 
 #include <iostream>
+#include <list>
+#include <set>
 
 int greet(int a, int b); // вызов функции которая написана ниже
+int add_set(); // вызов функции которая написана ниже
 
 int add() { 
     // базовый функционал цикла for
@@ -37,14 +40,19 @@ int add2(int x, int y) {
 
 int main() {
     // основная функция 
-    int x, y;
-    std::cin >> x >> y;
-
-    int sum = add2(x, y);
-    std::cout << "Summa = " << sum << std::endl;
-    return 0;
-
+    std::cout << "Sum of odd numbers between 0 and 10 (for loop): " << add_set() << std::endl;
 }   
+
+int add_list() {
+    std::list<int> numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+    int sum = 0;
+    for (int num : numbers) {
+        sum += num;
+    }
+
+    return sum;
+}
 
 int greet(int a, int b) {
     // чтобы эту функции использовать в main нужно вызвать выше чем main. показал в начале файла
@@ -56,3 +64,23 @@ int greet(int a, int b) {
         return 0;
     }
 }
+
+int add_set() {
+    std::set<int> num_set;
+    int sum = 0;
+    // цикл ввода чисел в множество
+    while (true) {
+        int num;
+        std::cin >> num;
+        if (num <= 0) {
+            break;
+        } else {
+            num_set.insert(num);
+        }
+    }
+    for (int n : num_set) {
+        std::cout << n << " ";
+        sum += n;
+    }
+    return sum;
+}   
