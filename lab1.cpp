@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <math.h>
 
 using namespace std;
 
@@ -22,13 +23,11 @@ using namespace std;
 // }
 
 int main(){
-    // нахождение периметра прямоугольника
-    double a, b;
-
-    cout << "Введите длину и ширину: " << endl;
-    cin >> a >> b;
-
-    cout << "Периметр равен: " << (a+b)*2;
+    // нахождение площади круга
+    // S = pi * r**2
+    double rad, pi; // радиус круга
+    pi = 3.14;
+    cout << "Введите радиус круга: "; cin >> rad;
+    cout << "Площадь круга равна - " << pi*(pow(rad, 2));
     return 0;
 }
-
