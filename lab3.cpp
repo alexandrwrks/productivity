@@ -1,29 +1,29 @@
 #include <iostream>
 #include <string>
-#include <cmath>
 
 using namespace std;
 
-// int main() {
-//     Сумма цифр в числе
-//     int num, sum, digit;
-
-//     cout << "Введите целое число: "; cin >> num;
-//     abs(num); sum = 0;
-
-//     while (num > 0) {
-//         digit = num % 10;
-//         sum += digit;
-//         num /=10; 
-//     }
-//     cout << "Сумма цифр равна: " << sum;
-
-//     return 0;
-// }
 int main() {
-    // натуральное и действительное a
+    int num, sum, digit;
+
+    cout << "Введите число: "; cin >> num;
+    abs(num); sum = 0;
+
+    while (num > 0) {
+        digit = num % 10;
+        sum += digit;
+        num /= 10; 
+    }
+    cout << "??? ??? ???: " << sum;
+
+    return 0;
+}
+
+int main() {
+
     // a * (a - n) * (a - 2n) *..* (a - n^2)
-    int n, k, a, sum;
+    int n, k;
+    double a, sum;
 
     cout << "Введите значение n: "; cin >> n;
     cout << "Введите значение a: "; cin >> a; 
