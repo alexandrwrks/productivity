@@ -27,11 +27,12 @@ using namespace std;
     
 //     return 0;
 // }
+
 int main() {
     int a,b,c;
     cout << "Введите значения a, b и c: " << endl;
     cin >> a >> b >> c;
-    if (a>=b and b >=c) {
+    if (a>=b & b >=c) {
         cout << "a: " << 2*a << endl;
         cout << "b: " << 2*b << endl;
         cout << "c: " << 2*c << endl;
