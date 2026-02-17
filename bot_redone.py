@@ -1,4 +1,6 @@
 from telebot import types
+from bot_token import BOT_TOKEN
+
 import telebot
 import random
 import threading
