@@ -3,78 +3,145 @@
 #include <string>
 #include <vector>
 
-#include <clocale>
-#include <windows.h>
-
-// #include <list> 
-
 using namespace std;
 
-struct LAB7 {
-    /* data */
-    string NAME; // имя сотрудника
-    string COMPANY; // название компании
-    double currency; // средняя зарплата
-};
+// struct ZNAK {
+//     /* data */
+//     string NAME; // people's name and surname
+//     string ZODIAC; // title of the zodiac sign
+//     double BDAY[3]; // day, month, year of birth
+// };
+
+// int main() {
+
+//     const int SIZE = 8;
+//     vector<ZNAK> BOOK(SIZE);
+
+//     cout << "Enter information about the employees: \n";
+//     cout << "================================\n";
+//     // Input information about the employees
+//     for (int i = 0; i < SIZE; i++) {
+
+//         cout << "\nEnter the name and surname of " << i+1 << " employee: "; 
+//         getline(cin, BOOK[i].NAME);
+        
+//         cout << "Enter the zodiac sign of " << i + 1 << " employee: ";
+//         cin >> BOOK[i].ZODIAC;
+
+//         cout << "Enter the birth date: \n";
+//         cout << "Day: "; cin >> BOOK[i].BDAY[0];
+//         cout << "Month(without 0): "; cin >> BOOK[i].BDAY[1];
+//         cout << "Year: "; cin >> BOOK[i].BDAY[2];
+//     }
+//     // Output the information about the employees
+//     cout << "\nInformation provided:\n";
+//     cout << "====================================================\n";
+//     cout << left << setw(20) << "Name and Surname" 
+//          << setw(20) << "Company Name"
+//          << setw(20) << "Date of Birth" << endl;
+//     cout << "====================================================\n";
+//     for (int i = 0; i < SIZE; i++) {
+//         cout << left << setw(20) << BOOK[i].NAME 
+//              << setw(20) << BOOK[i].ZODIAC
+//              << BOOK[i].BDAY[0] << ".0" << BOOK[i].BDAY[1] << "." << BOOK[i].BDAY[2] << endl;
+//     }
+
+//     // Input the number of month
+//     int number_month, sum_people = 0;
+//     cout << "\nEnter the month number: "; cin >> number_month;
+//     bool found = false;
+//     double sum = 0;
+
+//     for (int i = 0; i < SIZE; i++) {
+//         if (BOOK[i].BDAY[1] == number_month) {
+//             sum += BOOK[i].BDAY[1];
+//             sum_people++;
+//             found = true;
+//         }
+//     }
+
+//     if (found) {
+//         cout << "Was found " << sum_people << " people born in " 
+//              << number_month << " month." << endl;
+//         for (int i = 0; i < SIZE; i++) {
+//             if (BOOK[i].BDAY[1] == number_month) {
+//                 cout << left << setw(20) << "Name: " 
+//                      << setw(20) << "Zodiac: " 
+//                      << setw(15) << "Date of Birth: " << endl;
+//                 cout << left << setw(20) << BOOK[i].NAME 
+//                      << setw(20) << BOOK[i].ZODIAC
+//                      << BOOK[i].BDAY[0] << ".0" << BOOK[i].BDAY[1] << "." << BOOK[i].BDAY[2] << endl;
+//             }
+//         }
+//     } else {
+//         cout << "No people were found born in " 
+//              << number_month << " month." << endl;
+//     }
+    
+//     return 0;
+// }
+
+struct KINO
+{
+    string NAME; // name of the films
+    double COST; // cost of the films
+    string DIRECTOR; // name of the director
+};    
+
 
 int main() {
 
-    SetConsoleCP(CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
-    
-    setlocale(LC_ALL, "Russian");  
+    int SIZE;
+    cout << "Enter the number of movies: "; 
+    cin >> SIZE; // amount of films
+    cin.ignore(); 
+    vector<KINO> LIST(SIZE);
 
-    const int SIZE = 2;
-    vector<LAB7> LIST(SIZE);
-
-    cout << "Введите информацию о работниках: \n";
+    cout << "\nEnter information about the films: \n";
     cout << "================================\n";
-
     for (int i = 0; i < SIZE; i++) {
-
-        cout << "\nВведите имя " << i+1 << " работника: "; 
+        cout << "\nEnter the name of " << i + 1 << " film: "; 
         getline(cin, LIST[i].NAME);
         
-        cout << "Введите компанию(где работает "<< i + 1 << " сотрудник): ";
-        getline(cin, LIST[i].COMPANY);
+        cout << "Enter the cost of " << i + 1 << " film: ";
+        cin >> LIST[i].COST;
 
-        cout << "Введите среднюю зарплатную плату сотрудника(тысяч руб.): ";
-        cin >> LIST[i].currency;
+        cout << "Enter the name of the director of " << i + 1 << " film: ";
         cin.ignore();
+        getline(cin, LIST[i].DIRECTOR);
     }
-    // Вывод введеной информации
-    cout << "\nВведёная ифнформация:\n";
+
+    cout << "\nInformation provided:\n";
     cout << "====================================================\n";
-    cout << left << setw(20) << "Имя сотрудника" 
-         << setw(20) << "Название компании"
-         << setw(20) << "Заработная плата" << endl;
-    cout << "====================================================\n";
+    cout << left << setw(20) << "Name of the film" 
+         << setw(20) << "Cost of the film"
+         << setw(20) << "Director" << endl;
 
     for (int i = 0; i < SIZE; i++) {
         cout << left << setw(20) << LIST[i].NAME 
-             << setw(20) << LIST[i].COMPANY
-             << setw(15) << fixed << setprecision(2) << LIST[i].currency << endl;
+             << setw(20) << LIST[i].COST
+             << setw(20) << LIST[i].DIRECTOR << endl;
     }
 
-    string name_company;
-    cout << "\nВведите название компании: "; cin >> name_company;
-    bool found = false;
-
-    // string name;
-
-    int sum_company = 0;
-    double sum = 0, avg_sum = 0;
-
-    for (int i = 0; i < SIZE; i++) {
-        if (LIST[i].COMPANY == name_company) {
-            sum += LIST[i].currency;
-            sum_company++;
-            found = true;
+    for (int i = 0; i < SIZE-1; i++) {
+        for (int j = 0; j < SIZE-i-1; j++) {
+            if (LIST[j].COST > LIST[j+1].COST) {
+                KINO kino = LIST[j];
+                LIST[j] = LIST[j+1];
+                LIST[j+1] = kino;
+            }
         }
     }
 
-    avg_sum = sum/sum_company;
-    cout << "Средняя заработная плата: " << avg_sum << " (тысяч руб.)";
-
+    cout << "\nChanged information:\n";
+    cout << "====================================================\n";
+    cout << left << setw(20) << "Name of the film" 
+         << setw(20) << "Cost of the film"
+         << setw(20) << "Director" << endl;
+    for (int i = 0; i < SIZE; i++) {
+        cout << left << setw(20) << LIST[i].NAME 
+             << setw(20) << LIST[i].COST
+             << LIST[i].DIRECTOR << endl;
+    }
     return 0;
-}
+} 
