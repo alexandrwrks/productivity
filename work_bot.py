@@ -68,7 +68,7 @@ def comand_help(message):
 @bot.message_handler(commands=['calories'])
 def parcing_text(message):
     result = []
-    product_weight = []
+    
     parts = message.text.split()
 
     if len(parts) == 1 and parts[0] == '/calories':
@@ -76,6 +76,8 @@ def parcing_text(message):
                         "Введите счётчик в формате:\n\n/calories [продукт] [грам]\n\n" \
                         "Пример: /calories макароны 150")
         return
+
+    default_weight = []
 
     i = 1
     while i < len(parts):
@@ -85,15 +87,16 @@ def parcing_text(message):
         if i + 1 < len(parts) and parts[i + 1].isdigit():
             grams = int(parts[i + 1])
             i += 2
-        else:
-            bot.send_message(message.chat.id, 
-                            f"У '{product}' не был указан вес из-за чего изменили вес на 100 грамм")
-            product_weight.append(product)
+        else: 
+            default_weight.append(product)
             i += 1
         result.append((product, grams))
-    bot.send_message(message.chat.id, 
-                    f"Для продктов {product_weight}")
 
+    if default_weight:
+        str_default = ', '.join(default_weight)
+        bot.send_message(message.chat.id, 
+                    f"Для продуктов {str_default} не был предоставлен вес из-за чего вес был изменён на 100")
+    
     calc_nutrient(message, result)
 
 @bot.message_handler(func=lambda message: True)
