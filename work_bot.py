@@ -1,3 +1,4 @@
+from products import calories_counter
 from telebot import types
 from bot_token import BOT_TOKEN
 
@@ -6,32 +7,36 @@ import random
 import threading
 
 bot = telebot.TeleBot(BOT_TOKEN)
+my_set_products = set() # Создание множества для продктов которых ещё нет в основном списке
 
-"""
-Главное меню. Игра. Напоминалка. Помощь. 
-Обработка сообщений для каждого пункта меню.
-Обработка функций для каждой функции меню.
-"""
 
-# Главное меню.
 @bot.message_handler(commands=['start'])
 def main_menu(message):
+    
+    """
+    Главное меню.
+    Главное меню. Игра. Напоминалка. Помощь. 
+    Обработка сообщений для каждого пункта меню.
+    Обработка функций для каждой функции меню.
+    """
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     game = types.KeyboardButton('Игра')
     remind = types.KeyboardButton('Напоминалка')
     helper = types.KeyboardButton('Помощь')
+    calories = types.KeyboardButton('Счётчик калорий')
     markup.add(game, remind)
-    markup.add(helper)
+    markup.add(calories, helper)
     bot.send_message(message.chat.id, 'Главное меню:', reply_markup=markup)
     
-"""
-Команда для напоминания. 
-Пользователь вводит время в минутах и текст напоминания, 
-бот устанавливает таймер и отправляет напоминание через указанное время.
-"""
+
 @bot.message_handler(commands=['remind'])
 def remind(message):
-    # Парсинг сообщения /remind [время в минутах] [напоминание]
+    """
+    Команда для напоминания. 
+    Пользователь вводит время в минутах и текст напоминания, 
+    бот устанавливает таймер и отправляет напоминание через указанное время.
+    Парсинг сообщения /remind [время в минутах] [напоминание]
+    """
     try:
         args = message.text.split()
         if len(args) == 1:
@@ -60,17 +65,55 @@ def comand_help(message):
                 
     bot.send_message(message.chat.id, help_text)
 
+@bot.message_handler(commands=['calories'])
+def parcing_text(message):
+    result = []
+    product_weight = []
+    parts = message.text.split()
+
+    if len(parts) == 1 and parts[0] == '/calories':
+        bot.send_message(message.chat.id,
+                        "Введите счётчик в формате:\n\n/calories [продукт] [грам]\n\n" \
+                        "Пример: /calories макароны 150")
+        return
+
+    i = 1
+    while i < len(parts):
+        product = parts[i]
+        grams = 100
+
+        if i + 1 < len(parts) and parts[i + 1].isdigit():
+            grams = int(parts[i + 1])
+            i += 2
+        else:
+            bot.send_message(message.chat.id, 
+                            f"У '{product}' не был указан вес из-за чего изменили вес на 100 грамм")
+            product_weight.append(product)
+            i += 1
+        result.append((product, grams))
+    bot.send_message(message.chat.id, 
+                    f"Для продктов {product_weight}")
+
+    calc_nutrient(message, result)
+
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
 
     if message.text == 'Игра' or message.text == '/game':
         bot.send_message(message.chat.id, 'Вы выбрали игру!')
         start_game(message)
+
     elif message.text == 'Напоминалка':
         bot.send_message(message.chat.id, 'Вы выбрали напоминалку!')
         bot.send_message(message.chat.id, 
-                        "Введите напоминание в формате:\n/remind [минуты] [текст]\n\n"
+                        "Введите напоминание в формате:\n\n/remind [минуты] [текст]\n\n"
                         "Пример: /remind 5 Позвонить маме")
+        
+    elif message.text == 'Счётчик калорий':
+        bot.send_message(message.chat.id, 'Вы выбрали счётчик калорий')
+        bot.send_message(message.chat.id, 
+                        "Введите счётчик в формате:\n\n/calories [продукт] [грам]\n\n" \
+                        "Пример: /calories макароны 150")
 
     elif message.text == 'Помощь':
         comand_help(message)
@@ -123,7 +166,7 @@ def send_reminder(chat_id, text):
     bot.send_message(chat_id, f"⏰ Напоминание: {text}")
  
 
-def calorie_counter(message):
+# def calorie_counter(message):
     """
     Фнкция для подсчета калорий. Пользователь вводит блюдо и количество, бот возвращает калорийность и БЖУ.
 
@@ -139,7 +182,37 @@ def calorie_counter(message):
 
     Dead line: 20.05.2024
     """
+def send_message(message, result):
+    bot.send_message(message.chat.id, 
+                     f"Каллорийность продуктов - {result[3]} ккал"
+                     f"(белков - {result[1]}, жиров - {result[2]}, "
+                     f"углеводов - {result[0]})")
 
+def calc_nutrient(message, food_items):
+    result = [0, 0, 0, 0]
+    processed_items = []
+    
+    for item in food_items:
+        if isinstance(item, str):
+            processed_items.append((item.lower(), 100))
+        elif isinstance(item, (tuple, list)) and len(item) == 2:
+            product_name, gram = item
+            processed_items.append((product_name.lower(), gram))
+        else:
+            bot.send_message(message.chat.id, f"Неверный формат продукта: {item}")
+
+    for item, gram in processed_items:
+        if item not in calories_counter:
+            if item not in my_set_products:
+                bot.send_message(message.chat.id, f"Продукт '{item}' не найден в базе")
+                my_set_products.add(item)
+            continue
+        
+        product_name = calories_counter[item]
+        for i in range(4):
+            result[i] += (product_name[i] / 100) * gram
+            
+    send_message(message, [round(x, 2) for x in result])
 
 if __name__ == '__main__':
     print('Бот запущен!')
