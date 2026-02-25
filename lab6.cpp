@@ -4,47 +4,46 @@
 
 using namespace std;
 
-int main() {
+// int main() {
 
-    const int SIZE = 4;
-    vector<double> X(SIZE), Y(SIZE), Z(SIZE);
-    double num = 1.0, W = 1;
+//     const int SIZE = 4;
+//     vector<double> X(SIZE), Y(SIZE), Z(SIZE);
+//     double num = 1.0, W = 1;
 
-    for (int i = 0; i < SIZE; i++) {
-        cout << "Enter the " << i+1 << " number: ";
-        cin >> Y[i];
-    }
+//     for (int i = 0; i < SIZE; i++) {
+//         cout << "Enter the " << i+1 << " number: ";
+//         cin >> Y[i];
+//     }
 
-    for (int i = 0; i < SIZE; i++) {
-        num *= (1 - pow(Y[i], 2));
-    }
+//     for (int i = 0; i < SIZE; i++) {
+//         num *= (1 - pow(Y[i], 2));
+//     }
 
-    cout << "The product of the array Y is " << num << endl;
-    if (num > 0.5) {
-        cout << "\nEnter the numbers for branch X:\n";
-        for (int i = 0; i < SIZE; i++) {
-            cout << "X[" << i+1 << "] = ";
-            cin >> X[i];
-        }
-        for (int i = 0; i < SIZE; i++) {
-            W *= sin(X[i]) + 2;
-        }
-    } else {
-        cout << "\nEnter the numbers for branch Z:\n";
-        for (int i = 0; i < SIZE; i++) {
-            cout << "Z[" << i+1 << "] = ";
-            cin >> Z[i];
-        }
-        for (int i = 0; i < SIZE; i++) {
-            W *= (1 - pow(Z[i], 2));
-        }
-    }
-    cout << "Product of W: " << W;
-    return 0;
-}   
+//     cout << "The product of the array Y is " << num << endl;
+//     if (num > 0.5) {
+//         cout << "\nEnter the numbers for branch X:\n";
+//         for (int i = 0; i < SIZE; i++) {
+//             cout << "X[" << i+1 << "] = ";
+//             cin >> X[i];
+//         }
+//         for (int i = 0; i < SIZE; i++) {
+//             W *= sin(X[i]) + 2;
+//         }
+//     } else {
+//         cout << "\nEnter the numbers for branch Z:\n";
+//         for (int i = 0; i < SIZE; i++) {
+//             cout << "Z[" << i+1 << "] = ";
+//             cin >> Z[i];
+//         }
+//         for (int i = 0; i < SIZE; i++) {
+//             W *= (1 - pow(Z[i], 2));
+//         }
+//     }
+//     cout << "Product of W: " << W;
+//     return 0;
+// }   
 
 const int SIZE = 4;
-
 void createMatrix(vector<vector<int>>& matrix) {
     cout << "Enter " << SIZE << "x" << SIZE << "matrix elements:" << endl;
     for (int i = 0; i < SIZE; i++) {
