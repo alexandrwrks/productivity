@@ -3,7 +3,7 @@
 
 using namespace std;
 
-double recurseSumFunc(vector<int>& vec, size_t index = 0) {
+int recurseSumFunc(vector<int>& vec, size_t index = 0) {
     if (index >= vec.size()) {
         return 0;
     }
