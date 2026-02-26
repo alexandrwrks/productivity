@@ -32,6 +32,7 @@ using namespace std;
 //         cout << "Day: "; cin >> BOOK[i].BDAY[0];
 //         cout << "Month(without 0): "; cin >> BOOK[i].BDAY[1];
 //         cout << "Year: "; cin >> BOOK[i].BDAY[2];
+//         cin.ignore();
 //     }
 //     // Output the information about the employees
 //     cout << "\nInformation provided:\n";
@@ -43,7 +44,7 @@ using namespace std;
 //     for (int i = 0; i < SIZE; i++) {
 //         cout << left << setw(20) << BOOK[i].NAME 
 //              << setw(20) << BOOK[i].ZODIAC
-//              << BOOK[i].BDAY[0] << ".0" << BOOK[i].BDAY[1] << "." << BOOK[i].BDAY[2] << endl;
+//              << BOOK[i].BDAY[0] << "." << BOOK[i].BDAY[1] << "." << BOOK[i].BDAY[2] << endl;
 //     }
 
 //     // Input the number of month
@@ -81,67 +82,70 @@ using namespace std;
 //     return 0;
 // }
 
-struct KINO
-{
-    string NAME; // name of the films
-    double COST; // cost of the films
-    string DIRECTOR; // name of the director
-};    
-
+// Сделать вторую задачу 7 лабы
+struct STUDY{
+    string NAME;
+    int AGE;
+    int GROUP;
+};
 
 int main() {
 
-    int SIZE;
-    cout << "Enter the number of movies: "; 
-    cin >> SIZE; // amount of films
-    cin.ignore(); 
-    vector<KINO> LIST(SIZE);
+    cout << "Enter amount of students: ";
+    int amount; cin >> amount;
 
-    cout << "\nEnter information about the films: \n";
-    cout << "================================\n";
-    for (int i = 0; i < SIZE; i++) {
-        cout << "\nEnter the name of " << i + 1 << " film: "; 
-        getline(cin, LIST[i].NAME);
+    vector<STUDY> BOOK(amount);
+    cin.ignore();
+    // Enter information
+    cout << "Enter information about " << amount << " students" << endl;
+    cout << "=================================";
+    for (int i = 0; i < amount; i++) {
         
-        cout << "Enter the cost of " << i + 1 << " film: ";
-        cin >> LIST[i].COST;
+        cout << "\nStudent " << i + 1 << endl;
+        cout << "Name: ";
+        getline(cin, BOOK[i].NAME);
 
-        cout << "Enter the name of the director of " << i + 1 << " film: ";
+        cout << "Age: ";
+        cin >> BOOK[i].AGE;
+
+        cout << "Group: ";
+        cin >> BOOK[i].GROUP;
         cin.ignore();
-        getline(cin, LIST[i].DIRECTOR);
+    }   
+
+    // Print information
+    cout << "\nInformation about a students" << endl;
+    cout << "====================================================" << endl;
+    cout << left << setw(20) << "Name" 
+         << setw(20) << "Age" 
+         << "Group" << endl;
+    cout << "====================================================" << endl;
+
+    
+    for (int i = 0; i < amount; i++) {
+        cout << left << setw(20) << BOOK[i].NAME
+             << setw(20) << BOOK[i].AGE
+             << BOOK[i].GROUP << endl;
     }
 
-    cout << "\nInformation provided:\n";
-    cout << "====================================================\n";
-    cout << left << setw(20) << "Name of the film" 
-         << setw(20) << "Cost of the film"
-         << setw(20) << "Director" << endl;
+    cout << "\nEnter a number of group: ";
+    int number_of_group; 
+    cin >> number_of_group;
+    bool found = true;
 
-    for (int i = 0; i < SIZE; i++) {
-        cout << left << setw(20) << LIST[i].NAME 
-             << setw(20) << LIST[i].COST
-             << setw(20) << LIST[i].DIRECTOR << endl;
-    }
-
-    for (int i = 0; i < SIZE-1; i++) {
-        for (int j = 0; j < SIZE-i-1; j++) {
-            if (LIST[j].COST > LIST[j+1].COST) {
-                KINO kino = LIST[j];
-                LIST[j] = LIST[j+1];
-                LIST[j+1] = kino;
+    if (found) {
+        cout << "Information found for the group " << number_of_group << endl; 
+        cout << "====================================================" << endl;
+        for (int i = 0; i < amount; i++) {
+            if (BOOK[i].GROUP == number_of_group) {
+                cout << left << setw(20) << BOOK[i].NAME
+                     << setw(20) << BOOK[i].AGE
+                     << BOOK[i].GROUP;
             }
         }
+    } else {
+        cout << "Students of the entered group were not found" << endl;
     }
 
-    cout << "\nChanged information:\n";
-    cout << "====================================================\n";
-    cout << left << setw(20) << "Name of the film" 
-         << setw(20) << "Cost of the film"
-         << setw(20) << "Director" << endl;
-    for (int i = 0; i < SIZE; i++) {
-        cout << left << setw(20) << LIST[i].NAME 
-             << setw(20) << LIST[i].COST
-             << LIST[i].DIRECTOR << endl;
-    }
     return 0;
-} 
+}
