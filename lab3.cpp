@@ -1,42 +1,35 @@
 #include <iostream>
-#include <string>
 
 using namespace std;
 
+// int main() {
+//     int num, sum, digit;
+
+//     cout << "Enter number: "; cin >> num;
+//     num = abs(num); 
+//     sum = 0;
+
+//     while (num > 0) {
+//         digit = num % 10;
+//         sum += digit;
+//         num /= 10; 
+//     }
+//     cout << "The sum of the digits in the number: " << sum;
+//     return 0;
+// }
+
 int main() {
-    int num, sum, digit;
-
-    cout << "Введите число: "; cin >> num;
-    abs(num); sum = 0;
-
-    while (num > 0) {
-        digit = num % 10;
-        sum += digit;
-        num /= 10; 
-    }
-    cout << "??? ??? ???: " << sum;
-
-    return 0;
-}
-
-int main() {
-
     // a * (a - n) * (a - 2n) *..* (a - n^2)
     int n, k;
     double a, sum;
 
-    cout << "Введите значение n: "; cin >> n;
-    cout << "Введите значение a: "; cin >> a; 
-    sum = 1;
+    cout << "Enter n: "; cin >> n;
+    cout << "Enter a: "; cin >> a; 
+    sum = 1.0;
     for (k=0; k<=n; k++) {
         sum *= (a - k * n);
     }
-    
-    // k = n;
-    // while (k>=1, k--) {
-    //     sum *= a - (k * n);
-    // }
 
-    cout << "Сумма равна: " << sum;
+    cout << "The sum: " << sum;
     return 0;
 }
