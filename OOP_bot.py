@@ -5,6 +5,7 @@ from bot_token import BOT_TOKEN
 import telebot
 import random
 import threading
+import datetime
 
 
 class HandleManager:
@@ -81,6 +82,9 @@ class HandleManager:
 
             elif message.text == 'Играть снова':
                 self.GAME.start_game(message)
+
+            elif message.text == 'Отчёт за день':
+                self.CALORIES.send_daily_calories(message)
 
             elif message.text in ['Камень', 'Ножницы', 'Бумага']:
                 self.GAME.game(message)
@@ -160,7 +164,40 @@ class CaloriesManager:
     def __init__(self, bot):
         self.bot = bot
         self.calories_counter = calories_counter
+        self.file_name = "telebot.txt" # Название файла(можно будет заменить на json формат)
         self.unsuitable_products = set() # Создание множества для продктов которых ещё нет в основном списке
+
+    def save_calories_data(self, user_id, date, result):
+        """Сохранение калорий за день"""
+        with open(self.file_name, 'a', encoding='UTF-8') as data_file:
+            data_file.write(f"{user_id}|{date}|{result[3]}|{result[1]}|{result[2]}|{result[0]}\n")
+
+    def get_calories_data(self, user_id, date):
+        """
+        Получение суммы калорий за день для конкретного пользователя
+        """
+        total = 0 
+        try:
+            # Открытие файла для прочтение иф=нформации
+            with open(self.file_name, 'r', encoding='UTF-8') as data_file:
+                for line in data_file:
+                    saved_user, save_date, calories, protein, fats, carb = line.strip().split('|')
+                    if saved_user == str(user_id) and save_date == str(date):
+                        total += float(calories)
+        except FileNotFoundError:
+            pass
+        return total
+    
+    def send_daily_calories(self, message):
+        """
+        Отправка отчёт-сообщения с калориями
+        """
+        today = datetime.date.today()
+        total = self.get_calories_data(message.chat.id, today)
+
+        self.bot.send_message(
+            message.chat.id,
+            f"💾 Сумма калорий за сегодня: {total} ккал")
 
     def send_message(self, message, result):
         """
@@ -171,14 +208,17 @@ class CaloriesManager:
                         f"(белков - {result[1]}, жиров - {result[2]}, "
                         f"углеводов - {result[0]})")
         
+        today = datetime.date.today()
+        self.save_calories_data(message.chat.id, today, result)
+        
     def calc_nutrient(self, message, food_items):
         """
         Подсчёт КБЖУ и сохранение результатов в списов для дальнейшего вывода.
         """
         result = [0, 0, 0, 0]
         processed_items = []
-        
-        for item in food_items:
+        # Цикл для того чтобы донести информацию до бота в нужном ему виде
+        for item in food_items: 
             if isinstance(item, str):
                 processed_items.append((item.lower(), 100))
             elif isinstance(item, (tuple, list)) and len(item) == 2:
@@ -186,7 +226,7 @@ class CaloriesManager:
                 processed_items.append((product_name.lower(), gram))
             else:
                 self.bot.send_message(message.chat.id, f"Неверный формат продукта: {item}")
-
+        # Проверка нахождения продукта в БД/словаре
         for item, gram in processed_items:
             if item not in self.calories_counter:
                 if item not in self.unsuitable_products:
@@ -216,7 +256,7 @@ class CaloriesManager:
 
         default_weight = []
         i = 1
-
+        # Обрабтка сообщения от пользователя
         while i < len(parts):
             product = parts[i]
             grams = 100
@@ -245,15 +285,18 @@ class MenuManager:
     """
     def __init__(self, bot):
         self.bot = bot
-
+    # Добавление клавиатуры
     def main_menu(self, message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         game = types.KeyboardButton('Игра')
         remind = types.KeyboardButton('Напоминалка')
         helper = types.KeyboardButton('Помощь')
         calories = types.KeyboardButton('Счётчик калорий')
+        scores = types.KeyboardButton('Отчёт за день')
+
         markup.add(game, remind)
         markup.add(calories, helper)
+        markup.add(scores)
         self.bot.send_message(message.chat.id, 'Главное меню:', reply_markup=markup)
     
 class HelpManager:
@@ -279,7 +322,7 @@ class GameManager:
     """
     def __init__(self, bot):
         self.bot = bot
-
+    # Добавление клавиутры для игры
     def start_game(self, message):
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         rock = types.KeyboardButton('Камень')
@@ -287,7 +330,7 @@ class GameManager:
         paper = types.KeyboardButton('Бумага')
         keyboard.add(rock, scissors, paper)
         self.bot.send_message(message.chat.id, 'Выберите: ', reply_markup=keyboard)
-
+    # Логика игры
     def game(self, message):
         list_of_choice = ['Камень', 'Ножницы', 'Бумага']
         user_choice = message.text
@@ -305,7 +348,7 @@ class GameManager:
             result = 'Вы проиграли!'
         
         self.bot.send_message(message.chat.id, result)
-
+        # Клавитура после игры
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         play_again = types.KeyboardButton('Играть снова')
         main_menu_btn = types.KeyboardButton('Главное меню')
