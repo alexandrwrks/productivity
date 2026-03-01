@@ -3,69 +3,61 @@
 
 using namespace std;
 
-int main() {
+// int main() {
 
-    int row, col, max_col;
-    cout << "Введите значение row: "; cin >> row; 
-    cout << "Введите значение col: "; cin >> col;
-    /* Матрица -
-    9 8 7
-    6 5 4 
-    3 2 1
-    */ 
-    double matrix[row][col], max = -100;
+//     int row, col, max_col;
+//     cout << "Enter row: "; cin >> row; 
+//     cout << "Enter col: "; cin >> col;
+//     double matrix[row][col], max = -100;
 
+//     for (int i = 0; i < row; i++) {
+//         cout << "Enter " << i+1 << " row" << endl;
+//         for (int j = 0; j < col; j++) {
+//             cout << j+1 << ": ";
+//             double num;  
+//             cin >> num;
+//             if (num > max) {
+//                 max = num;
+//                 max_col = j;
+//             }
+//             matrix[i][j] = num;
+//         }
+//     }
 
-    // Ввод матрицы row * col
-    for (int i = 0; i < row; i++) {
-        cout << "Введите значения " << i+1 << " строки" << endl;
-        for (int j = 0; j < col; j++) {
-            int num; cout << j+1 << ": "; cin >> num;
-            if (num > max) {
-                max = num;
-                max_col = j;
-            }
-            matrix[i][j] = num;
-        }
-    }
+//     cout << "Max number: " << max << "\nTo be in col: " << max_col+1 << endl;
+//     cout << "Matrix" << endl;
+//     for (int i = 0; i < row; i++) {
+//         for (int j = 0; j < col; j++) {
+//             cout << matrix[i][j] << " ";
+//         }
+//         cout << endl;
+//     }
 
-    cout << "Максимальный элемент " << max << " находится в столбце " << max_col+1 << "\n" << endl;
-    // Вывод матрицы без замены
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < col; j++) {
-            cout << matrix[i][j] << " ";
-        }
-        cout << endl;
-    }
-    
-    // Переставляем столбец с максимальным числом на конец
-    for (int i = 0; i < row; i++) {
-        int a = matrix[i][col-1];
-        matrix[i][col-1] = matrix[i][max_col];
-        matrix[i][max_col] = a;
-    }
-    
-    // Вывод матрицы с максимальным числом в конце
-    for (int i = 0; i <= row-1; i++) {
-        for (int j = 0; j <= col-1; j++) {
-            cout << matrix[i][j] << " ";
-        }
-        cout << endl;
-    }
+//     cout << "\nSorted matrix:\n";
+//     for (int i = 0; i < row; i++) {
+//         int a = matrix[i][col-1];
+//         matrix[i][col-1] = matrix[i][max_col];
+//         matrix[i][max_col] = a;
+//     }
 
-    return 0;
-}
+//     for (int i = 0; i <= row-1; i++) {
+//         for (int j = 0; j <= col-1; j++) {
+//             cout << matrix[i][j] << " ";
+//         }
+//         cout << endl;
+//     }
+//     return 0;
+// }
 
 int main(){
 
     const int n = 4;
     double y = 0.0, x[n+1];
 
-
-    cout << "Введите " << n+1 << " элементов массива x: " << endl;
+    cout << "Enter " << n+1 << " elements to massive x: " << endl;
     for (int i = 0; i <= n; i++) {
-        cout << "Введите " << i+1 << " значение: ";
-        double a; cin >> a; x[i] = a;
+        cout << "Enter " << i+1 << " element: ";
+        cin >> x[i];
     }
 
     for (int j = 0; j <= n; j++)
@@ -76,8 +68,6 @@ int main(){
             y -= x[j] * x[n - j];
         }
     }
-
-    cout << "Сумма: " << y;
-
+    cout << "The sum: " << y;
     return 0;
 }
