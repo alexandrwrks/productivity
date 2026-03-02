@@ -85,6 +85,9 @@ class HandleManager:
 
             elif message.text == 'Отчёт за день':
                 self.CALORIES.send_daily_calories(message)
+            
+            elif message.text == 'Удалить все напоминания':
+                self.REMIND.cancel_all_reminders(message)
 
             elif message.text in ['Камень', 'Ножницы', 'Бумага']:
                 self.GAME.game(message)
@@ -108,6 +111,9 @@ class ReminderManager:
         Обработка команды /remind
         """
         try:
+            """
+            Сдедать обработку сообщения с добавлением клавиатуры для удаления напоминания если оно/и есть
+            """
             args = message.text.split()
             if len(args) == 1:
                 self.bot.send_message(
@@ -152,10 +158,18 @@ class ReminderManager:
         except Exception as e:
             print(f"Ошибка при отправке напоминания: {e}")
     
-    def cancel_all_reminders(self):
+    def cancel_all_reminders(self, message):
         """
         Отмена всех напоминаний
         """
+        if self.timers:
+            mes = f"Удалено {len.self.timers()} напоминаний"
+        else:
+            mes = f"Активные напоминания отсутствуют\n/help"
+        self.bot.send_message(
+            message.chat.id,
+            mes
+        )
         for timer in self.timers:
             timer.cancel()
         self.timers.clear()
@@ -276,6 +290,14 @@ class CaloriesManager:
         
         self.calc_nutrient(message, result)
 
+    def delete_data(self, message):
+        """
+        Функция для удаления продуктов за день для каждого пользователя
+        """
+        self.bot.send_message(
+            message.chat.id,
+        )
+
 class MenuManager:
     """
     Главное меню.
@@ -287,16 +309,20 @@ class MenuManager:
         self.bot = bot
     # Добавление клавиатуры
     def main_menu(self, message):
+        
+        # Сделать обработку некоторых кнопок в других местах чтобы они работали при каких-то условаиях, 
+        # чтобы не было лишних кнопок в главном меню
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         game = types.KeyboardButton('Игра')
         remind = types.KeyboardButton('Напоминалка')
         helper = types.KeyboardButton('Помощь')
         calories = types.KeyboardButton('Счётчик калорий')
         scores = types.KeyboardButton('Отчёт за день')
+        delete_remind = types.KeyboardButton('Удалить все напоминания')
 
         markup.add(game, remind)
         markup.add(calories, helper)
-        markup.add(scores)
+        markup.add(scores, delete_remind)
         self.bot.send_message(message.chat.id, 'Главное меню:', reply_markup=markup)
     
 class HelpManager:
