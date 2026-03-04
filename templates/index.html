@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>My TODO List</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>TODO List</h1>
+
+        <form action="/add" method="post" class="add-task">
+            <input type="text" name="title" id="text-place" placeholder="Добавьте задачу" required>
+            <button type="submit" class="addBtn"></button>
+        </form>
+
+        <div class="stats">
+            <div class="stats-item">
+                <h4>Выполненные</h4>
+                <div class="stats-number">{{ completed }}</div>
+            </div>
+            <div class="stats-item">
+                <h4>Всего задач</h4>
+                <div class="stats-number">{{ total }}</div>
+            </div>
+        </div>
+
+        <div class="tasks-list">
+            {% for task in tasks %}
+            <div class="task-item {% if task.completed %}completed{% endif %}">
+                <h3 class="task-title">{{ task.title }}</h3>
+                <div class="task-actions">
+                    <form action="/complete/{{ task.id }}" method="post" style="display: inline;">
+                        <button type="submit" class="accept-btn" title="Выполнить"></button>
+                    </form>
+                    <form action="/delete/{{ task.id }}" method="post" style="display: inline;">
+                        <button type="submit" class="delete-btn" title="Удалить"></button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
