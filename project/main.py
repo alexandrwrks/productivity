@@ -3,21 +3,27 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import uvicorn
+import os
 
 app = FastAPI()
 
-# Подключаем статические файлы (CSS)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Получаем абсолютный путь к директории, где находится main.py
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Настраиваем шаблоны
-templates = Jinja2Templates(directory="templates")
+# Подключаем статические файлы (CSS) с абсолютным путем
+app.mount(
+    "/static", 
+    StaticFiles(directory=os.path.join(BASE_DIR, "static")), 
+    name="static"
+)
+
+# Настраиваем шаблоны с абсолютным путем
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+
 
 # Здесь будет ваша БД (вы сказали, что уже сделали)
 # Пример простой БД в памяти:
-tasks_db = [
-    {"id": 1, "title": "Задача 1", "completed": False},
-    {"id": 2, "title": "Задача 2", "completed": True},
-]
+tasks_db = []
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
