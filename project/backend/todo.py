@@ -7,22 +7,25 @@ import os
 
 app = FastAPI()
 
-# Получаем абсолютный путь к директории, где находится main.py
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Подключаем статические файлы (CSS) с абсолютным путем
+PROJECT_DIR = os.path.dirname(BACKEND_DIR)
+
+FRONTEND_DIR = os.path.join(PROJECT_DIR, "frontend")
+
+static_dir = os.path.join(FRONTEND_DIR, "static")
+
+templates_dir = os.path.join(FRONTEND_DIR, "templates")
+
 app.mount(
     "/static", 
-    StaticFiles(directory=os.path.join(BASE_DIR, "static")), 
+    StaticFiles(directory=static_dir), 
     name="static"
 )
 
-# Настраиваем шаблоны с абсолютным путем
-templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
+templates = Jinja2Templates(directory=templates_dir)
 
-# Здесь будет ваша БД (вы сказали, что уже сделали)
-# Пример простой БД в памяти:
 tasks_db = []
 
 @app.get("/", response_class=HTMLResponse)
@@ -32,7 +35,7 @@ async def read_root(request: Request):
     total = len(tasks_db)
     
     return templates.TemplateResponse(
-        "index.html", 
+        "todo.html", 
         {
             "request": request, 
             "tasks": tasks_db,
@@ -69,4 +72,4 @@ async def delete_task(task_id: int):
     return RedirectResponse(url="/", status_code=303)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run("todo:app", host="127.0.0.1", port=8000, reload=True)
