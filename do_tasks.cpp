@@ -190,3 +190,72 @@ Laboratory work 10.1
 
 //     return 0;
 // }
+
+
+class Person {
+protected:
+    string name;
+    int age;
+
+public:
+
+    Person() : name(), age() {}
+
+    void print() {
+        cout << name << " - " << age << " age" << endl;
+    }
+
+    void input() {
+        cout << "Enter name: ";
+        getline(cin, name);
+        cout << "Enter age:";
+        cin >> age;
+        cin.ignore();
+        print();
+    }
+};
+
+class Child : public Person {
+private:
+    string school;
+    string hobby;
+
+public:
+
+    Child() : Person(), school(), hobby() {}
+
+    void print() {
+        Person::print();
+        cout << "School: " << school << "\nHobby: " << hobby << endl;
+    }
+
+    void input() {
+        Person::input();
+        cout << "Enter school: ";
+        getline(cin, school);
+        cout << "Enter hobby: ";
+        cin >> hobby;
+        cin.ignore();
+        print();
+        play();
+    }
+
+    void play() {
+        cout << name << " is playing " << hobby << endl;
+    }
+
+};
+
+int main() {
+
+    cout << "===PERSON===" << endl;
+    Person p1;
+    p1.input();
+
+
+    cout << "===CHILD===" << endl;
+    Child p2;
+    p2.input();
+    
+    return 0;
+}
