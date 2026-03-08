@@ -2,21 +2,14 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+
 import uvicorn
 import os
+import sqlite3
+from data.work_db import DataBase as db
 
 app = FastAPI()
 users = []
-
-# BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
-# PROJECT_DIR = os.path.dirname(BACKEND_DIR)
-
-# FRONTEND_DIR = os.path.join(PROJECT_DIR, "frontend")
-# static_dir = os.path.join(FRONTEND_DIR, "static")
-# image_dir = os.path.join(FRONTEND_DIR, "images")
-# templates_dir = os.path.join(FRONTEND_DIR, "templates")
-
-import os
 
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BACKEND_DIR)
