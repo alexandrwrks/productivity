@@ -2,3 +2,4 @@ __pycache__
 bot_token.py
 *.exe
 *.db
+*.db-journal
