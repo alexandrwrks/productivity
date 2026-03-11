@@ -1,10 +1,9 @@
-from work_my_database import data_base_name
 import hashlib
 import sqlite3
 
 class BaseDB:
-    def __init__(self):
-        self.db_name = data_base_name
+    def __init__(self, db_name="my_database.db"):
+        self.db_name = db_name
 
     def execute_query(self, query, params=(), fetch_one = False, fetch_all = False):
         """Универсальный метод для работы с БД"""
@@ -16,13 +15,13 @@ class BaseDB:
             cursor.execute(query, params)
 
             if fetch_one:
-                print(f"Инициализация прошла успешна")
+                print(f"Запрос выполнен: {query[:50]}...")
                 return cursor.fetchone()
             elif fetch_all:
-                print(f"Инициализация прошла успешна")
+                print(f"Запрос выполнен: {query[:50]}...")
                 return cursor.fetchall()
             else:
-                print(f"Инициализация прошла успешна")
+                print(f"Запрос выполнен: {query[:50]}...")
                 con.commit()
                 return cursor.lastrowid
 
@@ -46,7 +45,7 @@ class UsersDataManager(BaseDB):
         '''
         self.execute_query(query)
 
-    def vies_all_data(self):
+    def view_all_data(self):
         con = None
 
         try:
@@ -123,13 +122,22 @@ class ProductsData(BaseDB):
             cursor.execute('SELECT * FROM Products')
             users = cursor.fetchall()
 
-            print(f"Всего пользователей: {len(users)}")
+            print(f"Всего продуктов: {len(users)}")
         
         except sqlite3.Error as e:
             print(f"Ошибка при чтение данных: {e}")
         finally:
             if con:
                 con.close()
+
+    def find_data(self, name_of_product: str):
+        
+        query = '''
+        SELECT * FROM Products 
+        WHERE LOWER(name_of_product) LIKE LOWER(?)
+        ''' 
+        result = self.execute_query(query, (f'%{name_of_product}%',), fetch_all=True)
+        return result
 
 class ReportInfoProducts(BaseDB):
     def init_table(self):
@@ -148,15 +156,35 @@ class ReportInfoProducts(BaseDB):
         '''
         self.execute_query(query)
 
+
     def add_products_to_db(self, user_id, product_name, calories, carbs, protein, fats):
         query = '''
-                INSERT INTO ProductsReport
-                (name_of_product, calories, carbs, protein, fats, user_id, datetime)
-                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        INSERT INTO ProductsReport
+        (name_of_product, calories, carbs, protein, fats, user_id, datetime)
+        VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
         '''
         params = (product_name, calories, carbs, protein, fats, user_id)
         return self.execute_query(query, params)
 
+    def get_daily_report_formatted(self, user_id):
+        query = '''
+        SELECT SUM(calories), SUM(protein), SUM(carbs), SUM(fats), COUNT(*) 
+        FROM ProductsReport
+        WHERE user_id = ? AND DATE(datetime) = DATE('now')
+        '''
+        result = self.execute_query(query, (user_id,))
+        return result
+    
+    def get_weekly_stats(self, user_id):
+        query = '''
+        SELECT DATE(datetime) as day, SUM(calories), SUM(protein), SUM(carbs), SUM(fats)
+        FROM ProductsReport
+        WHERE user_id = ? AND DATE(datetime) >= DATE('now', '-7 days')
+        GROUP BY DATE(datetime)
+        ORDER BY day DESC
+        '''
+        result = self.execute_query(query, (user_id,))
+        return result
 """
 Логирование пользователя с хэшированным паролем
 stored_password = cursor.fetchone()[4]  # Получаем хеш из БД
