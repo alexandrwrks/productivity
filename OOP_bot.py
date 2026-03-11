@@ -1,6 +1,6 @@
 from products import calories_counter
 from telebot import types
-from bot_token import BOT_TOKEN
+from aiogram_bot.bot_token import BOT_TOKEN
 
 import telebot
 import random
