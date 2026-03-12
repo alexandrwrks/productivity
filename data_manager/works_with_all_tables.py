@@ -1,37 +1,45 @@
+from typing import Any, Optional, Union
+
 import hashlib
 import sqlite3
+import aiosqlite
+import asyncio
 
 class BaseDB:
-    def __init__(self, db_name="my_database.db"):
+    def __init__(self, db_name: str ="my_database.db"):
         self.db_name = db_name
 
-    def execute_query(self, query, params=(), fetch_one = False, fetch_all = False):
-        """Универсальный метод для работы с БД"""
-        con = None
-        try:
-            con = sqlite3.connect(self.db_name)
-            cursor = con.cursor()
+    async def execute_query(
+            self,
+            query: str,
+            params: tuple = (),
+            fetch_one: bool = False,
+            fetch_all: bool = False
+    ):
+        """Универсальный метод для работы с БД"""  
+        try:       
+            async with aiosqlite.connect(self.db_name) as db:
+                await db.execute("PRAGMA foreign_keys = ON")
 
-            cursor.execute(query, params)
+                cursor = await db.execute(query, params)
 
-            if fetch_one:
-                print(f"Запрос выполнен: {query[:50]}...")
-                return cursor.fetchone()
-            elif fetch_all:
-                print(f"Запрос выполнен: {query[:50]}...")
-                return cursor.fetchall()
-            else:
-                print(f"Запрос выполнен: {query[:50]}...")
-                con.commit()
-                return cursor.lastrowid
+                if fetch_one:
+                    result = await cursor.fetchone()
+                    print(f"Запрос выполнен: {query[:50]}...")
+                    return result
+                elif fetch_all:
+                    result = await cursor.fetchall()
+                    print(f"Запрос выполнен: {query[:50]}...")
+                    return result
+                else:
+                    await db.commit()
+                    print(f"Запрос выполнене: {query[:50]}...")
+                    return cursor.lastrowid
 
-        except sqlite3.Error as e:
+        except aiosqlite.Error as e:
             print(f"Ошибка БД: {e}")
             return None
-        finally:
-            if con:
-                con.close()
-
+        
 class UsersDataManager(BaseDB):
     def init_table(self):
         query = '''
