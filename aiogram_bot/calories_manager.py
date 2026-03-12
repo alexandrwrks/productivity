@@ -45,7 +45,6 @@ class CaloriesManager:
         total = self.get_calories_data(message.chat.id, today)
 
         await message.answer(
-            message.chat.id,
             f"💾 Сумма калорий за сегодня: {total} ккал")
 
     async def send_message(self, message: Message, result):

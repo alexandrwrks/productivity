@@ -1,1 +1,0 @@
-data_base_name = "my_database.db"
