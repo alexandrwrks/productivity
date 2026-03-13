@@ -1,1 +1,4 @@
 API_key.py
+*.db
+__pycache__
+*.exe
