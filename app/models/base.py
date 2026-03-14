@@ -1,0 +1,186 @@
+from typing import Any, Optional, Union
+
+import aiosqlite as sq
+import hashlib
+import asyncio
+
+class BaseDB:
+    def __init__(self, db_name='ai_assistant.db'):  # Исправлено название
+        self.db_name = db_name
+
+    async def execute_query(
+            self,
+            query: str,
+            params: tuple = (),
+            fetch_one: bool = False,
+            fetch_all: bool = False
+    ):
+        """Универсальный метод для работы с БД"""
+        try:
+            async with sq.connect(self.db_name) as db:
+                await db.execute('PRAGMA foreign_keys = ON')
+
+                cursor = await db.execute(query, params)
+            
+                if fetch_one:
+                    result = await cursor.fetchone()
+                    print(f"Запрос выполнен успешно: {query[:40]}...")
+                    return result
+                elif fetch_all:
+                    result = await cursor.fetchall()
+                    print(f"Запрос выполнен успешно: {query[:40]}...")
+                    return result
+                else:
+                    await db.commit()
+                    print(f"Запрос выполнен успешно: {query[:40]}...")
+                    return cursor.lastrowid
+                
+        except sq.Error as e:
+            print(f"Ошибка выполнения запроса {query[:40]}: {e}")
+            return None
+
+class UsersDataManager(BaseDB):
+    async def init_db(self):
+        query = """
+        CREATE TABLE IF NOT EXISTS Users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id TEXT UNIQUE,
+            username TEXT,
+            name TEXT,          
+            phone TEXT,
+            email TEXT
+        )
+        """
+        await self.execute_query(query)
+
+    async def add_user_from_bot(self, user_data: tuple):
+        """
+        Добавление данных пользователя из бота после /start
+        user_id и username
+        """
+        try:
+            async with sq.connect(self.db_name) as con:
+                await con.execute('''
+                                  INSERT INTO Users (user_id, username) 
+                                  VALUES (?, ?)
+                                  ''', user_data)
+                await con.commit()
+
+        except sq.Error as e:
+            print(f"Ошикба добавления пользователя в БД: {e}")
+        
+    async def add_users_todb(self, user_data: tuple = ()):
+        """Добавление пользователя с полными данными"""
+        try:
+            async with sq.connect(self.db_name) as con:
+                await con.execute('''
+                    INSERT INTO Users (username, name, phone, email) 
+                    VALUES (?, ?, ?, ?)
+                ''', user_data)
+                await con.commit()
+                print(f"Пользователь {user_data[0]} добавлен")
+        except sq.Error as e:
+            print(f"Ошибка добавления пользователя в БД: {e}")
+            return None
+        
+    async def delete_data(self, email: str):
+        """Удаление пользователя по email"""
+        try:
+            async with sq.connect(self.db_name) as con:
+                await con.execute("DELETE FROM Users WHERE email = ?", (email,))
+                await con.commit()
+                print(f"Пользователь с email {email} удален")
+        except sq.Error as e:
+            print(f"Ошибка удаления данных: {e}")
+
+class ItemsDataManager(BaseDB):
+    async def init_db(self):
+        """
+        user_id -> уникальный тг номер пользователя
+        useranme -> username пользователя(админа), который создал карточку товара
+        photo -> изоброжение/фотография которую прислыл пользователь через ТГ бота или через FastAPi(скорее всего через бота)
+        price -> цена которую указал продавец
+
+
+        """
+        product_query = """
+        CREATE TABLE IF NOT EXISTS Items (
+            item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            item_name TEXT NOT NULL,
+            username TEXT NOT NULL,
+            price REAL NOT NULL,
+            active BOOLEAN DEFAULT TRUE
+        )
+        """
+        await self.execute_query(product_query)
+
+    async def add_item(
+            self,
+            item_data: tuple, # item_id, item_name, username, photo(желательно), price
+    ):
+        if item_data == 5:
+            item_query = '''
+            INSERT INTO Items (item_id, item_name, username, price, photo) VALUES(?, ?, ?, ?, ?)
+    ''' 
+            params = item_data
+        elif item_data == 4:
+            item_query = '''
+            INSERT INTO Items (item_id, item_name, username, price) VALUES (?, ?, ?, ?)
+    '''
+            params = item_data
+
+        await self.execute_query(item_query, params)
+
+    async def show_items_data(self):
+
+        item_query = '''
+        SELECT 
+            item_id, item_name, username, price
+        FROM Items WHERE active
+        '''
+        await self.execute_query(item_query, fetch_all=True)
+
+class OrdersDataManager(BaseDB):
+    async def init_db(self):
+        """
+        id -> номер заказа(лучше всего если будет начинаться с 100001)
+        is_active -> активный ли заказ, если FALSE то значит заказ либо отменили, либо довезли до клиента
+        user_id -> user_id это уникальный тг номер пользователя который совершил заказ
+        username -> связан с user_id (таблица Users), получаем его вопремя регистрации пользователя или же тогда перед совершением покупки
+
+        Что ещё добавить?
+        """
+        order_query = """
+        CREATE TABLE IF NOT EXISTS Orders (
+        item_id INTEGER PRIMARY KEY AUTOINCREMENT = 10000,
+        is_active BOOLEAN DEFAULT True,
+        user_id INTEGER NOT NULL,
+        username TEXT NOT NULL,
+        )
+        """
+        await self.execute_query(order_query)
+
+    async def add_order(
+            self,
+            user_data: tuple = (), # получаю user_id(покупателя), username(покупателя), item_id(с начал сравнить с item_id Items)
+    ):
+        order_query = '''
+        INSERT INTO Orders (user_id, user_name) VALUES (?, ?)
+'''
+
+
+
+
+async def main():
+    um = UsersDataManager()
+    im = ItemsDataManager()
+    om = OrdersDataManager()
+    await um.init_db()
+    await im.init_db()
+    # await om.init_db()
+
+
+    # await um.add_user_from_bot()
+
+if __name__ == "__main__":
+    asyncio.run(main())
