@@ -43,7 +43,7 @@ class HandleManager:
         #         await message.answer(f"Фото не найдено. Био: {bio}")
 
         @router.message(Command('profile'))
-        async def get_profile(self):
+        async def get_profile():
             """
             Функция для вывода профоля пользователя/админа.
             После /profile [username] будет выводить профиль того человека который будет указан в [].
@@ -54,10 +54,40 @@ class HandleManager:
 
         @router.message(Command('catalog'))
         async def get_catalog(message: Message):
+            """
+            После /catalog. Пользователю приходят сообщения с предеметами которые сейчас находятся в продаже(имеют active = True/1)
+            Парсинг сообщения выглядит как карточка товара: фото, номер товара, username продавца, ниже описание и цена(в рублях)
+
+            """
+            await self.IDM.init_db()
+            catalog = await self.IDM.get_items_data()
+
+            if not catalog:
+                await message.answer("Нет активных объявлений")
+                return
+
+            # text = "Активные объявления:"
+            for item_id, item_name, username, price in catalog:
+                await message.answer(
+                    f"№{item_id} от <i>@{username}</i>\n\n"
+                    f"Название: <b>{item_name}</b>\n"
+                    f"Стоимость: {price}", 
+                    parse_mode='HTML')
+
+
+        @router.message(Command('support'))
+        async def get_support(message: Message):
+            await message.answer("Введите сообщение в котором ")
+
+        @router.message(Command('order'))
+        async def do_order(message: Message):
+            """
+            Пользователь вводит по очереди название предмета, описание, стоимость, фото.
+            Сделать проверку 
+            """
+            await message.answer("Введите название предмета: (обязательно)")
+            await message.answer("Введите описание предмета: (обязательно)")
+            await message.answer("Введиете стоимость: (обязательно)")
+            await message.answer("Добавьте фото для товара: (обязательно)")
+
             
-            catalog = await self.IDM.show_items_data()
-            if catalog:
-                text = (f"Номер товара: №{catalog[0]} от {catalog[2]}\n\nНазвание: *{catalog[1]}*\n\n Цена: *{catalog[3]}*")
-            else:
-                text = (f"Активных товаров нет в наличие")
-            await message.answer(text, parse_mode='Markdown')

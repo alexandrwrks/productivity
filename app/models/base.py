@@ -1,4 +1,7 @@
 from typing import Any, Optional, Union
+from decimal import Decimal
+from PIL import Image
+from aiogram.types import Message
 
 import aiosqlite as sq
 import hashlib
@@ -58,31 +61,17 @@ class UsersDataManager(BaseDB):
         Добавление данных пользователя из бота после /start
         user_id и username
         """
-        try:
-            async with sq.connect(self.db_name) as con:
-                await con.execute('''
-                                  INSERT INTO Users (user_id, username) 
-                                  VALUES (?, ?)
-                                  ''', user_data)
-                await con.commit()
+        result_query = 'SELECT * FROM Users WHERE user_id = ? AND username = ?) '
+        result = await self.execute_query(result_query, user_data)
 
-        except sq.Error as e:
-            print(f"Ошикба добавления пользователя в БД: {e}")
-        
-    async def add_users_todb(self, user_data: tuple = ()):
-        """Добавление пользователя с полными данными"""
-        try:
-            async with sq.connect(self.db_name) as con:
-                await con.execute('''
-                    INSERT INTO Users (username, name, phone, email) 
-                    VALUES (?, ?, ?, ?)
-                ''', user_data)
-                await con.commit()
-                print(f"Пользователь {user_data[0]} добавлен")
-        except sq.Error as e:
-            print(f"Ошибка добавления пользователя в БД: {e}")
-            return None
-        
+        if result:
+            print(f"Пользователь с '{user_data[1]}' уже существует в базе")
+        else:
+            add_user_query = 'INSERT INTO Users (user_id, username) VALUES (?, ?)'
+            
+            self.execute_query(add_user_query, user_data)
+
+
     async def delete_data(self, email: str):
         """Удаление пользователя по email"""
         try:
@@ -109,18 +98,52 @@ class ItemsDataManager(BaseDB):
             item_name TEXT NOT NULL,
             username TEXT NOT NULL,
             price REAL NOT NULL,
-            active BOOLEAN DEFAULT TRUE
+            active BOOLEAN DEFAULT TRUE,
+            description TEXT,
+            photo
         )
         """
         await self.execute_query(product_query)
 
+    """
+    Сделать отдельыне функции для добавления информации в таблицу Items.
+    Каждая функция будет овечать за одну позицию которую пользоваетль добавит в БД.
+    Корневая функция add_item, после чего в неё добавить функции добавления позиций
+    """
+    async def add_item(self, user_data: tuple):
+        add_user_query = 'INSERT INTO Items (item_name, description, price, photo)'
+
+        await self.execute_query(add_user_query, user_data)
+
+    async def add_description(
+            self,
+            description: str,
+            message: Message
+    ):
+        async with sq.connect(self.db_name) as db:
+            username = message.from_user.username
+
+            user_id = message.from_user.id
+            await db.execute('INSERT INTO Items WHERE = ')
+
+    async def add_item_photo(self, photo: Image):
+        img = Image.open('image.png')  # img теперь переменная-изображение
+        img.show()  # показать фото
+        img.save('new_image.jpg') # сохранить фото
+        img.size()
+        img.resize()
+
     async def add_item(
             self,
+            item_name: str,
+            username: str,
+            price: float,
+            photo: str,
             item_data: tuple, # item_id, item_name, username, photo(желательно), price
     ):
         if item_data == 5:
             item_query = '''
-            INSERT INTO Items (item_id, item_name, username, price, photo) VALUES(?, ?, ?, ?, ?)
+            INSERT INTO Items (item_name, username, price, photo) VALUES(?, ?, ?, ?)
     ''' 
             params = item_data
         elif item_data == 4:
@@ -140,6 +163,12 @@ class ItemsDataManager(BaseDB):
         '''
         await self.execute_query(item_query, fetch_all=True)
 
+    async def get_items_data(self):
+        async with sq.connect(self.db_name) as db:
+            cursor = await db.execute('SELECT item_id, item_name, username, price FROM Items WHERE active')
+            result = await cursor.fetchall()
+            return result
+
 class OrdersDataManager(BaseDB):
     async def init_db(self):
         """
@@ -152,20 +181,24 @@ class OrdersDataManager(BaseDB):
         """
         order_query = """
         CREATE TABLE IF NOT EXISTS Orders (
-        item_id INTEGER PRIMARY KEY AUTOINCREMENT = 10000,
-        is_active BOOLEAN DEFAULT True,
+        order_id INTEGER PRIMARY KEY AUTOINCREMENT = 100000,
+        username TEXT NOT NULL,
         user_id INTEGER NOT NULL,
         username TEXT NOT NULL,
+        is_active BOOLEAN DEFAULT True
         )
         """
         await self.execute_query(order_query)
 
     async def add_order(
             self,
-            user_data: tuple = (), # получаю user_id(покупателя), username(покупателя), item_id(с начал сравнить с item_id Items)
+            user_data: tuple, # получаю user_id(покупателя), username(покупателя), item_id(с начал сравнить с item_id Items)
     ):
-        order_query = '''
-        INSERT INTO Orders (user_id, user_name) VALUES (?, ?)
+        order_query = 'SELECT * FROM Items WHERE item_id = ? VALUE (?)'  
+        await self.execute_query(order_query, (user_data[0]))  
+    
+        add_order = '''
+
 '''
 
 
