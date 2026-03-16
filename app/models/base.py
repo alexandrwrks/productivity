@@ -2,6 +2,7 @@ from typing import Any, Optional, Union
 from decimal import Decimal
 from PIL import Image
 from aiogram.types import Message
+from aiogram import Bot
 
 import aiosqlite as sq
 import hashlib
@@ -89,8 +90,8 @@ class ItemsDataManager(BaseDB):
         useranme -> username пользователя(админа), который создал карточку товара
         photo -> изоброжение/фотография которую прислыл пользователь через ТГ бота или через FastAPi(скорее всего через бота)
         price -> цена которую указал продавец
-
-
+        description -> описание товара для удобства пользователям
+        photo -> изображения товара(photo.id)
         """
         product_query = """
         CREATE TABLE IF NOT EXISTS Items (
@@ -100,7 +101,7 @@ class ItemsDataManager(BaseDB):
             price REAL NOT NULL,
             active BOOLEAN DEFAULT TRUE,
             description TEXT,
-            photo
+            photo TEXT
         )
         """
         await self.execute_query(product_query)
@@ -110,21 +111,20 @@ class ItemsDataManager(BaseDB):
     Каждая функция будет овечать за одну позицию которую пользоваетль добавит в БД.
     Корневая функция add_item, после чего в неё добавить функции добавления позиций
     """
-    async def add_item(self, user_data: tuple):
-        add_user_query = 'INSERT INTO Items (item_name, description, price, photo)'
+    async def save_item_to_db(self, data: dict, username: str):
+        try:
+            async with sq.connect(self.db_name) as db:
 
-        await self.execute_query(add_user_query, user_data)
-
-    async def add_description(
-            self,
-            description: str,
-            message: Message
-    ):
-        async with sq.connect(self.db_name) as db:
-            username = message.from_user.username
-
-            user_id = message.from_user.id
-            await db.execute('INSERT INTO Items WHERE = ')
+                await db.execute('INSERT INTO Items (item_name, username, price, description, photo) VALUES (?, ?, ?, ?, ?)', (
+                    data['name'],
+                    username,
+                    data['price'],
+                    data.get('description', ''),
+                    data['photo_file_id']
+                ))
+                await db.commit()
+        except sq.Error as e:
+            print(f"Ошибка добавления товара в БД: {e}")
 
     async def add_item_photo(self, photo: Image):
         img = Image.open('image.png')  # img теперь переменная-изображение
@@ -132,36 +132,6 @@ class ItemsDataManager(BaseDB):
         img.save('new_image.jpg') # сохранить фото
         img.size()
         img.resize()
-
-    async def add_item(
-            self,
-            item_name: str,
-            username: str,
-            price: float,
-            photo: str,
-            item_data: tuple, # item_id, item_name, username, photo(желательно), price
-    ):
-        if item_data == 5:
-            item_query = '''
-            INSERT INTO Items (item_name, username, price, photo) VALUES(?, ?, ?, ?)
-    ''' 
-            params = item_data
-        elif item_data == 4:
-            item_query = '''
-            INSERT INTO Items (item_id, item_name, username, price) VALUES (?, ?, ?, ?)
-    '''
-            params = item_data
-
-        await self.execute_query(item_query, params)
-
-    async def show_items_data(self):
-
-        item_query = '''
-        SELECT 
-            item_id, item_name, username, price
-        FROM Items WHERE active
-        '''
-        await self.execute_query(item_query, fetch_all=True)
 
     async def get_items_data(self):
         async with sq.connect(self.db_name) as db:

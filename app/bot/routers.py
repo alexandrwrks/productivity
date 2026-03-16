@@ -1,10 +1,13 @@
 import aiogram
-from aiogram import Bot, Router
+from aiogram import Bot, Router, F
 from aiogram.types import Message
 from aiogram.filters import Command
 from app.models.base import UsersDataManager, ItemsDataManager, OrdersDataManager
+from app.bot.keyboards import KeyBoardManager
+from app.services import user_service
+from aiogram.fsm.context import FSMContext
 
-router = Router()
+main_router = Router()
 
 class HandleManager:
     def __init__(self, bot: Bot):
@@ -12,23 +15,21 @@ class HandleManager:
         self.UDM = UsersDataManager()
         self.IDM = ItemsDataManager()
         self.ODM = OrdersDataManager()
+        self.keyboard = KeyBoardManager
+
+        main_router.include_router(user_service.router)
+
         self._setup_handlers_()
 
     def _setup_handlers_(self):
-        @router.message(Command('start'))
+        @main_router.message(Command('start'))
         async def get_start(message: Message):            
-            user = message.from_user
-            user_id = user.id
-            username = user.username
+            text = (f"Привет, я бот-помощник.\nПомогаю людям с покупками в интернет магазинах")
 
-            text = (f"Привет, я бот-помощник. Помогаю людям с покупками в интрент магазинах\n\n"
-                    f"Твой ID {user_id}"
-                    f"Username: {username}")
-            
-            user_data = (user_id, username)
-
-            await self.UDM.add_user_from_bot(user_data)
-            await message.answer(text)
+            await message.answer(
+                text, 
+                reply_markup=self.keyboard.get_start_keyboard()
+            )
 
         # @router.message(Command('profile')) 
         # async def get_info(message: Message):
@@ -42,7 +43,7 @@ class HandleManager:
         #     else:
         #         await message.answer(f"Фото не найдено. Био: {bio}")
 
-        @router.message(Command('profile'))
+        @main_router.message(Command('profile'))
         async def get_profile():
             """
             Функция для вывода профоля пользователя/админа.
@@ -51,8 +52,17 @@ class HandleManager:
             количество товаров и соответсвенно товары(для админов)
             """
             pass
+        
 
-        @router.message(Command('catalog'))
+        @main_router.message(Command('order'))
+        async def get_catalog(bot: Bot, user_id: int, product_data: dict,):
+            await bot.send_photo(
+                chat_id=user_id,
+                photo=product_data['photo_file_id'],
+                caption=f"{product_data['item_name']}\nЦена: {product_data['price']}\n{product_data['description']}\nПродавец: @{product_data['username']}"
+            )
+
+        @main_router.message(Command('catalog'))
         async def get_catalog(message: Message):
             """
             После /catalog. Пользователю приходят сообщения с предеметами которые сейчас находятся в продаже(имеют active = True/1)
@@ -75,11 +85,11 @@ class HandleManager:
                     parse_mode='HTML')
 
 
-        @router.message(Command('support'))
+        @main_router.message(Command('support'))
         async def get_support(message: Message):
             await message.answer("Введите сообщение в котором ")
 
-        @router.message(Command('order'))
+        @main_router.message(Command('order'))
         async def do_order(message: Message):
             """
             Пользователь вводит по очереди название предмета, описание, стоимость, фото.
@@ -91,3 +101,16 @@ class HandleManager:
             await message.answer("Добавьте фото для товара: (обязательно)")
 
             
+        @main_router.message(F.text == '💾 Закончить регистрацию')
+        async def fihish_registration(message: Message, state: FSMContext):
+            """Обработчик кнопки завершения регистрации"""
+            current_state = await state.get_state()
+            if current_state:
+                await state.clear()
+                await message.answer("Регистрация прервана!")
+            else:
+                await message.answer("Нет активной регистрации")
+
+
+
+__all__ = ['main_router']

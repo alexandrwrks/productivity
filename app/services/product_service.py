@@ -61,18 +61,18 @@ async def process_price(message: Message, state: FSMContext):
 @router.message(ProductStates.waiting_for_photo, F.photo)
 async def process_photo(message: Message, state: FSMContext):
     photo = message.photo[-1]  # Берем самое большое фото
-    file_id = photo.file_id
+    
+    await state.update_data(photo_file_id=photo.file_id)
 
-    await state.update_data(photo_file_id = file_id)
     data = await state.get_data()
 
     await message.answer_photo(
-        photo=file_id,
-        caption=f"✅ Готов!\nНазвание: {data['name']}\nЦена: {data['price']}"
+        photo=photo.file_id,
+        caption=f"✅ Товар готов к публикации!\n\nНавзание: {data['name']}\nЦена: {data['price']}\nОписание: {data.get('description', 'Нет описания')}"
     )
 
-    await state.set_state(ProductStates.confirming_order)
-
+    await state.get_state(ProductStates.confirming_order)
+        
 @router.message(ProductStates.waiting_for_photo)
 async def process_photo_invalid(message: Message):
     await message.answer("Пожалуйста, отправьте фото")

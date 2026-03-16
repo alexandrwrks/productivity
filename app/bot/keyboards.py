@@ -3,13 +3,23 @@ from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup
 
 import asyncio
 
-class KeyBoradManager:
-    def __init__(self, bot: Bot):
-        self.bot = bot
+class KeyBoardManager:
+    """Класс олько для создания клавиатур"""
 
-    async def main_keyboard(self, message: Message):
+    @staticmethod
+    def get_start_keyboard():
+        """Возращает стартовую клавиатуру для регистрации"""
+        return ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text='💾 Закончить регистрацию')]
+            ],
+            resize_keyboard=True
+        )
 
-        keyboard = ReplyKeyboardMarkup(
+    @staticmethod
+    def main_keyboard():
+
+        return ReplyKeyboardMarkup(
             keyboard=[
                 [KeyboardButton(text='📓 Каталог'),
                  KeyboardButton(text='📱 Мои заказы'),
@@ -17,10 +27,10 @@ class KeyBoradManager:
             ],
             resize_keyboard=True
         )
-        await message.answer('Выберите: ', reply_markup=keyboard)
 
-    async def make_order(self, message: Message):
 
+    def make_order(self):
+        
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
                 [KeyboardButton(text='❌ Отменить'),
@@ -29,9 +39,8 @@ class KeyBoradManager:
             resize_keyboard=True
         )
         
-        await message.answer('Подтвердите покупку: ', reply_markup=keyboard)
 
-    async def main_admin_menu(self, message: Message):
+    async def main_admin_menu():
         
         keyboard = ReplyKeyboardMarkup(
             keyboard = [
@@ -42,7 +51,6 @@ class KeyBoradManager:
             resize_keyboard=True
         )
 
-        await message.answer('Выберите действие: ', reply_markup=keyboard)
     
     async def create_item(self, message: Message):
         pass
