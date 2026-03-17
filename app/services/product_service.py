@@ -10,7 +10,7 @@ import aiosqlite
 import os
 
 router = Router()
-
+"""Пользователь вводит свои данные с помощью FSM"""
 class ProductStates(StatesGroup):
     waiting_for_name = State()
     waiting_for_description = State()
@@ -18,7 +18,8 @@ class ProductStates(StatesGroup):
     waiting_for_photo = State()
     confirming_order = State()
 
-@router.message(Command('order'))
+@router.message(Command('item'))
+@router.message(F.text == '✅ Добавить товар')
 async def cmd_order(message: Message, state: FSMContext):
     await state.set_state(ProductStates.waiting_for_name)
     await message.answer('Введите название товара: ')
@@ -60,6 +61,8 @@ async def process_price(message: Message, state: FSMContext):
 
 @router.message(ProductStates.waiting_for_photo, F.photo)
 async def process_photo(message: Message, state: FSMContext):
+    """Последнее действие для создания карточки товара
+    Пользователь должен отправить фото товара для успешного оформления."""
     photo = message.photo[-1]  # Берем самое большое фото
     
     await state.update_data(photo_file_id=photo.file_id)
@@ -68,7 +71,7 @@ async def process_photo(message: Message, state: FSMContext):
 
     await message.answer_photo(
         photo=photo.file_id,
-        caption=f"✅ Товар готов к публикации!\n\nНавзание: {data['name']}\nЦена: {data['price']}\nОписание: {data.get('description', 'Нет описания')}"
+        caption=f"✅ Товар готов к публикации!\n\nНазвание: {data['name']}\nЦена: {data['price']}\nОписание: {data.get('description', 'Нет описания')}"
     )
 
     await state.get_state(ProductStates.confirming_order)
@@ -77,8 +80,9 @@ async def process_photo(message: Message, state: FSMContext):
 async def process_photo_invalid(message: Message):
     await message.answer("Пожалуйста, отправьте фото")
 
-@router.message(Command('confirm_order'), ProductStates.confirming_order)
+@router.message(ProductStates.confirming_order)
 async def confirm_order(message: Message, state: FSMContext):
+    """Сохранять данные в таблицу Items"""
     data = await state.get_data()
 
     # user_data = (name = data['name'], description = data['description'], price = data['price'], photo = data['photo_file_id'])
@@ -88,7 +92,6 @@ async def confirm_order(message: Message, state: FSMContext):
 
     await message.answer("✅ Заказ создан!")
     await state.clear()
-
 
 @router.message(Command('cancel'))
 async def cancell_order(message: Message, state: FSMContext):

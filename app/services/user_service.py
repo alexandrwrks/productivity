@@ -5,6 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types.input_file import InputFile
 from app.models.base import UsersDataManager as UDM
+from app.bot.keyboards import KeyBoardManager as keyboard
 
 import aiosqlite
 import os
@@ -22,6 +23,7 @@ class RegisterUserStates(StatesGroup):
     waiting_for_city = State()
 
 @router.message(Command('reg'))
+@router.message(F.text == '📓 Начать регистрацию')
 async def cmd_register(message: Message, state: FSMContext):
     await state.set_state(RegisterUserStates.waiting_for_name)
     await message.answer('Введите Ваше имя: ')
@@ -58,6 +60,10 @@ async def process_phone(message: Message, state: FSMContext):
 
 @router.message(RegisterUserStates.waiting_for_city)
 async def process_city(message: Message, state: FSMContext):
+    """
+    Сохранять данные пользователя в таблице users
+    Выводить результаты регистрации
+    """
     if not message.text:
         await message.answer('Введите город:')
         return
@@ -66,14 +72,20 @@ async def process_city(message: Message, state: FSMContext):
     
     # Получаем все данные
     data = await state.get_data()
-    
+    # data['user_id'] = message.from_user.id
+    # data['username'] = message.from_user.username
     # Сохраняем в БД
-    await ODM.add_user(data)  # Или другой менеджер
+    # await UDM.add_user_from_bot_to_db(data)
     
-    await message.answer(f"✅ Регистрация завершена!\n"
-                        f"Имя: {data['name']}\n"
-                        f"Email: {data['email']}\n"
-                        f"Телефон: {data['phone']}\n"
-                        f"Город: {data['city']}")
+    text = f"✅ Регистрация завершена!\n" \
+            f"Имя: {data['name']}\n" \
+            f"Email: {data['email']}\n" \
+            f"Телефон: {data['phone']}\n" \
+            f"Город: {data['city']}"
+
+    await message.answer(
+        text,
+        reply_markup=keyboard.main_keyboard()
+    )
     
     await state.clear()

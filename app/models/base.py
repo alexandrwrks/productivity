@@ -57,20 +57,23 @@ class UsersDataManager(BaseDB):
         """
         await self.execute_query(query)
 
-    async def add_user_from_bot(self, user_data: tuple):
-        """
-        Добавление данных пользователя из бота после /start
-        user_id и username
-        """
-        result_query = 'SELECT * FROM Users WHERE user_id = ? AND username = ?) '
-        result = await self.execute_query(result_query, user_data)
+    async def save_user_to_db(self, user_data: dict, user_id: int, username: str):
+        try:
+            async with sq.connect(self.db_name) as db:
 
-        if result:
-            print(f"Пользователь с '{user_data[1]}' уже существует в базе")
-        else:
-            add_user_query = 'INSERT INTO Users (user_id, username) VALUES (?, ?)'
-            
-            self.execute_query(add_user_query, user_data)
+                await db.execute('''INSERT INTO Items (user_id, name, email, username, phone, city) 
+                                 VALUES (?, ?, ?, ?, ?, ?)''', (
+                                     user_id,
+                                     user_data['name'],
+                                     user_data['email'],
+                                     username,
+                                     user_data['phone'],
+                                     user_data['city']
+                                 )
+                    )
+                await db.commit()
+        except sq.Error as e:
+            print(f"Ошибка добавления товара в БД: {e}")
 
 
     async def delete_data(self, email: str):

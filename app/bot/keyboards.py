@@ -4,34 +4,34 @@ from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup
 import asyncio
 
 class KeyBoardManager:
-    """Класс олько для создания клавиатур"""
+    """Класс только для создания клавиатур"""
 
     @staticmethod
-    def get_start_keyboard():
-        """Возращает стартовую клавиатуру для регистрации"""
+    def get_reg_keyboard():
+        """Возращаем клавтуру для начала реигстрации"""
         return ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton(text='💾 Закончить регистрацию')]
+                [KeyboardButton(text='📓 Начать регистрацию')]
             ],
             resize_keyboard=True
         )
-
+    
     @staticmethod
     def main_keyboard():
-
+        """Основная клавиатура"""
         return ReplyKeyboardMarkup(
             keyboard=[
                 [KeyboardButton(text='📓 Каталог'),
                  KeyboardButton(text='📱 Мои заказы'),
-                 KeyboardButton(text='❔ Поддержка')]
+                 KeyboardButton(text='❔Помощь')]
             ],
             resize_keyboard=True
         )
 
-
-    def make_order(self):
-        
-        keyboard = ReplyKeyboardMarkup(
+    @staticmethod
+    def make_order():
+        """Возращате клавиатуру с подтверждением создания товара"""
+        return ReplyKeyboardMarkup(
             keyboard=[
                 [KeyboardButton(text='❌ Отменить'),
                  KeyboardButton(text='✅ Подтвердить')]
@@ -39,19 +39,30 @@ class KeyBoardManager:
             resize_keyboard=True
         )
         
-
+    @staticmethod
     async def main_admin_menu():
-        
-        keyboard = ReplyKeyboardMarkup(
+        """Возращает меню вдмина/админку"""
+        return ReplyKeyboardMarkup(
             keyboard = [
-                [KeyboardButton(text='Статистика'),
-                 KeyboardButton(text='Добавить товар'),
-                 KeyboardButton(text=''),]
+                [KeyboardButton(text='💾 Статистика'),
+                 KeyboardButton(text='✅ Добавить товар'),
+                 KeyboardButton(text='❌ Убрать товар'),] # Выводиться список товаров от этого ползователя с кнопкой удаления товаров на каждой карточке
             ],
             resize_keyboard=True
         )
-
     
-    async def create_item(self, message: Message):
+    @staticmethod
+    async def create_item():
         pass
+    
+    @staticmethod
+    async def help_menu():
+        """Возращает клавиатуру для """
+        return ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text='📖 Основные функции бота'),
+                 KeyboardButton(text='📄 Написать в поддержку')]
+            ]
+        )
 
+        

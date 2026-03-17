@@ -4,7 +4,9 @@ from aiogram.types import Message
 from aiogram.filters import Command
 from app.models.base import UsersDataManager, ItemsDataManager, OrdersDataManager
 from app.bot.keyboards import KeyBoardManager
-from app.services import user_service
+from app.services import user_service, product_service
+from app.services.user_service import router as user_router
+from app.services.product_service import router as product_router
 from aiogram.fsm.context import FSMContext
 
 main_router = Router()
@@ -17,7 +19,7 @@ class HandleManager:
         self.ODM = OrdersDataManager()
         self.keyboard = KeyBoardManager
 
-        main_router.include_router(user_service.router)
+        main_router.include_router(user_router, product_router)
 
         self._setup_handlers_()
 
@@ -28,39 +30,8 @@ class HandleManager:
 
             await message.answer(
                 text, 
-                reply_markup=self.keyboard.get_start_keyboard()
-            )
-
-        # @router.message(Command('profile')) 
-        # async def get_info(message: Message):
-        #     chat_info = await self.bot.get_chat(message.from_user.id)
-        #     bio = chat_info.bio
-
-        #     photos = await self.bot.get_user_profile_photos(message.from_user.id)
-        #     if photos.total_count > 0:
-        #         photo_id = photos.photos[0][0].file_id
-        #         await message.answer_photo(photo_id, caption=f"Ваше фото. Био: {bio}")
-        #     else:
-        #         await message.answer(f"Фото не найдено. Био: {bio}")
-
-        @main_router.message(Command('profile'))
-        async def get_profile():
-            """
-            Функция для вывода профоля пользователя/админа.
-            После /profile [username] будет выводить профиль того человека который будет указан в [].
-            В профиле будет указан рейтинг пользователя. Его username. Количество заказво(если пользователь),
-            количество товаров и соответсвенно товары(для админов)
-            """
-            pass
-        
-
-        @main_router.message(Command('order'))
-        async def get_catalog(bot: Bot, user_id: int, product_data: dict,):
-            await bot.send_photo(
-                chat_id=user_id,
-                photo=product_data['photo_file_id'],
-                caption=f"{product_data['item_name']}\nЦена: {product_data['price']}\n{product_data['description']}\nПродавец: @{product_data['username']}"
-            )
+                reply_markup=self.keyboard.get_reg_keyboard()
+            )   
 
         @main_router.message(Command('catalog'))
         async def get_catalog(message: Message):
@@ -81,36 +52,35 @@ class HandleManager:
                 await message.answer(
                     f"№{item_id} от <i>@{username}</i>\n\n"
                     f"Название: <b>{item_name}</b>\n"
-                    f"Стоимость: {price}", 
+                    f"Стоимость: {price} руб.", 
                     parse_mode='HTML')
 
+        @main_router.message(Command('helper'))
+        @main_router.message(F.text == '❔ Помощь')
+        async def get_support(message: Message):
+            """Добавить FSM для работы поддержки, после введёного собщения, его нужно достваить в службу поддержки пользователя"""
+            await message.answer(
+                text='Выберите:',
+                reply_markup=self.keyboard.help_menu()
+            )
+
+        @main_router.message(Command('help'))
+        @main_router.message(F.text == '📖 Основные функции бота')
+        async def get_help_menu(message: Message):
+
+            text = f"На что способен бот:\n\n" \
+                    f"/help - помощь в использлвание бота" \
+                    f"/order - создание карточки вашего товара" \
+                    f"/"
+
+            await message.answer(text)
 
         @main_router.message(Command('support'))
+        @main_router.message(F.text == '📄 Написать в поддержку')
         async def get_support(message: Message):
-            await message.answer("Введите сообщение в котором ")
-
-        @main_router.message(Command('order'))
-        async def do_order(message: Message):
-            """
-            Пользователь вводит по очереди название предмета, описание, стоимость, фото.
-            Сделать проверку 
-            """
-            await message.answer("Введите название предмета: (обязательно)")
-            await message.answer("Введите описание предмета: (обязательно)")
-            await message.answer("Введиете стоимость: (обязательно)")
-            await message.answer("Добавьте фото для товара: (обязательно)")
-
+            await message.answer(
+                text='Опишите вашу проблему и тех. поддержка в скором времени с Вами свяжется'
+            )
             
-        @main_router.message(F.text == '💾 Закончить регистрацию')
-        async def fihish_registration(message: Message, state: FSMContext):
-            """Обработчик кнопки завершения регистрации"""
-            current_state = await state.get_state()
-            if current_state:
-                await state.clear()
-                await message.answer("Регистрация прервана!")
-            else:
-                await message.answer("Нет активной регистрации")
-
-
 
 __all__ = ['main_router']
