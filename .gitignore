@@ -1,3 +1,5 @@
 bot_token.py
 project
 *.exe
+*.db
+.env
