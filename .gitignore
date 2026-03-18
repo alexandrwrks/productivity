@@ -1,6 +1,0 @@
-*.db
-bot_token.py
-__pycache__
-aiogram_bot
-.env
-.exe
