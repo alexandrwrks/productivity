@@ -1,0 +1,13 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    color: red;
+    background-color: #ffeeee;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid red;
+}
