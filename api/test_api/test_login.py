@@ -1,12 +1,10 @@
 from fastapi import FastAPI, HTTPException, status
-from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel, EmailStr
 from test_service import test_service
 from test_base import test_base
 from contextlib import asynccontextmanager
 
 import uvicorn
-import asyncio
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,9 +20,6 @@ class RegistrationUser(BaseModel):
     password: str
     reply_password: str
 
-    def check_password_match(self):
-        if self.password != self.reply_password:
-            raise ValueError("Пароли не совпадают")
 
 class AuthorizationUser(BaseModel):
     email: EmailStr
@@ -70,20 +65,28 @@ async def register_panel(user_info: RegistrationUser):
             detail="Пароль должен содержать минимум 6 символов"
         )
 
-    user_data = {
-        "name": user_info.name,
-        "surname": user_info.surname,
-        "email": user_info.email,
-        "password": user_info.password
-    }
+    check_email_in_db = await test_service.check_email_for_registration(user_info.email)
 
-    await test_service.data_preparation(user_data)
+    if not check_email_in_db:
+        user_data = {
+            "name": user_info.name,
+            "surname": user_info.surname,
+            "email": user_info.email,
+            "password": user_info.password
+        }
 
-    return UserResponse(
-        name=user_info.name,
-        surname=user_info.surname,
-        email=user_info.email,
-        message="Региситрация прошла успешна"
+        await test_service.data_preparation(user_data)
+
+        return UserResponse(
+            name=user_info.name,
+            surname=user_info.surname,
+            email=user_info.email,
+            message="Региситрация прошла успешно"
+        )
+    
+    raise HTTPException(
+        status_code=status.HTTP_409_CONFLICT,
+        detail="Данная почта уже зарегестрирована"
     )
 
 @app.post("/login", response_model=dict)
@@ -110,6 +113,11 @@ async def login_panel(
         "token_type": "bearer"
     }
 
+
+"""
+check_password_match
+отсуствие response_model в эндпоинтах
+"""
 
 if __name__ == "__main__":
 
