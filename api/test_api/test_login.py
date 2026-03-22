@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, status
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from test_service import test_service
 from test_base import test_base
 from contextlib import asynccontextmanager
@@ -14,22 +14,21 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Мой магазин на FastAPI", lifespan=lifespan)
 
 class RegistrationUser(BaseModel):
-    name: str
-    surname: str
+    name: str = Field(min_length=1, max_length=50)
+    surname: str = Field(min_length=1, max_length=50)
     email: EmailStr
-    password: str
+    password: str = Field(min_length=6)
     reply_password: str
 
 
 class AuthorizationUser(BaseModel):
     email: EmailStr
-    password: str
+    password: str = Field(min_length=6)
 
 class UserResponse(BaseModel):
     name: str
     surname: str
     email: EmailStr
-    password: str | None = None
     message: str
 
 @app.get("/", response_model=dict)
@@ -39,17 +38,22 @@ async def main_page():
         "message": "Основная страница магазина",
     }
 
-@app.get("/register")
+@app.get("/register", response_model=dict)
 async def register_page():
+    """Страница регистрации"""
     return {
         "message": "Страница регистрации"
     }
 
-@app.get("/login")
+@app.get("/login", response_model=dict)
 async def login_page():
+    """Страцница авторизации"""
     return {
         "message": "Страница авторизации"
     }
+
+
+
 
 @app.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def register_panel(user_info: RegistrationUser):
@@ -57,12 +61,6 @@ async def register_panel(user_info: RegistrationUser):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Введённые данные не совпадают"
-        )
-    
-    if len(user_info.password) < 6:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Пароль должен содержать минимум 6 символов"
         )
 
     check_email_in_db = await test_service.check_email_for_registration(user_info.email)
@@ -75,21 +73,28 @@ async def register_panel(user_info: RegistrationUser):
             "password": user_info.password
         }
 
-        await test_service.data_preparation(user_data)
+        add_user = await test_service.data_preparation(user_data)
 
-        return UserResponse(
-            name=user_info.name,
-            surname=user_info.surname,
-            email=user_info.email,
-            message="Региситрация прошла успешно"
-        )
+        if add_user:
+            return UserResponse(
+                name=user_info.name,
+                surname=user_info.surname,
+                email=user_info.email,
+                message="Регистрация прошла успешно"
+            )
+        
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error with data base"
+            ) 
     
     raise HTTPException(
         status_code=status.HTTP_409_CONFLICT,
-        detail="Данная почта уже зарегестрирована"
+        detail="Данная почта уже зарегистрирована"
     )
 
-@app.post("/login", response_model=dict)
+@app.post("/login", response_model=dict, status_code=status.HTTP_200_OK)
 async def login_panel(
     auth_info: AuthorizationUser
 ):
@@ -106,6 +111,11 @@ async def login_panel(
             detail="Не верно введён пароль!"
         )
     
+    if checker_error == "error":
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error"
+        )
 
     return {
         "message": f"Добро пожаловать {auth_info.email}!",

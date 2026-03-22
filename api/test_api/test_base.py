@@ -1,8 +1,20 @@
 import aiosqlite
+from pydantic import EmailStr
+from datetime import datetime
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+
+logger = logging.getLogger(__name__)
 
 class TestBase:
-    def __init__(self, db_name="test_api.db"):
+    def __init__(self, db_name="test_api.db", log_name = "test_logging"):
         self.db_name = db_name
+        self.log_name = log_name
 
     async def init_db(self):
         try:
@@ -19,10 +31,10 @@ class TestBase:
                 await db.commit()
                 
         except aiosqlite.Error as e:
-            print(f"Ошибка инициализации базы данных")
+            logging.error(f"Ошибка инициализации: {e}")
 
     """Функции для возврата информации о пользователе"""
-    async def check_email_exists(self, email: str) -> bool:
+    async def check_email_exists(self, email: EmailStr) -> bool:
         """Проверяет наличие почты в БД"""
         try:
             async with aiosqlite.connect(self.db_name) as db:
@@ -32,24 +44,29 @@ class TestBase:
                 )
 
                 result = await cursor.fetchone()
-                return result is not None
+                if result: # Если почта есть в БД, то возращаем True, иначе False
+                    return True
+                
+                return False
                 
         except aiosqlite.Error as e:
-            print(f"Ошибка чтения данныз: {e}")
+            logging.error(f"Ошибка чтения данных: {e}")
+            return None # При ошибке возращаем None
     
-    async def get_hash_password_by_email(self, email: str):
-        """Возращаем хешированный пароль из БД для указанного email"""
-        try:
+    async def get_hashed_password(self, email: EmailStr):
+        """Получаем хешированный пароль"""
+        try: 
             async with aiosqlite.connect(self.db_name) as db:
                 cursor = await db.execute("SELECT password FROM Users WHERE email = ?", (email,))
 
-                hashed_password = await cursor.fetchone()
-                return hashed_password
-            
-        except aiosqlite.Error as e:
-            print(f"Ошибка чтения данных: {e}")
+                result = await cursor.fetchone()
+                return result[0] if result else None
 
-    async def get_user_by_email(self, email: str):
+        except aiosqlite.Error as e:
+            logging.error(f"Ошибка получения данных: {e}")
+            return "Ошибка чтения данных"
+
+    async def get_user_by_email(self, email: EmailStr):
         """Возращаем всю информацию о пользователе по почте"""
         try:
             async with aiosqlite.connect(self.db_name) as db:
@@ -57,28 +74,35 @@ class TestBase:
 
                 result = await cursor.fetchone()
                 return result
-            
+                
         except aiosqlite.Error as e:
-            print(f"Ошибка чтения данных: {e}")
-
-
-
+            logging.error(f"Ошибка чтения данных: {e}")
+            return None
 
     async def add_user_to_db(self, user_info: dict):
+        """Добавляем пользователя в базу данных"""
+        # with open(self.log_name, "a") as f:
         try:
             async with aiosqlite.connect(self.db_name) as db:
                 await db.execute("INSERT INTO Users (name, surname, email, password) VALUES (?, ?, ?, ?)",
                                 (user_info["name"],
-                                 user_info["surname"],
-                                 user_info["email"],
-                                 user_info["password"])
+                                user_info["surname"],
+                                user_info["email"],
+                                user_info["password"])
                                 )
 
                 await db.commit()
-
+                return True
+            
+        except aiosqlite.IntegrityError as e:
+            logging.error(f"Ошибка добавления! Почта данная почта уже находится в БД: {e}")
+            return False
+        
         except aiosqlite.Error as e:
-            print(f"Ошибка добавления: {e}")
+            logging.error(f"Ошибка добавления: {e}")
+            return False
 
+            
 """
 Ошибка в chech_email_exists
 get_hash_password_by_email

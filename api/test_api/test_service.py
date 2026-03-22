@@ -1,5 +1,6 @@
 from test_base import test_base
 from passlib.context import CryptContext
+from pydantic import EmailStr
 
 class TestService:
     def __init__(self):
@@ -8,49 +9,42 @@ class TestService:
     async def password_hashing(self, password: str) -> str:
         """Получаем пароль и возращаем хешированный пароль"""
         return self.pwd_context.hash(password)
-     
-        
-    
-    async def get_hashed_password(self, email: str) -> str:
-        try:
-            result = await test_base.get_hash_password_by_email(email)
-            if result is None:
-                return False
-            
-            hash_password = result[0]
+             
 
-            return hash_password
-        
-        except Exception as e:
-            print(f"Ошибка: {e}")
-
-    async def verify_password(self, password: str, email: str) -> bool:
+    async def verify_password(self, password: str, email: EmailStr) -> bool:
         """Проверяем введёный пароль с паролем из БД"""
         try:
-            hash_password = await self.get_hashed_password(email)
-            if hash_password is None:
+            take_hash_password = await test_base.get_hashed_password(email)
+            if take_hash_password is None:
                 return False
             
-            return self.pwd_context.verify(password, hash_password)
+            if take_hash_password == "Ошибка чтения данных":
+                return False
+            
+            return self.pwd_context.verify(password, take_hash_password)
 
         except Exception as e:
             print(f"Ошибка: {e}")
             return False
 
-    async def checker_auth(self, email: str, input_password: str):
-        check_email_in_db = await test_base.check_email_exists(email)
-        if not check_email_in_db:
+    async def checker_auth(self, email: EmailStr, input_password: str):
+        """Првоерка во время авторизации"""
+        check_email_in_db = await test_base.check_email_exists(email) # Получаем булевое значение
+
+        if check_email_in_db is None:
+            return False, "error"
+        elif check_email_in_db is False:
             return False, "not email"
         
         
-        hashed_password = await self.verify_password(input_password, email)
-        if not hashed_password:
+        hashed_password_exists = await self.verify_password(input_password, email)
+        if not hashed_password_exists:
             return False, "not password"
     
         return True, "Welcome"
         
 
-    async def check_email_for_registration(self, email: str):
+    async def check_email_for_registration(self, email: EmailStr):
         return await test_base.check_email_exists(email)
 
     async def data_preparation(self, user_info: dict):
@@ -59,7 +53,12 @@ class TestService:
 
         user_info["password"] = hashed_password
 
-        await test_base.add_user_to_db(user_info)
+        add_user = await test_base.add_user_to_db(user_info)
+
+        if add_user:
+            return True
+        else:
+            return False
 
 """
 get_hashed_password
