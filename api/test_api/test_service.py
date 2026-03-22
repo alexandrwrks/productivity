@@ -60,6 +60,8 @@ class TestService:
         else:
             return False
 
+    async def delete_account(self):
+
 """
 get_hashed_password
 verify_password

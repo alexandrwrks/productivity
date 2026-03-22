@@ -1,9 +1,13 @@
-import aiosqlite
+from sqlalchemy.orm import Session
 from pydantic import EmailStr
 from datetime import datetime
+
+import asyncio
 import logging
+import aiosqlite
 
 logging.basicConfig(
+    filename="test_api.log",
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
@@ -19,19 +23,41 @@ class TestBase:
     async def init_db(self):
         try:
             async with aiosqlite.connect(self.db_name) as db:
+                # Создаем таблицу Users
                 await db.execute("""
-                        CREATE TABLE IF NOT EXISTS Users (
+                    CREATE TABLE IF NOT EXISTS Users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL,
                         surname TEXT NOT NULL,
                         email TEXT UNIQUE NOT NULL,
-                        password TEXT NOT NULL
+                        password TEXT NOT NULL,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
-                    """)
+                """)
+            
+                # Создаем таблицу UserActive
+                await db.execute("""
+                    CREATE TABLE IF NOT EXISTS UserActive (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER NOT NULL UNIQUE,
+                        is_active BOOLEAN DEFAULT 1,
+                        deleted_at TIMESTAMP,
+                        FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+                    )
+                """)
+                
+                # Создаем индекс
+                await db.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_user_active_user_id 
+                    ON UserActive(user_id)
+                """)
                 
                 await db.commit()
+                logging.info("The database has been successfully initialized")
                 
         except aiosqlite.Error as e:
-            logging.error(f"Ошибка инициализации: {e}")
+            logging.error(f"Initialization error: {e}")
+            raise
 
     """Функции для возврата информации о пользователе"""
     async def check_email_exists(self, email: EmailStr) -> bool:
@@ -102,7 +128,21 @@ class TestBase:
             logging.error(f"Ошибка добавления: {e}")
             return False
 
+    async def delete_account(self, user_info: dict):
+        try:
+            async with aiosqlite.connect(self.db_name) as db:
+                await db.execute("""
+                    UPDATE Users
+                    SET is_active = FALSE
+                    WHERE email = ?
+                """, (user_info["email"]))
+                
+                await db.commit()
+                return True
             
+        except aiosqlite.Error as e:
+            logging.error("Ошибка удаления пользователя")
+            return False
 """
 Ошибка в chech_email_exists
 get_hash_password_by_email
@@ -111,3 +151,10 @@ except блоки не возращают ошибки на сервер
 """
 
 test_base = TestBase()
+
+async def main():
+
+    await test_base.init_db()
+    
+if __name__ == "__main__":
+    asyncio.run(main())

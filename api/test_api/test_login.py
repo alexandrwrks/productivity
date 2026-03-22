@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Depends
 from pydantic import BaseModel, EmailStr, Field
 from test_service import test_service
 from test_base import test_base
@@ -52,8 +52,12 @@ async def login_page():
         "message": "Страница авторизации"
     }
 
-
-
+@app.get("/delete-account", response_model=dict)
+async def delete_account_page():
+    """Удаление акканта"""
+    return {
+        "message": "Страница удаления аккаунта"
+    }
 
 @app.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def register_panel(user_info: RegistrationUser):
@@ -122,6 +126,10 @@ async def login_panel(
         "access-token": "fake-jwt-token",
         "token_type": "bearer"
     }
+
+@app.post("/delete-account", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_account():
+    """Эндпоинт для удаления пользователя"""
 
 
 """
