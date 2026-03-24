@@ -2,86 +2,140 @@ from test_base import test_base
 from passlib.context import CryptContext
 from pydantic import EmailStr
 
+import exception as ex
+import logging
+
+logging.basicConfig(
+    filename="test_api.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+
+logger = logging.getLogger(__name__)
+
+
+class APIException(Exception):
+    def __init__(self, message: str, code: int = 400):
+        self.message = message
+        self.code = code
+        super().__init__(self.message)
 
 class MainTestService:
     def __init__(self):
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     async def password_hashing(self, password: str) -> str:
-        """Получаем пароль и возращаем хешированный пароль"""
         return self.pwd_context.hash(password)
-    
-    async def check_email_in_db(self, email: EmailStr) -> bool:
-        """Возращает bool значение"""
-        return await test_base.check_email_exists(email)
 
-    
 class TestRegistrationService(MainTestService):
-    """
-    Чтобы добавить пользователя - нужно првоерить наличие почты в БД, если нет, то делаем валидацию данных,
-    после добавляем данные в таблицу Users. 
-    В UsersActivity автоматически добавляем данные добавляем 
-    """
-    async def data_preparation(self, user_info: dict):
+    async def check_email_for_reg(self, email: EmailStr) -> bool:
+        email_exists = await test_base.get_email_exists(email)
+
+        if email_exists == ex.EMAIL_FOUND:
+            raise APIException(
+                message="Почта уже зарегестрирована",
+                code=409
+            )
         
+        elif email_exists == ex.DATA_BASE_ERROR:
+            raise APIException(
+                message=ex.MES_INTERNAL_ERROR,
+                code=500
+            )
+        
+        logging.info("Успешная проверка")
+        return True
+
+
+    async def data_preparation(self, user_info: dict) -> bool:
         hashed_password = await self.password_hashing(user_info["password"])
 
         user_info["password"] = hashed_password
 
         add_user = await test_base.add_user_to_db(user_info)
 
-        if add_user:
+        if add_user == ex.UNIQUE_EMAIL:
+            logging.warning(f"Почта уже зарегестрирована: {user_info['email']}")
+            raise APIException(
+                message="Почта уже существует",
+                code=409
+            )
+        
+        elif add_user == ex.DATA_BASE_ERROR:
+            raise APIException(
+                message=ex.MES_INTERNAL_ERROR,
+                code=500
+            )
+        
+        elif add_user == ex.ADD_USER_SUCCESS:
+            logging.info(f"Успешное добавление пользователя")
+            return True
+            
+
+class TestAuthorizationService(MainTestService):
+    async def check_email_for_login(self, email: EmailStr) -> bool:
+        email_exists = await test_base.get_email_exists(email)
+
+        if email_exists == "Указанная почта отсутвует в БД":
+            raise APIException(
+                message="Сначала пройдите регистрацию",
+                code=409
+            )
+        
+        elif email_exists == ex.DATA_BASE_ERROR:
+            raise APIException(
+                message=ex.MES_INTERNAL_ERROR,
+                code=500
+            )
+
+        return True
+    
+    async def authorization(self, email: EmailStr, password: str) -> bool:
+        check_email = await self.check_email_for_login(email)
+        ver_password = await self.verify_password(password, email)
+        
+        if check_email and ver_password:
             return True
         else:
             return False
-
-
-class TestAuthorizationService(MainTestService):
-    async def verify_password(self, password: str, email: EmailStr) -> bool | None:
-        """Проверяем введёный пароль с паролем из БД"""
-        try:
-            take_hash_password = await test_base.get_hashed_password(email)
-            if take_hash_password is None:
-                return None
-            
-            if take_hash_password is False:
-                return False
-            
-            return self.pwd_context.verify(password, take_hash_password)
-
-        except Exception as e:
-            print(f"Ошибка: {e}")
-            return False
         
-    async def checker_auth(self, email: EmailStr, input_password: str):
-        """Првоверка во время авторизации"""
-        check_email_in_db = await test_base.check_email_exists(email)
-
-        if check_email_in_db is None:
-            return False, "error"
-        elif check_email_in_db is False:
-            return False, "not email"
+    async def verify_password(self, password: str, email: EmailStr) -> bool:
+        take_hash_password = await test_base.get_hashed_password(email)
+        if take_hash_password == ex.NOT_PASSWORD:
+            logging.error(f"Отсутствие пароля в базе данных для {email}")
+            raise APIException(
+                message="Отсутсвие пароля в БД"
+            )
         
+        elif take_hash_password == ex.DATA_BASE_ERROR:
+            logging.error("Ошибка БД")
+            raise APIException(
+                message=ex.MES_INTERNAL_ERROR,
+                code=500
+            )
         
-        hashed_password_exists = await self.verify_password(input_password, email)
-        if not hashed_password_exists:
-            return False, "not password"
-    
-        return True, "Welcome"
+        hash_password = take_hash_password
+        pas_checker = await self.pwd_context.verify(password, hash_password) 
+        if not pas_checker:
+            logging.warning(f"Отсутствие схожести паролей - {email}")
+            raise APIException(
+                message="Пароль не совпадает",
+            )
+        
+        logging.info("Проверка прошла успешно")
+        return True 
 
 class TestDeleteService(MainTestService):
-    async def soft_delete_account(self, email: EmailStr):
-        
+    async def soft_delete_account(self, email: EmailStr) -> bool:
         del_account = await test_base.soft_delete_account(email)
-
-        if del_account:
-            return True
+    
+        if del_account == ex.DATA_BASE_ERROR:
+            logging.error(ex.DATA_BASE_ERROR)
+            raise APIException(
+                message=ex.MES_INTERNAL_ERROR
+            )
         
-        return False
+        logging.info(ex.ACC_SOFT_DELETE)
+        return True
 
-
-
-main_service = MainTestService()
-reg_service = TestRegistrationService()
-auth_service = TestAuthorizationService()
-del_service = TestDeleteService()

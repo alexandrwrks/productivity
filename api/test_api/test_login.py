@@ -1,9 +1,11 @@
 from fastapi import FastAPI, HTTPException, status, Depends
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, EmailStr, Field
-from test_service import MainTestService, TestRegistrationService, TestAuthorizationService, TestDeleteService  
+from test_service import MainTestService, TestRegistrationService, TestAuthorizationService, TestDeleteService, APIException
 from test_base import test_base
 from contextlib import asynccontextmanager
 
+import exception as ex
 import uvicorn
 
 main_service = MainTestService()
@@ -18,7 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Мой магазин на FastAPI", lifespan=lifespan)
 
-class RegistrationUserSchemas(BaseModel):
+class RegistrationUserSchema(BaseModel):
     name: str = Field(min_length=1, max_length=50)
     surname: str = Field(min_length=1, max_length=50)
     email: EmailStr
@@ -26,18 +28,25 @@ class RegistrationUserSchemas(BaseModel):
     reply_password: str
 
 
-class AuthorizationUserSchemas(BaseModel):
+class AuthorizationUserSchema(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6)
 
-class UserSchemas(BaseModel):
+class UserSchema(BaseModel):
     name: str
     surname: str
     email: EmailStr
     message: str
 
-class DeleteUserSchemas(BaseModel):
+class DeleteUserSchema(BaseModel):
     email: EmailStr
+
+@app.exception_handler(APIException)
+async def api_exception_handler(request, exc: APIException):
+    return JSONResponse(
+        status_code=exc.code,
+        content={"detail": exc.message}
+    )
 
 @app.get("/", response_model=dict)
 async def main_page():
@@ -67,67 +76,39 @@ async def delete_account_page():
         "message": "Страница удаления аккаунта"
     }
 
-@app.post("/register", response_model=UserSchemas, status_code=status.HTTP_201_CREATED)
-async def register_panel(user_info: RegistrationUserSchemas):
+@app.post("/register", response_model=UserSchema, status_code=status.HTTP_201_CREATED)
+async def register_panel(
+    user_info: RegistrationUserSchema
+):
     if user_info.password != user_info.reply_password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Введённые данные не совпадают"
         )
 
-    check_email_in_db = await main_service.check_email_in_db(user_info.email)
+    await reg_service.check_email_for_reg(user_info.email)
+    user_data = {
+        "name": user_info.name,
+        "surname": user_info.surname,
+        "email": user_info.email,
+        "password": user_info.password
+    }
 
-    if not check_email_in_db:
-        user_data = {
-            "name": user_info.name,
-            "surname": user_info.surname,
-            "email": user_info.email,
-            "password": user_info.password
-        }
+    await reg_service.data_preparation(user_data)
 
-        add_user = await reg_service.data_preparation(user_data)
-
-        if add_user:
-            return UserSchemas(
-                name=user_info.name,
-                surname=user_info.surname,
-                email=user_info.email,
-                message="Регистрация прошла успешно"
-            )
-        
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Error with data base"
-            ) 
-    
-    raise HTTPException(
-        status_code=status.HTTP_409_CONFLICT,
-        detail="Данная почта уже зарегистрирована"
+    return UserSchema(
+        name=user_info.name,
+        surname=user_info.surname,
+        email=user_info.email,
+        message="Регистрация прошла успешно!"
     )
+
 
 @app.post("/login", response_model=dict, status_code=status.HTTP_200_OK)
 async def login_panel(
-    auth_info: AuthorizationUserSchemas
+    auth_info: AuthorizationUserSchema
 ):
-    checker, checker_error = await  auth_service.checker_auth(auth_info.email, auth_info.password)
-    if not checker and checker_error == "not email":
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Сначала пройдите регистрацию"
-        )
-    
-    if not checker and checker_error == "not password":
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Не верно введён пароль!"
-        )
-    
-    if checker_error == "error":
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error"
-        )
+    await auth_service.authorization(auth_info.email, auth_info.password)
 
     return {
         "message": f"Добро пожаловать {auth_info.email}!",
@@ -135,18 +116,12 @@ async def login_panel(
         "token_type": "bearer"
     }
 
-@app.post("/delete-account", status_code=status.HTTP_204_NO_CONTENT)
+@app.post("/delete-account", status_code=status.HTTP_200_OK)
 async def delete_account(
-    user_info: DeleteUserSchemas
+    user_info: DeleteUserSchema
 ):
     """Эндпоинт для мягкого удаления пользователя"""
-    del_account = await del_service.soft_delete_account(user_info.email)
-
-    if not del_account:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Account deletion error"
-        )
+    await del_service.soft_delete_account(user_info.email)
     
     return {
         "message": f"Вы успешно удалили аккаунт {user_info.email}"
