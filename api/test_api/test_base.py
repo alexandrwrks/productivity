@@ -1,5 +1,4 @@
-from sqlalchemy.orm import Session
-from pydantic import EmailStr
+from pydantic import EmailStr, BaseModel
 
 import exception as ex
 import asyncio
@@ -14,6 +13,13 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+class UserDB(BaseModel):
+    id: int
+    name: str
+    surname: str
+    email: EmailStr
+    # можно добавить created_at с типом данных - datetime
 
 class MainTestBase:
     def __init__(self, db_name="test_api.db"):
@@ -66,26 +72,36 @@ class MainTestBase:
     async def add_user_to_db(self, user_info: dict) -> str:
         try:
             async with aiosqlite.connect(self.db_name) as db:
-                cursor = await db.execute("INSERT INTO Users (name, surname, email, password) VALUES (?, ?, ?, ?)",
-                                        (user_info["name"],
-                                         user_info["surname"],
-                                         user_info["email"],
-                                         user_info["password"])
-                                        )
+                try:
+                    await db.execute("BEGIN")
+                    cursor = await db.execute("""
+                        INSERT INTO Users (name, surname, email, password) 
+                        VALUES (?, ?, ?, ?)""", (
+                            user_info["name"],
+                            user_info["surname"],
+                            user_info["email"],
+                            user_info["password"])
+                        )
+                    
+                    user_id = cursor.lastrowid
+                    
+                    await db.execute("INSERT INTO UserActive (user_id, is_active) VALUES (?, 1)", (user_id,))
+
+                    await db.commit()
+                    return ex.ADD_USER_SUCCESS
+
+                except aiosqlite.IntegrityError as e:
+                    await db.rollback()
+                    logging.warning(f"Почта {user_info['email']} уже существует")
+                    return ex.UNIQUE_EMAIL
                 
-                user_id = cursor.lastrowid
-                await db.execute("BEGIN")
-
-                await db.execute("INSERT INTO UserActive (user_id, is_active) VALUES (?, 1)", (user_id,))
-
-                await db.commit()
-                return ex.ADD_USER_SUCCESS
-        
-        except aiosqlite.IntegrityError as e:
-            return ex.UNIQUE_EMAIL
-        
+                except aiosqlite.Error as e:
+                    await db.rollback()
+                    logging.error(f"Ошибка добавления пользователя: {e}")
+                    return ex.DATA_BASE_ERROR
+                
         except aiosqlite.Error as e:
-            logging.error(f"Ошибка добавления пользователя: {e}")
+            logging.error(f"Ошибка подключения к БД: {e}")
             return ex.DATA_BASE_ERROR
 
     async def get_email_exists(self, email: EmailStr) -> str:
@@ -107,10 +123,10 @@ class MainTestBase:
             logging.error(f"Ошибка чтения данных: {e}")
             return ex.DATA_BASE_ERROR
         
-    async def check_users_active_exists(self, email: EmailStr) -> int | str:
+    async def check_users_active_exists(self, email: EmailStr) -> bool | str:
+        """Проверка активности пользователя"""
         try: 
-            async with aiosqlite.connect(self.db_name) as db:
-                
+            async with aiosqlite.connect(self.db_name) as db: 
                 cursor = await db.execute("""
                     SELECT ua.is_active
                     FROM UserActive ua
@@ -120,7 +136,7 @@ class MainTestBase:
                 result = await cursor.fetchone()
 
                 if result:
-                    return result[0]
+                    return result[0] == 1 # True если активен, иначе False
 
                 return ex.USER_ID_NOT_FOUND
                         
@@ -145,25 +161,34 @@ class MainTestBase:
             logging.error(f"Ошибка получения данных: {e}")
             return ex.DATA_BASE_ERROR
 
-    async def get_user_by_email(self, email: EmailStr) -> str:
+    async def get_user_by_email(self, email: EmailStr) -> dict | str:
         try:
             async with aiosqlite.connect(self.db_name) as db:
-                cursor = await db.execute("SELECT * FROM Users WHERE email = ?", (email,))
+                cursor = await db.execute("SELECT id, name, surname, email, created_at FROM Users WHERE email = ?", (email,))
 
                 result = await cursor.fetchone()
 
                 if result:
+                    user_dict = {
+                        "id": result[0],
+                        "name": result[1],
+                        "surname": result[2],
+                        "email": result[3],
+                        "created_at": result[4]
+                    }
+
                     logging.info(f"Успешное получение данных пользователя")
-                    return result[0]
+                    return user_dict
                 else:
-                    logging.warning(f"Ничего не найдено")
+                    logging.info(f"Пользователь с таким email {email} не найден")
                     return ex.NOTHING_FOUND
                 
         except aiosqlite.Error as e:
             logging.error(f"Data reading error: {e}")
             return ex.DATA_BASE_ERROR
 
-    async def get_user_id_by_email(self, email: EmailStr) -> str:
+    async def get_user_id_by_email(self, email: EmailStr) -> int | str:
+        """Получить user_id пользователя по email"""
         try: 
             async with aiosqlite.connect(self.db_name) as db:
                 cursor = await db.execute(
@@ -174,10 +199,10 @@ class MainTestBase:
                 result = await cursor.fetchone()
 
                 if result:
-                    logging.info(f"Успешное получение данных по email: {email}")
+                    logging.info(f"Успешное получение user_id для email: {email}")
                     return result[0] 
                 else:
-                    logging.info(f"Отсутвие наличия данных по email: {email}")
+                    logging.info(f"Отсутвие user_id для email: {email}")
                     return ex.NOT_INFO_ABOUT_EMAIL
                     
         except aiosqlite.Error as e:
@@ -202,35 +227,51 @@ class MainTestBase:
             return ex.DATA_BASE_ERROR
 
     async def soft_delete_account(self, email: EmailStr) -> str:
+        """Мягкое удаление аккаунта"""
         try:
             async with aiosqlite.connect(self.db_name) as db:
+                try:
+                    await db.execute("BEGIN")
 
-                cursor = await db.execute("""
-                    UPDATE UserActive 
-                    SET is_active = 0, deleted_at = CURRENT_TIMESTAMP
-                    WHERE user_id = (SELECT id FROM Users WHERE email = ?)
-                """, (email,))
+                    await db.execute("""
+                        UPDATE UserActive 
+                        SET is_active = 0, deleted_at = CURRENT_TIMESTAMP
+                        WHERE user_id = (SELECT id FROM Users WHERE email = ?)
+                    """, (email,))
 
-                await db.commit()
+                    await db.commit()
 
-                logging.info(f"The soft deletion of the account for this {email} was successful!")
-                return ex.ACC_SOFT_DELETE
-            
+                    logging.info(f"Soft deletion successful for {email}")
+                    return ex.ACC_SOFT_DELETE
+                
+                except aiosqlite.Error as e:
+                    await db.rollback()
+                    logging.error(f"User deletion error: {e}")
+                    return ex.ERROR_ACC_SOFT_DELETE
+                
         except aiosqlite.Error as e:
-            logging.error(f"User deletion error: {e}")
+            logging.error(f"Database connection error: {e}")
             return ex.DATA_BASE_ERROR
         
     async def hard_delete_account(self, email: EmailStr) -> str:
+        """Полное удаление аккаунта"""
         try:
             async with aiosqlite.connect(self.db_name) as db:
-                await db.execute("PRAGMA foreign_keys = ON")         
+                try:
+                    await db.execute("BEGIN")
+                    await db.execute("PRAGMA foreign_keys = ON")         
 
-                await db.execute("DELETE FROM Users WHERE email = ?", (email,))
-                await db.commit()
-                return ex.ACC_HARD_DELETE
-            
+                    await db.execute("DELETE FROM Users WHERE email = ?", (email,))
+                    await db.commit()
+                    return ex.ACC_HARD_DELETE
+
+                except aiosqlite.Error as e:
+                    await db.rollback()
+                    logging.error(f"Ошибка удаления пользоваетля по email: {email}")
+                    return ex.ERROR_ACC_HARD_DELETE
+                
         except aiosqlite.Error as e:
-            logging.error(f"User deletion error: {e}")
+            logging.error(f"Database connection error: {e}")
             return ex.DATA_BASE_ERROR
 
 

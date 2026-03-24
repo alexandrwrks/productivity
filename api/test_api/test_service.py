@@ -1,6 +1,8 @@
 from test_base import test_base
 from passlib.context import CryptContext
-from pydantic import EmailStr
+from pydantic import EmailStr, BaseModel
+from datetime import datetime, timedelta
+from jose import JWTError, jwt
 
 import exception as ex
 import logging
@@ -14,6 +16,14 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    refresh_token: str | None = None
+
+class TokenData(BaseModel):
+    email: EmailStr | None = None
+    user_id: int | None = None
 
 class APIException(Exception):
     def __init__(self, message: str, code: int = 400):
@@ -77,7 +87,7 @@ class TestAuthorizationService(MainTestService):
     async def check_email_for_login(self, email: EmailStr) -> bool:
         email_exists = await test_base.get_email_exists(email)
 
-        if email_exists == "Указанная почта отсутвует в БД":
+        if email_exists == ex.EMAIL_NOT_EXISTS:
             raise APIException(
                 message="Сначала пройдите регистрацию",
                 code=409
@@ -91,15 +101,6 @@ class TestAuthorizationService(MainTestService):
 
         return True
     
-    async def authorization(self, email: EmailStr, password: str) -> bool:
-        check_email = await self.check_email_for_login(email)
-        ver_password = await self.verify_password(password, email)
-        
-        if check_email and ver_password:
-            return True
-        else:
-            return False
-        
     async def verify_password(self, password: str, email: EmailStr) -> bool:
         take_hash_password = await test_base.get_hashed_password(email)
         if take_hash_password == ex.NOT_PASSWORD:
@@ -125,6 +126,15 @@ class TestAuthorizationService(MainTestService):
         
         logging.info("Проверка прошла успешно")
         return True 
+    
+    async def authorization(self, email: EmailStr, password: str) -> bool:
+        check_email = await self.check_email_for_login(email)
+        ver_password = await self.verify_password(password, email)
+        
+        if check_email and ver_password:
+            return True
+        else:
+            return False
 
 class TestDeleteService(MainTestService):
     async def soft_delete_account(self, email: EmailStr) -> bool:

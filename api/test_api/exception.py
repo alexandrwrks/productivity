@@ -2,6 +2,8 @@ DATA_BASE_ERROR = "Ошибка базы данных"
 
 ACC_SOFT_DELETE = "Успешное удаление аккаунта (soft)"
 ACC_HARD_DELETE = "Успешное удаление аккаунта (hard)"
+ERROR_ACC_SOFT_DELETE = "Ошибка удаление аккаунта (soft)"
+ERROR_ACC_HARD_DELETE = "Ошибка удаление аккаунта (hard)"
 
 NOTHING_FOUND = "Ничего не найдено"
 NOT_ACTIVE_INFO = "Информация по активности пользоваетля по email отсутствует"
