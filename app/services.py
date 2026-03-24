@@ -4,6 +4,8 @@ from pydantic import EmailStr, BaseModel
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from models.schemas import APIException
+from core.security import MainService
+
 
 import app.core.exceptions as ex
 import logging
@@ -18,14 +20,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class MainTestService:
-    def __init__(self):
-        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-    async def password_hashing(self, password: str) -> str:
-        return self.pwd_context.hash(password)
-
-class TestRegistrationService(MainTestService):
+class TestRegistrationService(MainService):
     async def check_email_for_reg(self, email: EmailStr) -> bool:
         email_exists = await test_base.get_email_exists(email)
 
@@ -70,7 +66,7 @@ class TestRegistrationService(MainTestService):
             return True
             
 
-class TestAuthorizationService(MainTestService):
+class TestAuthorizationService(MainService):
     async def check_email_for_login(self, email: EmailStr) -> bool:
         email_exists = await test_base.get_email_exists(email)
 
@@ -123,7 +119,7 @@ class TestAuthorizationService(MainTestService):
         else:
             return False
 
-class TestDeleteService(MainTestService):
+class TestDeleteService(MainService):
     async def soft_delete_account(self, email: EmailStr) -> bool:
         del_account = await test_base.soft_delete_account(email)
     
