@@ -1,9 +1,12 @@
 from pydantic import EmailStr, BaseModel
+from dotenv import load_dotenv
 
-import exception as ex
+
+import app.core.exceptions as ex
 import asyncio
 import logging
 import aiosqlite
+import os
 
 logging.basicConfig(
     filename="test_api.log",
@@ -14,15 +17,11 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-class UserDB(BaseModel):
-    id: int
-    name: str
-    surname: str
-    email: EmailStr
-    # можно добавить created_at с типом данных - datetime
+load_dotenv()
+JWT_TOKEN = os.getenv("DB_NAME")
 
 class MainTestBase:
-    def __init__(self, db_name="test_api.db"):
+    def __init__(self, db_name=JWT_TOKEN):
         self.db_name = db_name
 
     async def init_db(self):

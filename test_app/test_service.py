@@ -4,7 +4,7 @@ from pydantic import EmailStr, BaseModel
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 
-import exception as ex
+import app.core.exceptions as ex
 import logging
 
 logging.basicConfig(

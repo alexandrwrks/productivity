@@ -5,8 +5,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi import HTTPException
 from pydantic import EmailStr
-from api.services import service
-from api.models.base import user_manager
+from app.services import service
+from app.models.base import user_manager
 import asyncio
 
 """Что должно быть:

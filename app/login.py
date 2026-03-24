@@ -1,4 +1,4 @@
-from api.models.base import UsersManager
+from app.models.base import UsersManager
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
