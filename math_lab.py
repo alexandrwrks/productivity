@@ -1,132 +1,282 @@
 import networkx as nx
-import matplotlib.pyplot as plt
-import numpy as np
 import random
-
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtWidgets import *
-import sys
-
-class MainWindow(QMainWindow):
-    
-    def __init__(self):
-        super().__init__()
-
-        self.button_is_checked = True
-        
-        self.setWindowTitle("My app")
-
-        button = QPushButton("Push Me")
-        button.setCheckable(True)
-        # button.clicked.connect(self.the_button_was_clicked)
-        button.clicked.connect(self.the_button_was_toggled)
-        button.setChecked(self.button_is_checked)
-
-        self.setFixedSize(QSize(400, 300))
-
-        self.setCentralWidget(button)
-
-    # def the_button_was_clicked(self):
-    #     print("Clicked!")
-
-    def the_button_was_toggled(self, checked):
-        self.button_is_checked = checked
-
-        print(self.button_is_checked)
+import numpy as np
+import matplotlib.pyplot as plt
 
 
-app = QApplication(sys.argv)
+class CreateGraph:
+    def init(self):
+        pass
 
-window = MainWindow()
-window.show()
+    def create_simple_graph(self, n):
+        """Создание простого графа"""
+        matrix = [[0] * n for _ in range(n)]
+        for i in range(n - 1):
+            matrix[i][i + 1] = 1
+            matrix[i + 1][i] = 1
+        return matrix
 
-app.exec()
+    def create_full_graph(self, n):
+        """Создание полного графа"""
+        matrix = [[1] * n for _ in range(n)]
+        for i in range(n):
+            matrix[i][i] = 0
+        return matrix
 
-# Ввод размера матрицы с клавиатуры
-# n = int(input('Размер матрицы: '))
+    def create_graph_with_loops(self, n):
+        """Создание графа с петлями"""
+        matrix = [[0] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(i, n):
+                if i == j:
+                    matrix[i][i] = random.choice([0, 1, 1, 1])
+                else:
+                    matrix[i][j] = random.randint(0, 1)
+                    matrix[j][i] = matrix[i][j]
 
-# def create(n):
-#     matrix = [[0] * n for _ in range(n)]
-#     for i in range(n - 1):
-#         matrix[i][i + 1] = 1
-#         matrix[i + 1][i] = 1
-#     return matrix
+        return matrix
 
-# m = create(n)
+    def create_multi_graph(self, n):
+        """Создание мульти графа"""
+        G = nx.MultiGraph()
+        G.add_nodes_from(range(n))
 
-# for row in m:
-#     print(row)
-# G = nx.Graph()
-# for i in range(n):
-#     for j in range(i + 1, n):
-#         if m[i][j] == 1:
-#             G.add_edge(i, j)
+        for i in range(n):
+            for j in range(i + 1, n):
+                num_edges = random.randint(0, 2)
+                for k in range(num_edges):
+                    G.add_edge(i, j)
+        return G
 
-# # Рисуем граф
-# plt.figure(figsize=(12, 4))
+    def convert_incidence_matrix(self, matrix):
+        """Функция для конвертации таблицы в инцидентную"""
+        n = len(matrix)
+        edges = []
 
-# # Располагаем вершины
-# pos = {i: (i * 2, 0) for i in range(n)}
+        for i in range(n):
+            for j in range(i + 1, n):
+                if matrix[i][j] == 1:
+                    edges.append((i, j))
 
-# # Рисуем рёбра (сделаем их потолще)
-# # nx.draw_networkx_edges(G, pos, edge_color='#555555', width=3)
+        len_edges = len(edges)
+        if len_edges == 0:
+            return [[]]
 
-# # # Рисуем вершины (побольше и красивее)
-# # nx.draw_networkx_nodes(G, pos, node_color='#87CEEB',  # небесно-голубой
-# #                        node_size=1000, edgecolors='darkblue', linewidths=2)
+        inc_matrix = [[0] * len_edges for _ in range(n)]
 
-# # # Рисуем подписи (крупным шрифтом)
-# # labels = {i: i+1 for i in range(n)}
-# # nx.draw_networkx_labels(G, pos, labels, font_size=16, font_weight='bold',
-# #                         font_color='black')
+        for e, (v1, v2) in enumerate(edges):
+            inc_matrix[v1][e] = 1
+            inc_matrix[v2][e] = 1
+
+        return inc_matrix
+
+    def draw_graph(self, matrix, title='Граф'):
+        """Функция для отрисовки графа"""
+        n = len(matrix)
+        G = nx.Graph()
+
+        for i in range(n):
+            for j in range(i + 1, n):
+                if matrix[i][j] == 1:
+                    G.add_edge(i, j)
+
+        plt.figure(figsize=(12, 8))
+
+        pos = nx.spring_layout(G, k=3, iterations=50)
+
+        nx.draw_networkx_edges(G, pos, edge_color='#555555', width=2, alpha=0.7)
+        nx.draw_networkx_nodes(G, pos, node_color='#87CEEB', node_size=800, edgecolors='darkblue', linewidths=2,
+                               alpha=0.9)
+
+        labels = {i: i + 1 for i in range(n)}
+        nx.draw_networkx_labels(G, pos, labels, font_size=14, font_weight='bold', font_color='black')
+
+        plt.title(title, fontsize=16, fontweight='bold')
+        plt.axis('off')
+        plt.tight_layout()
+        plt.show()
+
+        return G
+
+    def draw_multi_graph(self, G: nx.Graph, title='Мультиграф'):
+        """Отрисовка мультиграфа"""
+        plt.figure(figsize=(12, 8))
+
+        pos = nx.spring_layout(G)
+        edges = G.edges()
+
+        if edges:
+            nx.draw_networkx_edges(G, pos, edge_color='#555555',
+                                   width=2, connectionstyle='arc3,rad=0.1', alpha=0.7)
+
+        nx.draw_networkx_nodes(G, pos, node_color='lightgreen',
+                               node_size=800, edgecolors='darkgreen',
+                               linewidths=2, alpha=0.9)
+
+        labels = {i: i + 1 for i in G.nodes()}
+        nx.draw_networkx_labels(G, pos, labels, font_size=14, font_weight='bold')
+
+        plt.axis('off')
+        plt.tight_layout()
+        plt.show()
 
 
-# # plt.axis('off')
-# # plt.tight_layout()
-# # plt.show()
+def main():
+    graph_creator = CreateGraph()
 
-# # # Создаём случайную матрицу смежности
-# # A = [[0] * n for i in range(n)]
-# # for i in range(n):
-# #     for j in range(i + 1, n):
-# #         A[i][j] = random.randint(0, 1)
-# #         A[j][i] = A[i][j]
+    while True:
+        print("\n" + "=" * 40)
+        print("ГЕНЕРАТОР ГРАФОВ")
+        print("=" * 40)
+        print("1. Простой граф")
+        print("2. Полный граф")
+        print("3. Граф с петлями")
+        print("4. Мульти граф")
+        print("5. Выход")
+        try:
+            choice = int(input("Выберите действие: "))
+            if choice not in [1, 2, 3, 4, 5]:
+                print("Ошибка! Введите число от 1 до 5")
+                continue
+        except ValueError:
+            print("Ошибка! Введите число от 1 до 5")
+            continue
 
-# # Выводим матрицу смежности
-# # print("\nМатрица смежности:")
-# # for r in A:
-# #     print(r)
+        if choice == 5:
+            print("Конец работы!")
+            break
 
-# # Преобразуем в numpy array и создаём граф
-# # A_np = np.array(A)
-# # G = nx.from_numpy_array(A_np)
+        try:
+            n = int(input("Введите размер матрицы - количество вершин(положительное число): "))
+            if n <= 0:
+                print("Размер должен быть положительным числом!")
+                continue
+        except ValueError:
+            print("Ошибка! Введите целое положительное число")
+            continue
 
-# # Рисуем граф
-# plt.figure(figsize=(8, 6))
-# nx.draw(G, with_labels=True, font_size=12, node_color='lightgreen',
-#         node_size=600, font_weight='bold', edge_color='gray')
-# plt.title(f"Граф с {n} вершинами")
-# plt.show()
+        if choice == 1:
+            matrix = graph_creator.create_simple_graph(n)
+            print("\nМатрица смежности: ")
+            for row in matrix:
+                print(' '.join(map(str, row)))
 
-# def cmtb(adj_matrix):
-#     n = len(adj_matrix)
-#     edges = []
+            inc_matrix = graph_creator.convert_incidence_matrix(matrix)
+            if inc_matrix != [[]]:
+                print("\nМатрица инцендентности: ")
+                for row in inc_matrix:
+                    print(' '.join(map(str, row)))
 
-#     for i in range(n):
-#         for j in range(i + 1, n):
-#             if adj_matrix[i][j] == 1:
-#                 edges.append((i, j))
+            graph_creator.draw_graph(matrix, f"Простой граф ({n} вершин)")
 
-#     n_edges = len(edges)
-#     inc_matrix = [[0] * n_edges for _ in range(n)]
+        elif choice == 2:
+            matrix = graph_creator.create_full_graph(n)
+            print(f"Количество рёбер: {n * (n - 1) // 2}")
+            print("\nМатрица смежности (полный граф): ")
+            for row in matrix:
+                print(' '.join(map(str, row)))
 
-#     for e, (v1, v2) in enumerate(edges):
-#         inc_matrix[v1][e] = 1
-#         inc_matrix[v2][e] = 1
+            inc_matrix = graph_creator.convert_incidence_matrix(matrix)
+            if inc_matrix != [[]]:
+                print("\nМатрица инцидетности: ")
+                for row in inc_matrix:
+                    print(' '.join(map(str, row)))
 
-#     return inc_matrix
+            graph_creator.draw_graph(matrix, f"Полный граф ({n} вершин)")
 
-# t = cmtb(m)
-# print('новая')
-# for row in t:
-#     print(row)
+        elif choice == 3:
+            matrix = graph_creator.create_graph_with_loops(n)
+            print("\n✅ Граф с петлями создан")
+            print("\nМатрица смежности (1 на диагонали = петля):")
+            for row in matrix:
+                print(' '.join(map(str, row)))
+
+            inc_matrix = graph_creator.convert_incidence_matrix(matrix)
+            if inc_matrix != [[]]:
+                print("\n✅ Матрица инцидентности (петли не отображаются):")
+                for row in inc_matrix:
+                    print(' '.join(map(str, row)))
+
+            # Создаём граф с петлями
+            G = nx.Graph()
+            for i in range(n):
+                for j in range(i, n):
+                    if matrix[i][j] == 1:
+                        G.add_edge(i, j)
+
+            # Отрисовка графа с петлями
+            plt.figure(figsize=(12, 8))
+            pos = nx.circular_layout(G)
+
+            # Рисуем рёбра
+            nx.draw_networkx_edges(G, pos, edge_color='gray', width=2, alpha=0.7)
+
+            # Рисуем вершины
+            nx.draw_networkx_nodes(G, pos, node_color='#87CEEB',
+                                   node_size=800, edgecolors='darkblue',
+                                   linewidths=2, alpha=0.9)
+
+            # Добавляем петли
+            for node in G.nodes():
+                if G.has_edge(node, node):
+                    x, y = pos[node]
+                    circle = plt.Circle((x, y - 0.2), 0.2, fill=False,
+                                        edgecolor='gray', linewidth=2)
+                    plt.gca().add_patch(circle)
+
+            # Подписи
+            labels = {i: i + 1 for i in range(n)}
+            nx.draw_networkx_labels(G, pos, labels, font_size=14,
+                                    font_weight='bold')
+
+            plt.title(f"Граф с петлями ({n} вершин)", fontsize=16, fontweight='bold')
+            plt.axis('off')
+            plt.tight_layout()
+            plt.show()
+
+        elif choice == 4:
+
+            G = graph_creator.create_multi_graph(n)
+            print(f"\n✅ Мультиграф создан!")
+            print(f"Вершины: {G.number_of_nodes()}")
+            print(f"Рёбра: {G.number_of_edges()}")
+
+            adj_matrix = [[0] * n for _ in range(n)]
+            for u, v in G.edges():
+                adj_matrix[u][v] += 1
+                if u != v:
+                    adj_matrix[v][u] += 1
+
+            print("\n✅ Матрица смежности (числа показывают количество рёбер):")
+            for row in adj_matrix:
+                print(' '.join(map(str, row)))
+
+            edges = list(G.edges())
+            if edges:
+                inc_matrix = [[0] * len(edges) for _ in range(n)]
+                for e, (u, v) in enumerate(edges):
+                    inc_matrix[u][e] += 1
+                    if u != v:
+                        inc_matrix[v][e] += 1
+
+                print("\n✅ Матрица инцидентности:")
+                for row in inc_matrix:
+                    print(' '.join(map(str, row)))
+
+            # Показываем все рёбра
+            # if G.number_of_edges() > 0:
+            #     print("\nСписок рёбер:")
+            #     edge_dict = {}
+            #     for u, v, key in G.edges(keys=True):
+            #         edge_key = tuple(sorted([u, v]))
+            #         if edge_key not in edge_dict:
+            #             edge_dict[edge_key] = []
+            #         edge_dict[edge_key].append(key + 1)
+
+            #     for (u, v), keys in edge_dict.items():
+            #         print(f"{u + 1} — {v + 1}: {len(keys)} ребро(а)")
+
+                graph_creator.draw_multi_graph(G, f"Мультиграф ({n} вершин)")
+
+if __name__ == "__main__":
+    main()
