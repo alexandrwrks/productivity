@@ -4,3 +4,4 @@ __pycache__
 aiogram_bot
 .env
 .exe
+venv
