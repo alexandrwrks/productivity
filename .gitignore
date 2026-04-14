@@ -1,4 +1,2 @@
-API_key.py
-*.db
+venv
 __pycache__
-*.exe
