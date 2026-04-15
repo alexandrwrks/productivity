@@ -1,0 +1,531 @@
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+INFO:aiogram.event:Update id=937202955 is not handled. Duration 1406 ms by bot id=8675249748
+ERROR:aiogram.event:Cause exception while process update id=937202955 by bot id=8675249748
+TypeError: object NoneType can't be used in 'await' expression
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 222, in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\storage\memory.py", line 77, in lock
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 191, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\bot\handlers\news.py", line 20, in process_command_news
+    await news_repo.add_news()
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\repo\news.py", line 28, in add_news
+    await session.add(news)
+TypeError: object NoneType can't be used in 'await' expression
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+INFO:aiogram.event:Update id=937202956 is not handled. Duration 1016 ms by bot id=8675249748
+ERROR:aiogram.event:Cause exception while process update id=937202956 by bot id=8675249748
+TypeError: object NoneType can't be used in 'await' expression
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 222, in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\storage\memory.py", line 77, in lock
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 191, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\bot\handlers\news.py", line 20, in process_command_news
+    await news_repo.add_news()
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\repo\news.py", line 28, in add_news
+    await session.add(news)
+TypeError: object NoneType can't be used in 'await' expression
+INFO:aiogram.event:Update id=937202957 is handled. Duration 265 ms by bot id=8675249748
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+INFO:aiogram.event:Update id=937202958 is not handled. Duration 1046 ms by bot id=8675249748
+ERROR:aiogram.event:Cause exception while process update id=937202958 by bot id=8675249748
+TypeError: object NoneType can't be used in 'await' expression
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 222, in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\storage\memory.py", line 77, in lock
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 191, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\bot\handlers\news.py", line 20, in process_command_news
+    await news_repo.add_news()
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\repo\news.py", line 28, in add_news
+    await session.add(news)
+TypeError: object NoneType can't be used in 'await' expression
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+INFO:aiogram.event:Update id=937202959 is not handled. Duration 1515 ms by bot id=8675249748
+ERROR:aiogram.event:Cause exception while process update id=937202959 by bot id=8675249748
+TypeError: object NoneType can't be used in 'await' expression
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 222, in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\storage\memory.py", line 77, in lock
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 191, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\bot\handlers\news.py", line 20, in process_command_news
+    await news_repo.add_news()
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\repo\news.py", line 28, in add_news
+    await session.add(news)
+TypeError: object NoneType can't be used in 'await' expression
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Database error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedTableError'>: отношение "news" не существует
+[SQL: INSERT INTO news (title, url, source) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR) RETURNING news.id, news.time]
+[parameters: ('Арестован экс-начальник департамента здравоохранения Томской области Роберт Фидаров', 'https://vtomske.ru/news/214509-arestovan-eks-nachalnik-departamenta-zdravoohraneniya-tomskoi-oblasti-robert-fidarov', 'vtomske')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:aiogram.event:Update id=937202960 is handled. Duration 1407 ms by bot id=8675249748
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Database error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedTableError'>: отношение "news" не существует
+[SQL: INSERT INTO news (title, url, source) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR) RETURNING news.id, news.time]
+[parameters: ('Арестован экс-начальник департамента здравоохранения Томской области Роберт Фидаров', 'https://vtomske.ru/news/214509-arestovan-eks-nachalnik-departamenta-zdravoohraneniya-tomskoi-oblasti-robert-fidarov', 'vtomske')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:aiogram.event:Update id=937202961 is handled. Duration 1390 ms by bot id=8675249748
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Database error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedTableError'>: отношение "news" не существует
+[SQL: INSERT INTO news (title, url, source) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR) RETURNING news.id, news.time]
+[parameters: ('Арестован экс-начальник департамента здравоохранения Томской области Роберт Фидаров', 'https://vtomske.ru/news/214509-arestovan-eks-nachalnik-departamenta-zdravoohraneniya-tomskoi-oblasti-robert-fidarov', 'vtomske')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:aiogram.event:Update id=937202962 is not handled. Duration 1484 ms by bot id=8675249748
+ERROR:aiogram.event:Cause exception while process update id=937202962 by bot id=8675249748
+TelegramBadRequest: Telegram server says - Bad Request: can't parse entities: Unsupported start tag "b/" at byte offset 161
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 222, in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\storage\memory.py", line 77, in lock
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 191, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\bot\handlers\news.py", line 21, in process_command_news
+    await message.answer(
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\methods\base.py", line 82, in emit
+    return await bot(self)
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\client\bot.py", line 493, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\client\session\base.py", line 259, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\client\session\aiohttp.py", line 177, in make_request
+    response = self.check_response(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\client\session\base.py", line 121, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: can't parse entities: Unsupported start tag "b/" at byte offset 161
+INFO:aiogram.event:Update id=937202963 is not handled. Duration 5094 ms by bot id=8675249748
+ERROR:aiogram.event:Cause exception while process update id=937202963 by bot id=8675249748
+ConnectTimeout: 
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\http11.py", line 376, in start_tls
+    return await self._stream.start_tls(ssl_context, server_hostname, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_backends\anyio.py", line 67, in start_tls
+    with map_exceptions(exc_map):
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectTimeout
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 222, in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\storage\memory.py", line 77, in lock
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 191, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\bot\handlers\news.py", line 13, in process_command_news
+    news_info = await process_vtomske()
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\news\vtomske.py", line 15, in process_vtomske
+    response = await client.get(url)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectTimeout
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Database error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedTableError'>: отношение "news" не существует
+[SQL: INSERT INTO news (title, url, source) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR) RETURNING news.id, news.time]
+[parameters: ('Арестован экс-начальник департамента здравоохранения Томской области Роберт Фидаров', 'https://vtomske.ru/news/214509-arestovan-eks-nachalnik-departamenta-zdravoohraneniya-tomskoi-oblasti-robert-fidarov', 'vtomske')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:aiogram.event:Update id=937202964 is handled. Duration 1329 ms by bot id=8675249748
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Database error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedTableError'>: отношение "news" не существует
+[SQL: INSERT INTO news (title, url, source) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR) RETURNING news.id, news.time]
+[parameters: ('Арестован экс-начальник департамента здравоохранения Томской области Роберт Фидаров', 'https://vtomske.ru/news/214509-arestovan-eks-nachalnik-departamenta-zdravoohraneniya-tomskoi-oblasti-robert-fidarov', 'vtomske')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:aiogram.event:Update id=937202965 is handled. Duration 1436 ms by bot id=8675249748
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://vtomske.ru/ "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Database error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedTableError'>: отношение "news" не существует
+[SQL: INSERT INTO news (title, url, source) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR) RETURNING news.id, news.time]
+[parameters: ('Арестован экс-начальник департамента здравоохранения Томской области Роберт Фидаров', 'https://vtomske.ru/news/214509-arestovan-eks-nachalnik-departamenta-zdravoohraneniya-tomskoi-oblasti-robert-fidarov', 'vtomske')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:aiogram.event:Update id=937202966 is handled. Duration 1359 ms by bot id=8675249748
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.event:Update id=937202967 is not handled. Duration 0 ms by bot id=8675249748
+INFO:aiogram.event:Update id=937202968 is handled. Duration 266 ms by bot id=8675249748
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
