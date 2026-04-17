@@ -8,6 +8,7 @@ from urllib.parse import urljoin
 
 from app.news.config import NewsInfo
 
+SOURCE="vtomske"
 
 async def process_vtomske() -> Optional[NewsInfo]:
     async with httpx.AsyncClient() as client:
@@ -51,8 +52,8 @@ async def process_vtomske() -> Optional[NewsInfo]:
             news = NewsInfo(
                 title=title,
                 time=time_text,
-                source="vtomske",
-                url=full_link
+                url=full_link,
+                source=SOURCE
             )
 
             return news
