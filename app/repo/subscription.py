@@ -88,4 +88,24 @@ class SubscriptionRepo:
             )
             return result.scalars().all()
         
+    async def get_sub_source_by_telegram_id(self, telegram_id: int):
+        async with SessionLocal() as session:
+            try:
+                result = await session.execute(
+                    select(Subscriptions.source)
+                    .where(
+                        Subscriptions.telegram_id == telegram_id
+                    )
+                )
+
+                sub_source = result.scalar_one_or_none()
+                if sub_source is not None:
+                    return sub_source
+                
+                return None
+
+            except SQLAlchemyError as e:
+                logger.exception(f"Database error: {e}")
+                return False
+        
 subs_repo = SubscriptionRepo()

@@ -10,61 +10,61 @@ from app.news.config_news import NewsInfo
 
 from app.news.config_news import NAME_OF_SOURCE
 
-async def parsing_vtomske() -> Optional[NewsInfo]:
-    async with httpx.AsyncClient() as client:
-        url = "https://vtomske.ru/tag/tomsk"
-        response = await client.get(url)
-        response.raise_for_status()
+class VtomskeNews:
+    async def parsing_vtomske(self) -> Optional[NewsInfo]:
+        async with httpx.AsyncClient() as client:
+            url = "https://vtomske.ru/tag/tomsk"
+            response = await client.get(url)
+            response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, "html.parser")
+            soup = BeautifulSoup(response.text, "html.parser")
 
-        news_card = soup.find_all("a", class_="lenta_material", limit=1)
+            news_card = soup.find_all("a", class_="lenta_material", limit=5)
 
-        seen = set()
-        list_news = []
+            list_news = []
 
-        for card in news_card:
-            link = card.get("href")
-            if not link:
-                continue
+            for card in news_card:
+                # Получение "ссылки" на новость
+                link = card.get("href")
+                if not link:
+                    continue
 
-            title_tag = card.find("div", class_="lenta_material_title")
-            if not title_tag:
-                continue
+                # Получение заголовка
+                title_tag = card.find("div", class_="lenta_material_title")
+                if not title_tag:
+                    continue
 
-            title = title_tag.get_text(" ", strip=True)
+                title = title_tag.get_text(" ", strip=True)
 
-            time_tag = card.find("div", class_="lenta_material_info")
+                # Получение времени и даты
+                time_tag = card.find("div", class_="lenta_material_info")
 
-            time_text = "Нет времени"
+                time_text = "Нет времени"
 
-            if time_tag:
-                time_div = time_tag.find("div")
-                if time_div:
-                    time_text = time_div.get_text(strip=True)
+                if time_tag:
+                    time_div = time_tag.find("div")
+                    if time_div:
+                        time_text = time_div.get_text(strip=True)
+                
+                # Создание полной ссыклки на новость
+                full_link = urljoin(url, link)
 
-            full_link = urljoin(url, link)
+                list_news.append(NewsInfo(
+                    topic=None,
+                    title=title,
+                    created_at=time_text,
+                    url=full_link,
+                    source=NAME_OF_SOURCE[0]
+                ))
+                
+            # Возращаем список новостей 5 штук
+            return list_news
 
-            if full_link in seen:
-                continue
-
-            seen.add(full_link)
-
-            news = NewsInfo(
-                title=title,
-                created_at=time_text,
-                url=full_link,
-                source=NAME_OF_SOURCE[0]
-            )
-
-            list_news.append(news)
-
-        return list_news
-
+vtomske_news = VtomskeNews()
 
 async def main():
 
-    list_of_news = await parsing_vtomske()
+    list_of_news = await vtomske_news.parsing_vtomske()
 
     for news in list_of_news:
         print(

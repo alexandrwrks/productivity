@@ -43,39 +43,49 @@ class NewsRepo:
                 logger.error(f"Database error: {e}")
                 return None
             
-    async def add_news_if_not_exists(self, news_info: NewsInfo):
+    async def exists_news_in_database(self, news_info: NewsInfo):
+        """
+        Проверка есть ли новость в БД
+        если новость существует то возращает True
+        если новсти нет то сразу же добавляем в БД
+        """
         async with SessionLocal() as session:
             try:
-                result = await session.execute(select(News).where(
-                    News.title == news_info.title,
-                    News.url == news_info.url,
-                    News.source == news_info.source
-                ))
+                result = await session.execute(
+                    select(News)
+                    .where(
+                        News.title == news_info.title,
+                        News.url == news_info.url,
+                        News.source == news_info.source
+                    )
+                )
 
-                news = result.scalar_one_or_none()
-                return news is not None
+                exists_news = result.scalar_one_or_none()
+                if exists_news is None:
+                    await self.add_news(news_info)
+
+                return True
 
             except IntegrityError as e:
-                await session.rollback()
-                logger.error(f"Database have this news: {e}")
-                return None
-
+                logger.error(f"Unique error: {e}")
+                return False
+            
             except SQLAlchemyError as e:
-                await session.rollback()
-                logger.error(f"Database error: {e}")
-                return None
+                logger.error(f"DAtabase error: {e}")
+                return False
             
     async def get_news_from_one_source(self, source: str, datatime: datetime):
+        """Получаем новости с олного источника в дату"""
         async with SessionLocal() as session:
             try:
-                exists_news = await session.execute(select(News.title).where(
+                result = await session.execute(select(News.title).where(
                     News.source == source,
                     News.created_at == datatime
                 ))
+                
+                exists_news = await result.scalar_one_or_none()
 
-                result = exists_news.scalar_one_or_none()
-
-                if result is None:
+                if exists_news is None:
                     return f"Нет новостей с {source}"
                 
                 list_news = []
@@ -90,6 +100,7 @@ class NewsRepo:
                 return None
     
     async def get_last_news_per_source(self):
+        """Получаем самую последнюю новость с каждого источника"""
         async with SessionLocal() as session:
             last_news = []
 
@@ -108,6 +119,7 @@ class NewsRepo:
             return last_news
 
     async def get_last_news_by_source(self, source: str):
+        """Получаем последнюю новость с источника"""
         async with SessionLocal() as session:
 
             result = await session.execute(
@@ -120,11 +132,5 @@ class NewsRepo:
             news = result.scalars().first()
             # Сделать обработку на None в другом месте
             return news
-
-    async def add_news_if_not_exists(self, news_info: NewsInfo) -> Optional[News]:
-        exists = await self.add_news_if_not_exists(news_info)
-        if exists:
-            return None
-        return await self.add_news(news_info)
-
+        
 news_repo = NewsRepo()

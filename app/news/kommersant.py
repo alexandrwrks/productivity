@@ -12,71 +12,71 @@ from datetime import datetime
 
 SOURCE="kommersant"
 
-async def parsing_kommersant() -> Optional[NewsInfo]:
-    async with httpx.AsyncClient(timeout=20.0) as client:
+class KommersantNews:
+    async def parsing_kommersant(self) -> Optional[NewsInfo]:
+        async with httpx.AsyncClient(timeout=20.0) as client:
 
-        url="https://www.kommersant.ru/lenta/news?from=lenta_news"
-        response = await client.get(url)
-        response.raise_for_status()
+            url="https://www.kommersant.ru/lenta/news?from=lenta_news"
+            response = await client.get(url)
+            response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, "html.parser")
+            soup = BeautifulSoup(response.text, "html.parser")
 
-        news_list = soup.find("div", class_="rubric_lenta")
-        news_cards = news_list.find_all("div", class_="uho__text")
+            news_list = soup.find("div", class_="rubric_lenta")
+            news_cards = news_list.find_all("div", class_="uho__text")
 
-        news = []
+            news = []
 
-        for card in news_cards:
-             # Поиск темы новсти
-            topic_list = news_list.find("ul", class_="crumbs tag_list")
-            topic_li = topic_list.find("li", class_="crumbs__item tag_list__item tag_list__item--plus")
-            topic = topic_li.find("a", class_="tag_list__link")
+            for card in news_cards:
+                # Поиск темы новсти
+                topic_list = news_list.find("ul", class_="crumbs tag_list")
+                topic_li = topic_list.find("li", class_="crumbs__item tag_list__item tag_list__item--plus")
+                topic = topic_li.find("a", class_="tag_list__link")
 
-            if topic:
-                topic_text = topic.get_text(" ", strip=True)
-            else:
-                topic_text = None
-            # Поиск даты и времени
-            topic = card.find("a", class_="tag_list__link")
+                if topic:
+                    topic_text = topic.get_text(" ", strip=True)
+                else:
+                    topic_text = None
+                # Поиск даты и времени
+                topic = card.find("a", class_="tag_list__link")
 
-            datatime = card.find("p", class_="uho__tag")
-            datatime_text = datatime.get_text(" ", strip=True)
+                datatime = card.find("p", class_="uho__tag")
+                datatime_text = datatime.get_text(" ", strip=True)
 
-            # Разделяем полученные данные на дату и время
-            date, time = datatime_text.split(", ")
+                # Разделяем полученные данные на дату и время
+                date, time = datatime_text.split(", ")
 
-            # Валидация полученной даты и времени для базы данных
-            data = f"{date} {time}"
-            valid_datatime = datetime.strptime(data, "%d.%m.%Y %H:%M")
+                # Валидация полученной даты и времени для базы данных
+                data = f"{date} {time}"
+                valid_datatime = datetime.strptime(data, "%d.%m.%Y %H:%M")
 
-            # Поиск названия нвости
-            title = card.find("a", class_="uho__link")
-            title_text = title.get_text(" ", strip=True)
+                # Поиск названия нвости
+                title = card.find("a", class_="uho__link")
+                title_text = title.get_text(" ", strip=True)
 
-            # Получение ссылки на новость
-            link = title.get("href")
+                # Получение ссылки на новость
+                link = title.get("href")
 
-            # Сборка полной ссылки на новость
-            full_link = urljoin(url, link)
+                # Сборка полной ссылки на новость
+                full_link = urljoin(url, link)
 
-            news_info = NewsInfo(
-                topic=topic_text,
-                title=title_text,
-                url=full_link,
-                created_at=valid_datatime,
-                source=SOURCE
-            )
+                news_info = NewsInfo(
+                    topic=topic_text,
+                    title=title_text,
+                    url=full_link,
+                    created_at=valid_datatime,
+                    source=SOURCE
+                )
 
-            news.append(news_info)
+                news.append(news_info)
 
-        for new in news:
-            await news_repo.add_news(new)
+            return news
 
-        return news
-        
+kommersant_news = KommersantNews()
+
 async def main():
 
-    news = await parsing_kommersant()
+    news = await kommersant_news.parsing_kommersant()
 
     for item in news:
         print(

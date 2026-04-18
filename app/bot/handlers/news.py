@@ -2,7 +2,7 @@
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from app.news.vtomske import parsing_vtomske
+from app.news.vtomske import vtomske_news
 from app.repo.news import news_repo
 
 router = Router()
@@ -10,7 +10,7 @@ router = Router()
 
 @router.message(Command("news"))
 async def process_command_news(message: Message):
-    list_news = await parsing_vtomske()
+    list_news = await vtomske_news.parsing_vtomske()
 
     if list_news is None:
         await message.answer("Новости сейчас недоступны, попробуйте позже.")
