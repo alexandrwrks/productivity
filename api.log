@@ -529,3 +529,13 @@ INFO:aiogram.dispatcher:Polling stopped
 ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
 WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
 INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"

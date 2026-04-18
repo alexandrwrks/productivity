@@ -1,11 +1,11 @@
-﻿from typing import Optional
+from typing import Optional
 
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from sqlalchemy import select
+from sqlalchemy import select, desc
 
 from app.database.config_db import SessionLocal, logger
 from app.database.models import News
-from app.news.config import NewsInfo
+from app.news.config_news import NewsInfo, NAME_OF_SOURCE
 
 from datetime import datetime
 
@@ -43,19 +43,17 @@ class NewsRepo:
                 logger.error(f"Database error: {e}")
                 return None
             
-    async def exists_news_in_data_base(self, news_info: NewsInfo):
+    async def add_news_if_not_exists(self, news_info: NewsInfo):
         async with SessionLocal() as session:
             try:
-                exists_news = await session.execute(select(News).where(
+                result = await session.execute(select(News).where(
                     News.title == news_info.title,
                     News.url == news_info.url,
                     News.source == news_info.source
                 ))
 
-                result = exists_news.scalar_one_or_none()
-
-                if result is None:
-                    await self.add_news()
+                news = result.scalar_one_or_none()
+                return news is not None
 
             except IntegrityError as e:
                 await session.rollback()
@@ -67,18 +65,18 @@ class NewsRepo:
                 logger.error(f"Database error: {e}")
                 return None
             
-    async def get_news_from_one_source_(self, name_source: str, datatime: datetime):
+    async def get_news_from_one_source(self, source: str, datatime: datetime):
         async with SessionLocal() as session:
             try:
                 exists_news = await session.execute(select(News.title).where(
-                    News.source == name_source,
+                    News.source == source,
                     News.created_at == datatime
                 ))
 
                 result = exists_news.scalar_one_or_none()
 
                 if result is None:
-                    return f"Нет новостей с {name_source}"
+                    return f"Нет новостей с {source}"
                 
                 list_news = []
                 for news in result:
@@ -91,5 +89,42 @@ class NewsRepo:
                 logger.error(f"Error receiving news from a source: {e}")
                 return None
     
+    async def get_last_news_per_source(self):
+        async with SessionLocal() as session:
+            last_news = []
+
+            for source in NAME_OF_SOURCE:
+                result = await session.execute(
+                    select(News)
+                    .where(News.source == source)
+                    .order_by(News.id.desc())
+                    .limit(1)
+                )
+
+                news = result.scalars().first()
+                if news is not None:
+                    last_news.append(news)
+
+            return last_news
+
+    async def get_last_news_by_source(self, source: str):
+        async with SessionLocal() as session:
+
+            result = await session.execute(
+                select(News)
+                .where(News.source == source)
+                .order_by(News.id.desc())
+                .limit(1)
+            )
+
+            news = result.scalars().first()
+            # Сделать обработку на None в другом месте
+            return news
+
+    async def add_news_if_not_exists(self, news_info: NewsInfo) -> Optional[News]:
+        exists = await self.add_news_if_not_exists(news_info)
+        if exists:
+            return None
+        return await self.add_news(news_info)
 
 news_repo = NewsRepo()

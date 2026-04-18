@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 from app.news.config_news import NewsInfo
-from app.repo.news import news_repo
+# from app.repo.news import news_repo
 
 from datetime import datetime
 
@@ -27,7 +27,7 @@ async def parsing_kommersant() -> Optional[NewsInfo]:
         news = []
 
         for card in news_cards:
-             # Поиск темы новсти
+            # Поиск темы новсти
             topic_list = news_list.find("ul", class_="crumbs tag_list")
             topic_li = topic_list.find("li", class_="crumbs__item tag_list__item tag_list__item--plus")
             topic = topic_li.find("a", class_="tag_list__link")
@@ -36,9 +36,8 @@ async def parsing_kommersant() -> Optional[NewsInfo]:
                 topic_text = topic.get_text(" ", strip=True)
             else:
                 topic_text = None
+            
             # Поиск даты и времени
-            topic = card.find("a", class_="tag_list__link")
-
             datatime = card.find("p", class_="uho__tag")
             datatime_text = datatime.get_text(" ", strip=True)
 
@@ -69,9 +68,6 @@ async def parsing_kommersant() -> Optional[NewsInfo]:
 
             news.append(news_info)
 
-        for new in news:
-            await news_repo.add_news(new)
-
         return news
         
 async def main():
@@ -80,6 +76,7 @@ async def main():
 
     for item in news:
         print(
+            f"Тема: {item.topic}\n"
             f"Заголовок: {item.title}\n"
             f"Ссылка: {item.url}\n"
             f"Дата публикаций: {item.created_at}\n"

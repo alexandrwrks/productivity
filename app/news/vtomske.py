@@ -6,21 +6,22 @@ from typing import Optional
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-from app.news.config import NewsInfo
+from app.news.config_news import NewsInfo
 
-SOURCE="vtomske"
+from app.news.config_news import NAME_OF_SOURCE
 
-async def process_vtomske() -> Optional[NewsInfo]:
+async def parsing_vtomske() -> Optional[NewsInfo]:
     async with httpx.AsyncClient() as client:
-        url = "https://vtomske.ru/"
+        url = "https://vtomske.ru/tag/tomsk"
         response = await client.get(url)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        news_card = soup.find_all("a", class_="lenta_material", limit=5)
+        news_card = soup.find_all("a", class_="lenta_material", limit=1)
 
         seen = set()
+        list_news = []
 
         for card in news_card:
             link = card.get("href")
@@ -51,13 +52,27 @@ async def process_vtomske() -> Optional[NewsInfo]:
 
             news = NewsInfo(
                 title=title,
-                time=time_text,
+                created_at=time_text,
                 url=full_link,
-                source=SOURCE
+                source=NAME_OF_SOURCE[0]
             )
 
-            return news
+            list_news.append(news)
 
+        return list_news
+
+
+async def main():
+
+    list_of_news = await parsing_vtomske()
+
+    for news in list_of_news:
+        print(
+            f"Заголовок: {news.title}\n"
+            f"Ссылка: {news.url}\n"
+            f"Дата публикаций: {news.created_at}\n"
+            f"Источник: {news.source}\n\n"
+        )
 
 if __name__ == "__main__":
-    asyncio.run(process_vtomske())
+    asyncio.run(main())
