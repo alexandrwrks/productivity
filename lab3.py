@@ -2,12 +2,13 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 
+
 class CreateGraph:
     def __init__(self):
         pass
 
     def create_simple_graph(self, n):
-        #Создаёт случайный простой связный граф на n вершинах
+        # Создает случайный простой связный граф на n вершинах
         matrix = [[0] * n for _ in range(n)]
 
         for v in range(1, n):
@@ -15,20 +16,17 @@ class CreateGraph:
             matrix[u][v] = 1
             matrix[v][u] = 1
 
-        #Возвращаем его матрицу смежности
         return matrix
 
     def create_full_graph(self, n):
-        # Создаёт полный граф на n вершинах
+        # Создает полный граф на n вершинах
         matrix = [[1] * n for _ in range(n)]
         for i in range(n):
             matrix[i][i] = 0
-
-        # Возвращаем матрицу смежности без петель
         return matrix
 
     def create_graph_with_loops(self, n):
-        # Создаёт случайный неориентированный граф с возможными петлями
+        # Создает случайный неориентированный граф с возможными петлями
         matrix = [[0] * n for _ in range(n)]
         for i in range(n):
             for j in range(i, n):
@@ -37,11 +35,10 @@ class CreateGraph:
                 else:
                     matrix[i][j] = random.randint(0, 1)
                     matrix[j][i] = matrix[i][j]
-        # Возвращает матрицу смежности, где диагональ может быть 1
         return matrix
 
     def create_multi_graph(self, n):
-        # Создаёт случайный мультиграф с 0-2 параллельными рёбрами между вершинами
+        # Создает случайный мультиграф с 0-2 параллельными ребрами
         graph = nx.MultiGraph()
         graph.add_nodes_from(range(n))
 
@@ -50,15 +47,13 @@ class CreateGraph:
                 num_edges = random.randint(0, 2)
                 for _ in range(num_edges):
                     graph.add_edge(i, j)
-        # Возвращаем объект граф типа networkx.MultiGraph
         return graph
 
     def convert_incidence_matrix(self, matrix):
-        # Преобразует матрицу смежности простого графа в матрицу инцидентности
-        # Каждому ребру соответствует отдельный столбец
-
+        # Преобразует матрицу смежности в матрицу инцидентности
         n = len(matrix)
         edges = []
+
         for i in range(n):
             for j in range(i + 1, n):
                 if matrix[i][j] == 1:
@@ -77,9 +72,7 @@ class CreateGraph:
         return inc_matrix
 
     def draw_graph(self, matrix, title='Граф'):
-        # Отрисовывает граф по матрице смежности и заданному заголовку
-        if plt is None:
-            raise ImportError('Для отрисовки графа установите matplotlib.')
+        # Отрисовывает граф по матрице смежности
         n = len(matrix)
         graph = nx.Graph()
 
@@ -89,11 +82,18 @@ class CreateGraph:
                     graph.add_edge(i, j)
 
         plt.figure(figsize=(12, 8))
-
         pos = nx.spring_layout(graph, k=3, iterations=50)
 
         nx.draw_networkx_edges(graph, pos, edge_color='#555555', width=2, alpha=0.7)
-        nx.draw_networkx_nodes(graph, pos, node_color='#87CEEB', node_size=800, edgecolors='darkblue', linewidths=2, alpha=0.9,)
+        nx.draw_networkx_nodes(
+            graph,
+            pos,
+            node_color='#87CEEB',
+            node_size=800,
+            edgecolors='darkblue',
+            linewidths=2,
+            alpha=0.9,
+        )
 
         labels = {i: i + 1 for i in range(n)}
         nx.draw_networkx_labels(graph, pos, labels, font_size=14, font_weight='bold', font_color='black')
@@ -104,11 +104,9 @@ class CreateGraph:
         plt.show()
 
         return graph
+
     def draw_multi_graph(self, graph: nx.Graph, title='Мультиграф'):
-        # Отрисовывает мультиграф с дугами для параллельных рёбер
-        # Используем spring-layout для расположения вершин
-        if plt is None:
-            raise ImportError('Для отрисовки графа установите matplotlib.')
+        # Отрисовывает мультиграф
         plt.figure(figsize=(12, 8))
 
         pos = nx.spring_layout(graph)
@@ -144,8 +142,7 @@ class CreateGraph:
 
 
 def print_matrix(matrix, title='Матрица'):
-    # Печатаем матрицу в консоль с заголовком
-    # Значение None отображается как символ бесконечности
+    # Печатаем матрицу в консоль
     print(f"\n{title}:")
     for row in matrix:
         formatted = []
@@ -158,14 +155,12 @@ def print_matrix(matrix, title='Матрица'):
 
 
 def print_metric_matrix(metric_matrix):
-    # Печатаем матрицу метрик - кратчайших расстояний в консоль
-    # Используем общий формат вывода матриц
+    # Печатаем матрицу метрик
     print_matrix(metric_matrix, 'Матрица метрик')
 
 
 def multiply_matrices(matrix_a, matrix_b):
-    # Перемножаем две квадратные матрицы одинакового размера
-    # Возвращаем новую матрицу-результат
+    # Умножение двух квадратных матриц
     n = len(matrix_a)
     if n == 0 or n != len(matrix_b):
         raise ValueError('Матрицы должны быть квадратными и одного размера')
@@ -192,8 +187,7 @@ def multiply_matrices(matrix_a, matrix_b):
 
 
 def matrix_power(matrix, power):
-    # Возводим квадратную матрицу в неотрицательную целую степень
-    # Используем бинарное возведение в степень
+    # Возведение квадратной матрицы в целую неотрицательную степень
     if power < 0:
         raise ValueError('Степень не может быть отрицательной')
 
@@ -216,7 +210,6 @@ def matrix_power(matrix, power):
 
 def build_metric_matrix(adjacency):
     # Строим матрицу кратчайших расстояний по матрице смежности
-    # Ищем расстояния через последовательный просмотр степеней матрицы
     n = len(adjacency)
     if n == 0:
         return []
@@ -227,7 +220,6 @@ def build_metric_matrix(adjacency):
     for i in range(n):
         metrics[i][i] = 0
 
-    # Булева матрица смежности (петли не влияют на расстояния между разными вершинами).
     adjacency_bool = [
         [1 if i != j and adjacency[i][j] > 0 else 0 for j in range(n)]
         for i in range(n)
@@ -246,8 +238,7 @@ def build_metric_matrix(adjacency):
 
 
 def find_graph_characteristics(metric_matrix):
-    # Находим эксцентриситеты, радиус, диаметр, центр и периферию графа.
-    # Вершины с недостижимыми расстояниями получают эксцентриситет None
+    # По матрице метрик находим радиус, диаметр, центр и периферию
     n = len(metric_matrix)
     if any(len(row) != n for row in metric_matrix):
         raise ValueError('Матрица метрик должна быть квадратной')
@@ -259,15 +250,14 @@ def find_graph_characteristics(metric_matrix):
         else:
             eccentricities.append(max(row))
 
-    finite_eccentricities = [e for e in eccentricities if e is not None]
+    finite = [e for e in eccentricities if e is not None]
 
-    radius = min(finite_eccentricities) if finite_eccentricities else None
-    diameter = max(finite_eccentricities) if finite_eccentricities else None
+    radius = min(finite) if finite else None
+    diameter = max(finite) if finite else None
 
     central_vertices = [i + 1 for i, e in enumerate(eccentricities) if e == radius and e is not None]
     peripheral_vertices = [i + 1 for i, e in enumerate(eccentricities) if e == diameter and e is not None]
 
-    # Возращаем эксцентриситету, радиус, диаметр, центр. вершины и периф. вершины
     return {
         'eccentricities': eccentricities,
         'radius': radius,
@@ -278,7 +268,7 @@ def find_graph_characteristics(metric_matrix):
 
 
 def print_characteristics(characteristics):
-    # Печатает характеристики графа, рассчитанные по матрице метрик
+    # Печатаем характеристики графа
     def format_value(value):
         return '∞' if value is None else str(value)
 
@@ -291,13 +281,223 @@ def print_characteristics(characteristics):
 
 
 def analyze_graph(matrix):
-    # Комплексно анализируем граф по матрице смежности
-    # Печатаем матрицы и основные метрические характеристики
+    # Анализ для 2 лабораторной
     print_matrix(matrix, 'Матрица смежности')
     metric_matrix = build_metric_matrix(matrix)
     print_metric_matrix(metric_matrix)
     characteristics = find_graph_characteristics(metric_matrix)
     print_characteristics(characteristics)
+
+
+# -----------------------------
+# ФУНКЦИИ 3 ЛАБОРАТОРНОЙ
+# -----------------------------
+
+def to_simple_adjacency(adjacency):
+    # Преобразуем матрицу смежности в булеву (0/1)
+    n = len(adjacency)
+    if any(len(row) != n for row in adjacency):
+        raise ValueError('Матрица смежности должна быть квадратной')
+    return [[1 if adjacency[i][j] > 0 else 0 for j in range(n)] for i in range(n)]
+
+
+def find_maximum_independent_sets(adjacency):
+    # Ищем максимальные пустые подграфы (независимые множества)
+    n = len(adjacency)
+    if any(len(row) != n for row in adjacency):
+        raise ValueError('Матрица смежности должна быть квадратной')
+
+    conflict = [[False] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                conflict[i][j] = adjacency[i][i] > 0
+            else:
+                conflict[i][j] = adjacency[i][j] > 0 or adjacency[j][i] > 0
+
+    degrees = [sum(1 for j in range(n) if i != j and conflict[i][j]) for i in range(n)]
+    order = sorted(range(n), key=lambda v: degrees[v], reverse=True)
+
+    best_size = 0
+    best_sets = []
+
+    def dfs(pos, chosen):
+        nonlocal best_size, best_sets
+
+        if len(chosen) + (n - pos) < best_size:
+            return
+
+        if pos == n:
+            size = len(chosen)
+            if size > best_size:
+                best_size = size
+                best_sets = [chosen[:]]
+            elif size == best_size:
+                best_sets.append(chosen[:])
+            return
+
+        v = order[pos]
+
+        can_take = not conflict[v][v]
+        if can_take:
+            for u in chosen:
+                if conflict[v][u]:
+                    can_take = False
+                    break
+
+        if can_take:
+            chosen.append(v)
+            dfs(pos + 1, chosen)
+            chosen.pop()
+
+        dfs(pos + 1, chosen)
+
+    dfs(0, [])
+
+    normalized = []
+    seen = set()
+    for subset in best_sets:
+        one_based = tuple(sorted(v + 1 for v in subset))
+        if one_based not in seen:
+            seen.add(one_based)
+            normalized.append(list(one_based))
+
+    normalized.sort()
+    return normalized, best_size
+
+
+def color_graph_exact(adjacency):
+    # Точная раскраска графа: хроматическое число и цвета вершин
+    n = len(adjacency)
+    if any(len(row) != n for row in adjacency):
+        raise ValueError('Матрица смежности должна быть квадратной')
+
+    for i in range(n):
+        if adjacency[i][i] > 0:
+            return None, None
+
+    neighbors = [set() for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if i != j and (adjacency[i][j] > 0 or adjacency[j][i] > 0):
+                neighbors[i].add(j)
+
+    degrees = [len(neighbors[i]) for i in range(n)]
+
+    colors = [-1] * n
+    best_count = n + 1
+    best_coloring = None
+
+    def pick_vertex():
+        uncolored = [v for v in range(n) if colors[v] == -1]
+        if not uncolored:
+            return None
+
+        def saturation(v):
+            return len({colors[u] for u in neighbors[v] if colors[u] != -1})
+
+        return max(uncolored, key=lambda v: (saturation(v), degrees[v]))
+
+    def dfs(used_colors):
+        nonlocal best_count, best_coloring
+
+        if used_colors >= best_count:
+            return
+
+        v = pick_vertex()
+        if v is None:
+            best_count = used_colors
+            best_coloring = colors[:]
+            return
+
+        forbidden = {colors[u] for u in neighbors[v] if colors[u] != -1}
+
+        for c in range(used_colors):
+            if c in forbidden:
+                continue
+            colors[v] = c
+            dfs(used_colors)
+            colors[v] = -1
+
+        colors[v] = used_colors
+        dfs(used_colors + 1)
+        colors[v] = -1
+
+    dfs(0)
+    return best_count, best_coloring
+
+
+def print_coloring_result(chromatic_number, colors):
+    # Печатаем хроматическое число и классы вершин по цветам
+    if chromatic_number is None or colors is None:
+        print('\nГраф содержит петли, поэтому правильная раскраска невозможна.')
+        return
+
+    print(f'\nХроматическое число графа: {chromatic_number}')
+    classes = {}
+    for v, color in enumerate(colors, start=1):
+        classes.setdefault(color + 1, []).append(v)
+
+    for color in sorted(classes):
+        print(f'Цвет {color}: вершины {classes[color]}')
+
+
+def draw_colored_graph(adjacency, colors=None, title='Раскрашенный граф'):
+    # Отрисовываем раскрашенный граф
+    n = len(adjacency)
+    graph = nx.Graph()
+    graph.add_nodes_from(range(n))
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            if adjacency[i][j] > 0 or adjacency[j][i] > 0:
+                graph.add_edge(i, j)
+
+    if colors is None:
+        node_colors = ['lightgray'] * n
+    else:
+        palette = [
+            '#FF6B6B', '#4ECDC4', '#FFD166', '#6A4C93', '#06D6A0', '#118AB2',
+            '#F77F00', '#8338EC', '#3A86FF', '#8AC926', '#EF476F', '#2A9D8F',
+        ]
+        node_colors = [palette[c % len(palette)] for c in colors]
+
+    plt.figure(figsize=(12, 8))
+    pos = nx.spring_layout(graph, seed=42)
+    nx.draw_networkx_edges(graph, pos, edge_color='#666666', width=2, alpha=0.8)
+    nx.draw_networkx_nodes(
+        graph,
+        pos,
+        node_color=node_colors,
+        node_size=900,
+        edgecolors='black',
+        linewidths=1.8,
+    )
+    labels = {i: i + 1 for i in range(n)}
+    nx.draw_networkx_labels(graph, pos, labels, font_size=14, font_weight='bold')
+    plt.title(title, fontsize=17, fontweight='bold')
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+
+def analyze_graph_lab3(matrix):
+    # Анализ для 3 лабораторной
+    simple_adj = to_simple_adjacency(matrix)
+
+    max_sets, max_size = find_maximum_independent_sets(simple_adj)
+    print(f'\nМаксимальный пустой подграф: размер {max_size}')
+    print('Множества вершин:')
+    for idx, subset in enumerate(max_sets, start=1):
+        print(f'{idx}. {subset}')
+
+    chromatic_number, colors = color_graph_exact(simple_adj)
+    print_coloring_result(chromatic_number, colors)
+
+    if chromatic_number is None:
+        draw_colored_graph(simple_adj, None, 'Граф (раскраска невозможна из-за петель)')
+    else:
+        draw_colored_graph(simple_adj, colors, f'Раскрашенный граф, хроматическое число = {chromatic_number}')
 
 
 def main():
@@ -343,7 +543,7 @@ def main():
                 print_matrix(inc_matrix, 'Матрица инцидентности')
 
             analyze_graph(matrix)
-            graph_creator.draw_graph(matrix, f'Простой граф ({n} вершин)')
+            analyze_graph_lab3(matrix)
 
         elif choice == 2:
             matrix = graph_creator.create_full_graph(n)
@@ -354,7 +554,7 @@ def main():
                 print_matrix(inc_matrix, 'Матрица инцидентности')
 
             analyze_graph(matrix)
-            graph_creator.draw_graph(matrix, f'Полный граф ({n} вершин)')
+            analyze_graph_lab3(matrix)
 
         elif choice == 3:
             matrix = graph_creator.create_graph_with_loops(n)
@@ -365,39 +565,7 @@ def main():
                 print_matrix(inc_matrix, 'Матрица инцидентности (петли не отображаются)')
 
             analyze_graph(matrix)
-
-            graph = nx.Graph()
-            for i in range(n):
-                for j in range(i, n):
-                    if matrix[i][j] == 1:
-                        graph.add_edge(i, j)
-
-            plt.figure(figsize=(12, 8))
-            pos = nx.circular_layout(graph)
-            nx.draw_networkx_edges(graph, pos, edge_color='gray', width=2, alpha=0.7)
-            nx.draw_networkx_nodes(
-                graph,
-                pos,
-                node_color='#87CEEB',
-                node_size=800,
-                edgecolors='darkblue',
-                linewidths=2,
-                alpha=0.9,
-            )
-
-            for node in graph.nodes():
-                if graph.has_edge(node, node):
-                    x, y = pos[node]
-                    circle = plt.Circle((x, y - 0.2), 0.2, fill=False, edgecolor='gray', linewidth=2)
-                    plt.gca().add_patch(circle)
-
-            labels = {i: i + 1 for i in range(n)}
-            nx.draw_networkx_labels(graph, pos, labels, font_size=14, font_weight='bold')
-
-            plt.title(f'Граф с петлями ({n} вершин)', fontsize=16, fontweight='bold')
-            plt.axis('off')
-            plt.tight_layout()
-            plt.show()
+            analyze_graph_lab3(matrix)
 
         elif choice == 4:
             graph = graph_creator.create_multi_graph(n)
@@ -423,9 +591,8 @@ def main():
                 print_matrix(inc_matrix, 'Матрица инцидентности')
 
             analyze_graph(adj_matrix)
-            graph_creator.draw_multi_graph(graph, f'Мультиграф ({n} вершин)')
+            analyze_graph_lab3(adj_matrix)
 
 
 if __name__ == '__main__':
     main()
-
