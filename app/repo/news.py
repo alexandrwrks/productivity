@@ -65,7 +65,7 @@ class NewsRepo:
                 if exists_news is None:
                     await self.add_news(news_info)
 
-                return True
+                # return None
 
             except IntegrityError as e:
                 logger.error(f"Unique error: {e}")

@@ -38,7 +38,7 @@ class UserRepo:
             )
             exists_user = result.scalar_one_or_none()
 
-            if exists_user is not None:
+            if exists_user is None:
                 await self.add_user(telegram_id)
 
             return

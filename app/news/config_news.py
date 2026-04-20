@@ -8,6 +8,13 @@ SOURCE = {
     "euronews": "https://www.euronews.com/just-in"
 }
 
+SOURCES = {
+    "vtomske": "Vtomske",
+    "kommersant": "Kommersant",
+    "euronews": "EuroNews"
+}
+
+
 NAME_OF_SOURCE = [
     "vtomske",
     "kommersant",

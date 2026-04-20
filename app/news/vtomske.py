@@ -31,7 +31,8 @@ class VtomskeNews:
             list_news = []
             for card in news_card:
                 # Получение "ссылки" на новость
-                link = card.get("href")
+                link_a = card.find("a", class_="lenta_material")
+                link = link_a.get("href")
 
                 # Получение заголовка
                 title_tag = card.find("div", class_="lenta_material_title")
@@ -48,7 +49,7 @@ class VtomskeNews:
 
                 # Валидация даты и времени для БД
                 datatime_str = datetime.strptime(datatime, "%Y-%m-%d %H:%M")
-                datatime_valid = datetime.strftime(datatime_str, "%d.%m.%Y %H:%M")
+                # datatime_valid = datetime.strftime(datatime_str, "%d.%m.%Y %H:%M")
 
                 # Создание полной ссылки на новость
                 full_link = urljoin(url, link)
@@ -57,7 +58,7 @@ class VtomskeNews:
                 list_news.append(NewsInfo(
                     topic=None,
                     title=title,
-                    created_at=datatime_valid,
+                    created_at=datatime_str,
                     url=full_link,
                     source=NAME_OF_SOURCE[0]
                 ))

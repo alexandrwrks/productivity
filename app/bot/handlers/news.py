@@ -13,16 +13,23 @@ async def process_command_news(message: Message):
 
     if last_news_from_all_source is None:
         await message.answer("Новости сейчас недоступны, попробуйте позже.")
-        return
 
     for news_info in last_news_from_all_source:
-        # await news_repo.exists_news_in_database(news_info)
+        if news_info.topic is None:
+            await message.answer(
+                f"<a href=\"{news_info.url}\"><b>{news_info.title}</b></a>\n\n"
+                f"🕐 Время: {news_info.created_at}\n"
+                f"🌐 Источник: {news_info.source}\n\n",
+                parse_mode="HTML",
+                disable_web_page_preview=True
+            )
 
-        await message.answer(
-            f"<a href=\"{news_info.url}\"><b>{news_info.title}</b></a>\n\n"
-            f"Тема: {news_info.topic}\n"
-            f"🕐 Время: {news_info.created_at}\n"
-            f"🌐 Источник: {news_info.source}\n\n",
-            parse_mode="HTML",
-            disable_web_page_preview=True
-        )
+        else:
+            await message.answer(
+                f"<a href=\"{news_info.url}\"><b>{news_info.title}</b></a>\n\n"
+                f"Тема: {news_info.topic}\n"
+                f"🕐 Время: {news_info.created_at}\n"
+                f"🌐 Источник: {news_info.source}\n\n",
+                parse_mode="HTML",
+                disable_web_page_preview=True
+            )

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Integer, ForeignKey, String, TIMESTAMP, UniqueConstraint
+from sqlalchemy import Integer, ForeignKey, String, TIMESTAMP, UniqueConstraint, Boolean, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .config_db import Base
@@ -10,7 +10,7 @@ class User(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True) # Первичный ключ
     telegram_id: Mapped[int] = mapped_column(Integer, unique=True, nullable=False) # Уникальный телеграмм id
-
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
 
 class News(Base):
     __tablename__ = "news"
@@ -35,4 +35,5 @@ class Subscriptions(Base):
         , ForeignKey("users.telegram_id")
         , nullable=False) # Внешний ключ привязанный к users.telegram_id
     source: Mapped[str] = mapped_column(String, nullable=False) # Источник
-
+    is_active: Mapped[bool] = mapped_column(Boolean, default=0)
+    update_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
