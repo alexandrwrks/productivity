@@ -23,7 +23,7 @@ class NewsChecker:
                 vtomske_news_info = await vtomske_news.parsing_vtomske()
 
                 for news_info in vtomske_news_info:
-                    await news_repo.exists_news_in_database()
+                    await news_repo.exists_news_in_database(news_info)
                     
                 logger.info(f"Конец парсинга: {NAME_OF_SOURCE[0]}")
             except Exception as e:

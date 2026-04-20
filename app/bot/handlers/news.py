@@ -16,7 +16,7 @@ async def process_command_news(message: Message):
         return
 
     for news_info in last_news_from_all_source:
-        await news_repo.exists_news_in_database(news_info)
+        # await news_repo.exists_news_in_database(news_info)
 
         await message.answer(
             f"<a href=\"{news_info.url}\"><b>{news_info.title}</b></a>\n\n"
