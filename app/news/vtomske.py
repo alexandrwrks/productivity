@@ -10,6 +10,8 @@ from app.news.config_news import NewsInfo
 
 from app.news.config_news import NAME_OF_SOURCE
 
+from datetime import date, datetime
+
 class VtomskeNews:
     async def parsing_vtomske(self) -> Optional[NewsInfo]:
         async with httpx.AsyncClient() as client:
@@ -19,40 +21,43 @@ class VtomskeNews:
 
             soup = BeautifulSoup(response.text, "html.parser")
 
-            news_card = soup.find_all("a", class_="lenta_material", limit=5)
+            # Нахождение первой колонки с новстями 
+            div = soup.find("div", class_="lenta_column")
 
+            # Карточки нвостей
+            news_card = soup.find_all("div", class_="lenta_column", limit=5)
+
+            # Создания списка новостей
             list_news = []
-
             for card in news_card:
                 # Получение "ссылки" на новость
                 link = card.get("href")
-                if not link:
-                    continue
 
                 # Получение заголовка
                 title_tag = card.find("div", class_="lenta_material_title")
-                if not title_tag:
-                    continue
-
                 title = title_tag.get_text(" ", strip=True)
 
                 # Получение времени и даты
                 time_tag = card.find("div", class_="lenta_material_info")
-
-                time_text = "Нет времени"
-
-                if time_tag:
-                    time_div = time_tag.find("div")
-                    if time_div:
-                        time_text = time_div.get_text(strip=True)
+                time_div = time_tag.find("div")
+                time_text = time_div.get_text(" ", strip=True)
                 
-                # Создание полной ссыклки на новость
+                # Делаем валидацию даты
+                today = date.today()
+                datatime = f"{today} {time_text}"
+
+                # Валидация даты и времени для БД
+                datatime_str = datetime.strptime(datatime, "%Y-%m-%d %H:%M")
+                datatime_valid = datetime.strftime(datatime_str, "%d.%m.%Y %H:%M")
+
+                # Создание полной ссылки на новость
                 full_link = urljoin(url, link)
 
+                # Добавляем данные новости
                 list_news.append(NewsInfo(
                     topic=None,
                     title=title,
-                    created_at=time_text,
+                    created_at=datatime_valid,
                     url=full_link,
                     source=NAME_OF_SOURCE[0]
                 ))

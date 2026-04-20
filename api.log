@@ -2030,3 +2030,526 @@ INFO:aiogram.dispatcher:Polling stopped
 ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
 WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
 INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:app.database.config_db:Начало парсинга: vtomske
+INFO:app.database.config_db:Начало парсинга: kommersant и 
+INFO:app.database.config_db:Начало парсинга: euronews
+INFO:httpx:HTTP Request: GET https://www.euronews.com/just-in "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:app.database.config_db:Конец парсинга: kommersant
+INFO:httpx:HTTP Request: GET https://vtomske.ru/tag/tomsk "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Ошибка при парсинге: NewsRepo.exists_news_in_database() missing 1 required positional argument: 'news_info'
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\script.py", line 26, in check_vtomske
+    await news_repo.exists_news_in_database()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: NewsRepo.exists_news_in_database() missing 1 required positional argument: 'news_info'
+INFO:aiogram.dispatcher:Run polling for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:app.database.config_db:Конец парсинга: euronews
+INFO:aiogram.event:Update id=937203014 is handled. Duration 530 ms by bot id=8675249748
+ERROR:app.database.config_db:Unique error: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.UniqueViolationError'>: повторяющееся значение ключа нарушает ограничение уникальности "news_url_key"
+DETAIL:  Ключ "(url)=(https://www.kommersant.ru/doc/8604880)" уже существует.
+[SQL: INSERT INTO news (topic, title, url, source, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::TIMESTAMP WITHOUT TIME ZONE) RETURNING news.id]
+[parameters: ('Мир', 'Цены на нефть выросли на 7% после новости о закрытии Ормузского пролива', 'https://www.kommersant.ru/doc/8604880', 'kommersant', datetime.datetime(2026, 4, 20, 3, 19))]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+INFO:aiogram.event:Update id=937203015 is handled. Duration 641 ms by bot id=8675249748
+INFO:app.database.config_db:Начало парсинга: kommersant и 
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:app.database.config_db:Конец парсинга: kommersant
+INFO:app.database.config_db:Начало парсинга: euronews
+INFO:httpx:HTTP Request: GET https://www.euronews.com/just-in "HTTP/1.1 200 OK"
+INFO:app.database.config_db:Конец парсинга: euronews
+INFO:app.database.config_db:Начало парсинга: kommersant и 
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:app.database.config_db:Конец парсинга: kommersant
+INFO:app.database.config_db:Начало парсинга: euronews
+INFO:httpx:HTTP Request: GET https://www.euronews.com/just-in "HTTP/1.1 200 OK"
+INFO:app.database.config_db:Конец парсинга: euronews
+INFO:app.database.config_db:Начало парсинга: kommersant и 
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:app.database.config_db:Конец парсинга: kommersant
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 1.277686 seconds and try again... (tryings = 1, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 1.761093 seconds and try again... (tryings = 2, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 2.199800 seconds and try again... (tryings = 3, bot id = 8675249748)
+INFO:app.database.config_db:Начало парсинга: euronews
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 2.866618 seconds and try again... (tryings = 4, bot id = 8675249748)
+ERROR:app.database.config_db:Ошибка при парсинге: 
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\http11.py", line 376, in start_tls
+    return await self._stream.start_tls(ssl_context, server_hostname, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_backends\anyio.py", line 67, in start_tls
+    with map_exceptions(exc_map):
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\script.py", line 53, in check_euronews
+    euronews = await euro_news.parsing_euronews()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\news\euronews.py", line 26, in parsing_euronews
+    response = await client.get(url)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 3.656372 seconds and try again... (tryings = 5, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.812293 seconds and try again... (tryings = 6, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.058253 seconds and try again... (tryings = 7, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.895204 seconds and try again... (tryings = 8, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.990711 seconds and try again... (tryings = 9, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.977338 seconds and try again... (tryings = 10, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.078587 seconds and try again... (tryings = 11, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.144720 seconds and try again... (tryings = 12, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.163605 seconds and try again... (tryings = 13, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.970988 seconds and try again... (tryings = 14, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.028152 seconds and try again... (tryings = 15, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.040181 seconds and try again... (tryings = 16, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.045604 seconds and try again... (tryings = 17, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.015292 seconds and try again... (tryings = 18, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.968203 seconds and try again... (tryings = 19, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.071306 seconds and try again... (tryings = 20, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.994342 seconds and try again... (tryings = 21, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [Превышен таймаут семафора]
+WARNING:aiogram.dispatcher:Sleep for 4.997146 seconds and try again... (tryings = 22, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.046632 seconds and try again... (tryings = 23, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.050286 seconds and try again... (tryings = 24, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.971115 seconds and try again... (tryings = 25, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.994305 seconds and try again... (tryings = 26, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.085507 seconds and try again... (tryings = 27, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.897903 seconds and try again... (tryings = 28, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.096866 seconds and try again... (tryings = 29, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.904446 seconds and try again... (tryings = 30, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.984880 seconds and try again... (tryings = 31, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.965731 seconds and try again... (tryings = 32, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.091067 seconds and try again... (tryings = 33, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.985358 seconds and try again... (tryings = 34, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.170064 seconds and try again... (tryings = 35, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.867139 seconds and try again... (tryings = 36, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.977921 seconds and try again... (tryings = 37, bot id = 8675249748)
+INFO:app.database.config_db:Начало парсинга: kommersant и 
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.091000 seconds and try again... (tryings = 38, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.947766 seconds and try again... (tryings = 39, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.188509 seconds and try again... (tryings = 40, bot id = 8675249748)
+ERROR:app.database.config_db:Ошибка при парсинге: 
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\http11.py", line 376, in start_tls
+    return await self._stream.start_tls(ssl_context, server_hostname, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_backends\anyio.py", line 67, in start_tls
+    with map_exceptions(exc_map):
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectTimeout
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\script.py", line 38, in check_kommersant
+    kommersant_news_info = await kommersant_news.parsing_kommersant()
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\news\kommersant.py", line 20, in parsing_kommersant
+    response = await client.get(url)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectTimeout
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.954248 seconds and try again... (tryings = 41, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.114332 seconds and try again... (tryings = 42, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.963343 seconds and try again... (tryings = 43, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.006992 seconds and try again... (tryings = 44, bot id = 8675249748)
+INFO:app.database.config_db:Начало парсинга: euronews
+ERROR:app.database.config_db:Ошибка при парсинге: 
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\http11.py", line 376, in start_tls
+    return await self._stream.start_tls(ssl_context, server_hostname, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_backends\anyio.py", line 67, in start_tls
+    with map_exceptions(exc_map):
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\script.py", line 53, in check_euronews
+    euronews = await euro_news.parsing_euronews()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\news\euronews.py", line 26, in parsing_euronews
+    response = await client.get(url)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.111078 seconds and try again... (tryings = 45, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.927027 seconds and try again... (tryings = 46, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.941764 seconds and try again... (tryings = 47, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.067653 seconds and try again... (tryings = 48, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.990159 seconds and try again... (tryings = 49, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.017947 seconds and try again... (tryings = 50, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.897121 seconds and try again... (tryings = 51, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.898859 seconds and try again... (tryings = 52, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.929654 seconds and try again... (tryings = 53, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.985398 seconds and try again... (tryings = 54, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.081528 seconds and try again... (tryings = 55, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.034893 seconds and try again... (tryings = 56, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.937502 seconds and try again... (tryings = 57, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.056383 seconds and try again... (tryings = 58, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.998150 seconds and try again... (tryings = 59, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.953357 seconds and try again... (tryings = 60, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.019170 seconds and try again... (tryings = 61, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.161970 seconds and try again... (tryings = 62, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.884695 seconds and try again... (tryings = 63, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.855760 seconds and try again... (tryings = 64, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.960693 seconds and try again... (tryings = 65, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 5.204572 seconds and try again... (tryings = 66, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.967105 seconds and try again... (tryings = 67, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 4.999077 seconds and try again... (tryings = 68, bot id = 8675249748)
+INFO:aiogram.dispatcher:Connection established (tryings = 69, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 1.489033 seconds and try again... (tryings = 1, bot id = 8675249748)
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+WARNING:aiogram.dispatcher:Sleep for 2.016515 seconds and try again... (tryings = 2, bot id = 8675249748)
+INFO:aiogram.dispatcher:Connection established (tryings = 3, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped
+ERROR:aiogram.dispatcher:Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+WARNING:aiogram.dispatcher:Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8675249748)
+INFO:aiogram.dispatcher:Polling stopped for bot @the_worldnews_bot id=8675249748 - 'NewsBot'
+INFO:aiogram.dispatcher:Start polling
+INFO:app.database.config_db:Начало парсинга: vtomske
+INFO:app.database.config_db:Начало парсинга: kommersant и 
+INFO:app.database.config_db:Начало парсинга: euronews
+INFO:httpx:HTTP Request: GET https://vtomske.ru/tag/tomsk "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Ошибка при парсинге: NewsRepo.exists_news_in_database() missing 1 required positional argument: 'news_info'
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\script.py", line 26, in check_vtomske
+    await news_repo.exists_news_in_database()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: NewsRepo.exists_news_in_database() missing 1 required positional argument: 'news_info'
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:app.database.config_db:Конец парсинга: kommersant
+ERROR:app.database.config_db:Ошибка при парсинге: 
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection.py", line 101, in handle_async_request
+    raise exc
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection.py", line 156, in _connect
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_backends\anyio.py", line 67, in start_tls
+    with map_exceptions(exc_map):
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectTimeout
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\script.py", line 53, in check_euronews
+    euronews = await euro_news.parsing_euronews()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\news\euronews.py", line 26, in parsing_euronews
+    response = await client.get(url)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectTimeout
+INFO:aiogram.dispatcher:Polling stopped
+INFO:aiogram.dispatcher:Start polling
+INFO:app.database.config_db:Начало парсинга: vtomske
+INFO:app.database.config_db:Начало парсинга: kommersant и 
+INFO:app.database.config_db:Начало парсинга: euronews
+INFO:httpx:HTTP Request: GET https://vtomske.ru/tag/tomsk "HTTP/1.1 200 OK"
+ERROR:app.database.config_db:Ошибка при парсинге: NewsRepo.exists_news_in_database() missing 1 required positional argument: 'news_info'
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\script.py", line 26, in check_vtomske
+    await news_repo.exists_news_in_database()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: NewsRepo.exists_news_in_database() missing 1 required positional argument: 'news_info'
+INFO:httpx:HTTP Request: GET https://www.kommersant.ru/lenta/news?from=lenta_news "HTTP/1.1 200 OK"
+INFO:app.database.config_db:Конец парсинга: kommersant
+ERROR:app.database.config_db:Ошибка при парсинге: 
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection.py", line 101, in handle_async_request
+    raise exc
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_async\connection.py", line 156, in _connect
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_backends\anyio.py", line 67, in start_tls
+    with map_exceptions(exc_map):
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectTimeout
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\script.py", line 53, in check_euronews
+    euronews = await euro_news.parsing_euronews()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\app\news\euronews.py", line 26, in parsing_euronews
+    response = await client.get(url)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+  File "C:\Users\Acer\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Users\Acer\OneDrive\Documents\Рабочий стол\Программирование GitHub\my_git\productivity\venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectTimeout
+INFO:aiogram.dispatcher:Polling stopped

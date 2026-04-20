@@ -31,8 +31,16 @@ class UserRepo:
                 return None
 
     async def get_exists_user(self, telegram_id: int) -> Optional[User]:
+        """Проверка наличия пользователя в БД"""
         async with SessionLocal() as session:
             result = await session.execute(
                 select(User).where(User.telegram_id == telegram_id)
             )
-            return result.scalar_one_or_none()
+            exists_user = result.scalar_one_or_none()
+
+            if exists_user is not None:
+                await self.add_user(telegram_id)
+
+            return
+
+user_repo = UserRepo()

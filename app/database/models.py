@@ -20,7 +20,7 @@ class News(Base):
     title: Mapped[str] = mapped_column(String, nullable=False) # Заголовок 
     url: Mapped[str] = mapped_column(String, unique=True, nullable=False) # Ссылка на новость
     source: Mapped[str] = mapped_column(String, nullable=False) # Источник
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, nullable=False) # Время создания
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP) # Время создания
 
 
 class Subscriptions(Base):

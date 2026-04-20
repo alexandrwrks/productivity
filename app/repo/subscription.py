@@ -98,11 +98,8 @@ class SubscriptionRepo:
                     )
                 )
 
-                sub_source = result.scalar_one_or_none()
-                if sub_source is not None:
-                    return sub_source
-                
-                return None
+                sub_source = result.scalars()
+                return sub_source if sub_source else None
 
             except SQLAlchemyError as e:
                 logger.exception(f"Database error: {e}")

@@ -22,6 +22,7 @@ class NewsRepo:
         async with SessionLocal() as session:
             try:
                 news = News(
+                    topic=news_info.topic,
                     title=news_info.title,
                     url=news_info.url,
                     created_at=news_info.created_at,
@@ -78,21 +79,24 @@ class NewsRepo:
         """Получаем новости с олного источника в дату"""
         async with SessionLocal() as session:
             try:
-                result = await session.execute(select(News.title).where(
-                    News.source == source,
-                    News.created_at == datatime
-                ))
+                result = await session.execute(
+                    select(News.title)
+                    .where(
+                        News.source == source,
+                        News.created_at == datatime
+                    )
+                    .limit(20)
+                    )
                 
-                exists_news = await result.scalar_one_or_none()
+                exists_news = result.scalars()
 
-                if exists_news is None:
-                    return f"Нет новостей с {source}"
-                
-                list_news = []
-                for news in result:
-                    list_news.append(news)
-
-                return list_news
+                if exists_news:
+                    list_news = []
+                    for news in result:
+                        list_news.append(news)
+                    return list_news
+                    
+                return f"Нет новостей с {source}"
 
             except SQLAlchemyError as e:
                 await session.rollback()
