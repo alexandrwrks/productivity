@@ -234,13 +234,23 @@ def build_metric_matrix(adjacency):
     ]
 
     current_power = [row[:] for row in adjacency_bool]
+    
 
     for distance in range(1, n):
+        change = False
         for i in range(n):
             for j in range(n):
                 if i != j and metrics[i][j] is None and current_power[i][j] > 0:
                     metrics[i][j] = distance
-        current_power = multiply_matrices(current_power, adjacency_bool)
+                    change = True
+                    
+        if all(metrics[i][j] is not None for i in range(n) for j in range(n)):
+            break
+
+        if not change:
+            break
+
+        current_power = multiply_matrices(current_power, adjacency)
 
     return metrics
 
