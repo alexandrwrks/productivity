@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Integer, ForeignKey, String, TIMESTAMP, UniqueConstraint, Boolean, func
+from sqlalchemy import Integer, ForeignKey, String, TIMESTAMP, UniqueConstraint, Boolean, func, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .config_db import Base
@@ -35,5 +35,5 @@ class Subscriptions(Base):
         , ForeignKey("users.telegram_id")
         , nullable=False) # Внешний ключ привязанный к users.telegram_id
     source: Mapped[str] = mapped_column(String, nullable=False) # Источник
-    is_active: Mapped[bool] = mapped_column(Boolean, default=0)
+    is_active: Mapped[bool] = mapped_column(Boolean, server_default=text("false"))
     update_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())

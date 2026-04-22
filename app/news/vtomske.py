@@ -1,75 +1,56 @@
+﻿import asyncio
+from datetime import date, datetime
+
 import httpx
-import asyncio
-
-from typing import Optional
-
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-from app.news.config_news import NewsInfo
+from app.news.config_news import NAME_OF_SOURCE, NewsInfo, SOURCES
 
-from app.news.config_news import NAME_OF_SOURCE
-
-from datetime import date, datetime
 
 class VtomskeNews:
-    async def parsing_vtomske(self) -> Optional[NewsInfo]:
-        async with httpx.AsyncClient() as client:
+    async def parsing_vtomske(self) -> list[NewsInfo]:
+        async with httpx.AsyncClient(timeout=20.0) as client:
             url = "https://vtomske.ru/tag/tomsk"
             response = await client.get(url)
             response.raise_for_status()
 
             soup = BeautifulSoup(response.text, "html.parser")
+            cards = soup.find_all("a", class_="lenta_material", limit=5)
 
-            # Нахождение первой колонки с новстями 
-            div = soup.find("div", class_="lenta_column")
-
-            # Карточки нвостей
-            news_card = soup.find_all("div", class_="lenta_column", limit=5)
-
-            # Создания списка новостей
-            list_news = []
-            for card in news_card:
-                # Получение "ссылки" на новость
-                link_a = card.find("a", class_="lenta_material")
-                link = link_a.get("href")
-
-                # Получение заголовка
+            list_news: list[NewsInfo] = []
+            for card in cards:
+                link = card.get("href")
                 title_tag = card.find("div", class_="lenta_material_title")
-                title = title_tag.get_text(" ", strip=True)
-
-                # Получение времени и даты
                 time_tag = card.find("div", class_="lenta_material_info")
-                time_div = time_tag.find("div")
+                time_div = time_tag.find("div") if time_tag else None
+
+                if not link or not title_tag or not time_div:
+                    continue
+
+                title = title_tag.get_text(" ", strip=True)
                 time_text = time_div.get_text(" ", strip=True)
-                
-                # Делаем валидацию даты
-                today = date.today()
-                datatime = f"{today} {time_text}"
 
-                # Валидация даты и времени для БД
-                datatime_str = datetime.strptime(datatime, "%Y-%m-%d %H:%M")
-                # datatime_valid = datetime.strftime(datatime_str, "%d.%m.%Y %H:%M")
-
-                # Создание полной ссылки на новость
+                dt = datetime.strptime(f"{date.today()} {time_text}", "%Y-%m-%d %H:%M")
                 full_link = urljoin(url, link)
 
-                # Добавляем данные новости
-                list_news.append(NewsInfo(
-                    topic=None,
-                    title=title,
-                    created_at=datatime_str,
-                    url=full_link,
-                    source=NAME_OF_SOURCE[0]
-                ))
-                
-            # Возращаем список новостей 5 штук
+                list_news.append(
+                    NewsInfo(
+                        topic=None,
+                        title=title,
+                        created_at=dt,
+                        url=full_link,
+                        source=NAME_OF_SOURCE[0],
+                    )
+                )
+
             return list_news
+
 
 vtomske_news = VtomskeNews()
 
-async def main():
 
+async def main():
     list_of_news = await vtomske_news.parsing_vtomske()
 
     for news in list_of_news:
@@ -79,6 +60,7 @@ async def main():
             f"Дата публикаций: {news.created_at}\n"
             f"Источник: {news.source}\n\n"
         )
+
 
 if __name__ == "__main__":
     asyncio.run(main())

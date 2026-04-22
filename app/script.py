@@ -59,7 +59,7 @@ class NewsChecker:
             except Exception as e:
                 logger.exception(f"Ошибка при парсинге: {e}")
 
-            await asyncio.sleep(300)
+            await asyncio.sleep(240)
 
 
 news_checker = NewsChecker()

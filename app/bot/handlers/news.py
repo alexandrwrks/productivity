@@ -11,8 +11,9 @@ router = Router()
 async def process_command_news(message: Message):
     last_news_from_all_source = await news_repo.get_last_news_per_source()
 
-    if last_news_from_all_source is None:
+    if not last_news_from_all_source:
         await message.answer("Новости сейчас недоступны, попробуйте позже.")
+        return
 
     for news_info in last_news_from_all_source:
         if news_info.topic is None:
@@ -21,7 +22,7 @@ async def process_command_news(message: Message):
                 f"🕐 Время: {news_info.created_at}\n"
                 f"🌐 Источник: {news_info.source}\n\n",
                 parse_mode="HTML",
-                disable_web_page_preview=True
+                disable_web_page_preview=True,
             )
 
         else:
@@ -31,5 +32,5 @@ async def process_command_news(message: Message):
                 f"🕐 Время: {news_info.created_at}\n"
                 f"🌐 Источник: {news_info.source}\n\n",
                 parse_mode="HTML",
-                disable_web_page_preview=True
+                disable_web_page_preview=True,
             )
