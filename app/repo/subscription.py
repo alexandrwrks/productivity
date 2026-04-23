@@ -9,7 +9,7 @@ from app.news.config_news import SOURCE_LINK, SOURCES
 
 
 class SubscriptionRepo:
-    async def _get_or_create_source(self, session, source_code: str) -> Sources | None:
+    async def _get_or_create_source(self, source_code: str) -> Sources | None:
         async with SessionLocal() as session:
             try:
                 result = await session.execute(

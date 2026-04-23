@@ -30,7 +30,7 @@ class UserRepo:
                 logger.error(f"Database error: {e}")
                 return None
 
-    async def get_exists_user(self, telegram_id: int) -> Optional[User]:
+    async def get_exists_user(self, telegram_id: int):
         """Проверка наличия пользователя в БД"""
         async with SessionLocal() as session:
             result = await session.execute(
