@@ -62,7 +62,7 @@ class EuroNews:
                         topic=topic_str,
                         title=title,
                         url=full_link,
-                        source=SOURCES["euronews"],
+                        source="euronews",
                         created_at=valid_datetime,
                     )
                 )

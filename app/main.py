@@ -23,7 +23,7 @@ async def main():
 
     await asyncio.gather(
         dp.start_polling(bot),
-        run_all()
+        run_all(bot)
     )
 
 

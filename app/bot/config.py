@@ -13,9 +13,9 @@ class SubscriptionsState(StatesGroup):
     choosing_sources = State()
 
 class SubscriptionsSources:
-    vtomske: bool = SOURCES["vtomske"]
-    kommersant: bool = SOURCES["kommersant"]
-    euronews: bool = SOURCES["euronews"]
+    vtomske: bool = False
+    kommersant: bool = False
+    euronews: bool = False
 
     # bool = True значит пользователь выбрал это источник
     # bool =False значит пользователь убрал галочку с источника

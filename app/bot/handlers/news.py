@@ -2,6 +2,7 @@
 from aiogram.filters import Command
 from aiogram.types import Message
 
+from app.news.config_news import SOURCES
 from app.repo.news import news_repo
 
 router = Router()
@@ -16,21 +17,22 @@ async def process_command_news(message: Message):
         return
 
     for news_info in last_news_from_all_source:
+        source_name = SOURCES.get(news_info.source or "", news_info.source or "Unknown")
         if news_info.topic is None:
             await message.answer(
                 f"<a href=\"{news_info.url}\"><b>{news_info.title}</b></a>\n\n"
                 f"🕐 Время: {news_info.created_at}\n"
-                f"🌐 Источник: {news_info.source}\n\n",
+                f"🌐 Источник: {source_name}\n\n",
+                parse_mode="HTML",
+                disable_web_page_preview=True,
+            )
+        else:
+            await message.answer(
+                f"<a href=\"{news_info.url}\"><b>{news_info.title}</b></a>\n\n"
+                f"📄 Тема: {news_info.topic}\n"
+                f"🕐 Время: {news_info.created_at}\n"
+                f"🌐 Источник: {source_name}\n\n",
                 parse_mode="HTML",
                 disable_web_page_preview=True,
             )
 
-        else:
-            await message.answer(
-                f"<a href=\"{news_info.url}\"><b>{news_info.title}</b></a>\n\n"
-                f"Тема: {news_info.topic}\n"
-                f"🕐 Время: {news_info.created_at}\n"
-                f"🌐 Источник: {news_info.source}\n\n",
-                parse_mode="HTML",
-                disable_web_page_preview=True,
-            )

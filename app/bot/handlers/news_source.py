@@ -1,17 +1,17 @@
-from aiogram import Router
+﻿from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from app.news.config_news import NAME_OF_SOURCE, LINK_OF_SOURCE
+from app.news.config_news import SOURCE_LINK, SOURCES
 
 router = Router()
 
+
 @router.message(Command("sources"))
 async def get_news_sources(message: Message):
+    lines = []
+    for code, name in SOURCES.items():
+        lines.append(f"<b><a href=\"{SOURCE_LINK[code]}\">{name}</a></b>")
 
-    print("Декоратор на команду sources")
+    await message.answer("\n".join(lines), parse_mode="HTML")
 
-    await message.answer(
-        f"<b><a href=\"{LINK_OF_SOURCE[0]}\">{NAME_OF_SOURCE}</a></b>\n",
-        parse_mode="HTML"
-    )

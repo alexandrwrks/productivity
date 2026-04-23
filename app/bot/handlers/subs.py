@@ -5,6 +5,7 @@ from aiogram.types import CallbackQuery, Message
 
 from app.news.config_news import SOURCES
 from app.repo.subscription import subs_repo
+from app.repo.users import user_repo
 
 from app.bot.config import SubscriptionsState, SubscriptionsCallback
 from app.bot.keyboards.subs import get_sources_keyboard
@@ -15,6 +16,7 @@ router = Router()
 
 @router.message(Command("subs"))
 async def process_command_subs(message: Message, state: FSMContext):
+    await user_repo.get_exists_user(message.from_user.id)
     current_sources = await subs_repo.get_sub_source_by_telegram_id(message.from_user.id)
     selected_sources = set(current_sources or [])
 
@@ -68,6 +70,7 @@ async def save_sources(
     selected_sources = set(data.get("selected_sources", []))
 
     telegram_id = callback.from_user.id
+    await user_repo.get_exists_user(telegram_id)
     current_sources = set(await subs_repo.get_sub_source_by_telegram_id(telegram_id) or [])
 
     to_add = selected_sources - current_sources
