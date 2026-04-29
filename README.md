@@ -51,3 +51,28 @@ python -m alembic upgrade head
 ```bash
 python -m app.main
 ```
+
+## Docker run
+
+1. Copy `.env.example` to `.env` and set `BOT_TOKEN`.
+2. Start services:
+
+```bash
+docker compose up --build -d
+```
+
+3. Check logs:
+
+```bash
+docker compose logs -f bot
+```
+
+4. Stop services:
+
+```bash
+docker compose down
+```
+
+Notes:
+- Migrations are applied automatically on bot container start.
+- PostgreSQL data is stored in Docker volume `postgres_data`.

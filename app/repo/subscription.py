@@ -9,27 +9,26 @@ from app.news.config_news import SOURCE_LINK, SOURCES
 
 
 class SubscriptionRepo:
-    async def _get_or_create_source(self, source_code: str) -> Sources | None:
-        async with SessionLocal() as session:
-            try:
-                result = await session.execute(
-                    select(Sources).where(Sources.type == source_code)
-                )
-                source = result.scalar_one_or_none()
-                if source is not None:
-                    return source
-
-                source = Sources(
-                    name=SOURCES.get(source_code, source_code),
-                    type=source_code,
-                    config=SOURCE_LINK.get(source_code, ""),
-                )
-                session.add(source)
-                await session.flush()
+    async def _get_or_create_source(self, session, source_code: str) -> Sources | None:
+        try:
+            result = await session.execute(
+                select(Sources).where(Sources.type == source_code)
+            )
+            source = result.scalar_one_or_none()
+            if source is not None:
                 return source
-            except SQLAlchemyError as e:
-                logger.error(f"Source create/get error: {e}")
-                return None
+
+            source = Sources(
+                name=SOURCES.get(source_code, source_code),
+                type=source_code,
+                config=SOURCE_LINK.get(source_code, ""),
+            )
+            session.add(source)
+            await session.flush()
+            return source
+        except SQLAlchemyError as e:
+            logger.error(f"Source create/get error: {e}")
+            return None
 
     async def get_sub_source_by_telegram_id(self, telegram_id: int) -> list[str]:
         async with SessionLocal() as session:

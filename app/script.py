@@ -29,7 +29,7 @@ class NewsChecker:
             f"Новая новость из {source_name}\n\n"
             # f"{news_info.title}\n"
             # f"{news_info.url}\n"
-            f"<a href=\"{news_info.url}\"><b>{news_info.title}</b>"
+            f"<a href=\"{news_info.url}\"><b>{news_info.title}</b></a>"
         )
 
         for user_id in user_ids:
