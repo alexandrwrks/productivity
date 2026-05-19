@@ -210,6 +210,7 @@ def matrix_power(matrix, power):
 
 def build_metric_matrix(adjacency):
     # Строим матрицу кратчайших расстояний по матрице смежности
+    # Ищем расстояния через последовательный просмотр степеней матрицы
     n = len(adjacency)
     if n == 0:
         return []
@@ -220,19 +221,30 @@ def build_metric_matrix(adjacency):
     for i in range(n):
         metrics[i][i] = 0
 
+    # Булева матрица смежности (петли не влияют на расстояния между разными вершинами).
     adjacency_bool = [
         [1 if i != j and adjacency[i][j] > 0 else 0 for j in range(n)]
         for i in range(n)
     ]
 
     current_power = [row[:] for row in adjacency_bool]
+    
 
     for distance in range(1, n):
+        change = False
         for i in range(n):
             for j in range(n):
                 if i != j and metrics[i][j] is None and current_power[i][j] > 0:
                     metrics[i][j] = distance
-        current_power = multiply_matrices(current_power, adjacency_bool)
+                    change = True
+                    
+        if all(metrics[i][j] is not None for i in range(n) for j in range(n)):
+            break
+
+        if not change:
+            break
+
+        current_power = multiply_matrices(current_power, adjacency)
 
     return metrics
 
