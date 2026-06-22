@@ -3,3 +3,5 @@ bot_token.py
 *.exe
 *.db
 *.db-journal
+.venv
+.env
